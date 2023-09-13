@@ -15,7 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="how_to_dissapear_comletely.cpp">
+    <ClInclude Include="src\include\settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\how_to_dissapear_comletely.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

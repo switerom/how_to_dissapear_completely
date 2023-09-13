@@ -5,7 +5,7 @@ Project desription:
 From one side it's more like a mocumentary movie, from another side it's detective game. Gameplay based on watching videos in random order which are all part of one big story that needs to be assembled as a complexed puzzle that consits of different types of nodes, such as screenshots, notes, dates which need to be connected together by proper threads.
 Besides assembling full picture out of given details, player also should make detuctive assumptions to fill missing "puzzles".
 
-Written in C++
+Written in C++ (17 Standard)
 
 Dependencies:
 
@@ -18,5 +18,5 @@ Dependencies:
     in order to work, instructions must be followed (but without .dll, because they're already in repository):
         http://sfemovie.yalir.org/latest/start.php
 
-also used, but no need to download, because it's already in repository:
 - .srt subtitle parser: https://github.com/saurabhshri/simple-yet-powerful-srt-subtitle-parser-cpp
+    just modify include directory path in visual studio project settings
