@@ -1,6 +1,0 @@
-﻿  how_to_dissapear_comletely.cpp
-C:\libs\srt_subtitles_parser\srtparser.h(567,32): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  windowsettings.cpp
-C:\libs\srt_subtitles_parser\srtparser.h(567,32): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  Generating Code...
-  how_to_dissapear_comletely.vcxproj -> C:\_FILES\how_to_dissapear_comletely\x64\Debug\how_to_dissapear_comletely.exe
