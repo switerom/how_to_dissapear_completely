@@ -1,9 +1,13 @@
 #include "stdafx.h"
 #include "settings.h"
 
+#include "windowsettings.h"
+
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), GAME_NAME, sf::Style::Default);
+    WindowSettings windowSettings;
+    sf::RenderWindow window;
+    windowSettings.initWindow(window);
 
     
     while (window.isOpen())
