@@ -131,11 +131,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\include\deltatime.h" />
     <ClInclude Include="src\include\settings.h" />
     <ClInclude Include="src\include\stdafx.h" />
     <ClInclude Include="src\include\windowsettings.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\deltatime.cpp" />
     <ClCompile Include="src\how_to_dissapear_comletely.cpp" />
     <ClCompile Include="src\windowsettings.cpp" />
   </ItemGroup>

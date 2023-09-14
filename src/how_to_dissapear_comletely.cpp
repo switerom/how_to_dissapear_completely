@@ -1,17 +1,20 @@
 #include "stdafx.h"
-#include "settings.h"
 
+#include "settings.h"
+#include "deltatime.h"
 #include "windowsettings.h"
 
 int main()
 {
     WindowSettings windowSettings;
     sf::RenderWindow window;
-    windowSettings.initWindow(window);
-
+    windowSettings.initWindow(window);  
+    DeltaTime dt;
     
     while (window.isOpen())
     {
+        dt.restart();
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -20,6 +23,10 @@ int main()
         }
 
         window.clear();
+
+        //explorer.Update(dt.get());
+        //explorer.Draw(window);
+
         window.display();
     }
 
