@@ -11,11 +11,11 @@ Dependencies:
 
 - Visual Studio Community 2022 v17
 - SFML (game engine)(download "Visual C++ 17 (2022) - 64-bit" version): https://www.sfml-dev.org/download/sfml/2.6.0/
-    in order to work, instructions must be followed (but without .dll, because they're already in repository):
+    in order to work, instructions must be followed:
         https://www.sfml-dev.org/tutorials/2.6/start-vc.php
     
 - sfeMovie (extension for SFML to play video with sound): http://sfemovie.yalir.org/latest/
-    in order to work, instructions must be followed (but without .dll, because they're already in repository):
+    in order to work, instructions must be followed:
         http://sfemovie.yalir.org/latest/start.php
 
 - .srt subtitle parser: https://github.com/saurabhshri/simple-yet-powerful-srt-subtitle-parser-cpp
