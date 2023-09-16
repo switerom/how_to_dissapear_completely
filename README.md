@@ -17,6 +17,3 @@ Dependencies:
 - sfeMovie (extension for SFML to play video with sound): http://sfemovie.yalir.org/latest/
     in order to work, instructions must be followed:
         http://sfemovie.yalir.org/latest/start.php
-
-- .srt subtitle parser: https://github.com/saurabhshri/simple-yet-powerful-srt-subtitle-parser-cpp
-    just modify include directory path in visual studio project settings
