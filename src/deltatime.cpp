@@ -1,10 +1,8 @@
 #include "deltatime.h"
 
-float DeltaTime::restart()
+void DeltaTime::restart()
 {
-    sf::Time elapsed = _clock.restart();
-    _time = elapsed;
-    return elapsed.asSeconds();
+    _time = _clock.restart();
 }
 
 float DeltaTime::get() const
