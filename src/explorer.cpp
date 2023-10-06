@@ -35,3 +35,13 @@ void Explorer::Draw(sf::RenderWindow& window)
 void Explorer::Update(float dt)
 {
 }
+
+void Explorer::toggleMaximize()
+{
+
+}
+
+sf::FloatRect Explorer::getTopBoxRect() const
+{
+	return _topRect.getGlobalBounds();
+}

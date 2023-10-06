@@ -24,10 +24,13 @@
     <ClInclude Include="src\include\windowsettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\deltatime.h">
+    <ClInclude Include="src\include\explorer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\explorer.h">
+    <ClInclude Include="src\include\timecontroller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\collisiondetection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,10 +41,13 @@
     <ClCompile Include="src\windowsettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\deltatime.cpp">
+    <ClCompile Include="src\explorer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\explorer.cpp">
+    <ClCompile Include="src\timecontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\collisiondetection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

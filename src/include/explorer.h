@@ -12,6 +12,11 @@ public:
 	Explorer();
 	void Init();
 
+	// Maximize or minimize Explorer window
+	void toggleMaximize();
+
+	sf::FloatRect getTopBoxRect() const;
+
 private:
 	
 	sf::RectangleShape _bigRect;	// заменить это на текстуру из AssetManagera
