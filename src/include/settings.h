@@ -6,6 +6,8 @@
 #define HEIGHT				720
 #define TOTAL_VIDS			6
 
+#define EXPLORER_TOP_RECT	WIDTH*0.02f
+
 #define EXITEM_X_POS		WIDTH*0.1f
 #define EXITEM_Y_POS		WIDTH*0.1f
 #define EXITEM_Y_DIST		WIDTH*0.05f

@@ -27,6 +27,9 @@
     <ClInclude Include="src\include\deltatime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\include\explorer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\how_to_dissapear_comletely.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\deltatime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\explorer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

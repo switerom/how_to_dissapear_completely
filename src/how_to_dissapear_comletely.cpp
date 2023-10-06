@@ -3,6 +3,7 @@
 #include "settings.h"
 #include "deltatime.h"
 #include "windowsettings.h"
+#include "explorer.h"
 
 int main()
 {
@@ -10,6 +11,7 @@ int main()
     sf::RenderWindow window;
     windowSettings.initWindow(window);  
     DeltaTime dt;
+    Explorer explorer;
     
     while (window.isOpen())
     {
@@ -25,7 +27,7 @@ int main()
         window.clear();
 
         //explorer.Update(dt.get());
-        //explorer.Draw(window);
+        explorer.Draw(window);
 
         window.display();
     }
