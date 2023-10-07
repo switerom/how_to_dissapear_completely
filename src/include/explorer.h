@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "stdafx.h"
-//#include "ExItem.h"
+#include "exploreritem.h"
 
 class Explorer
 {
@@ -15,6 +15,9 @@ public:
 	// Maximize or minimize Explorer window
 	void toggleMaximize();
 
+	// To count total number of videos
+	void loadFiles();
+
 	sf::FloatRect getTopBoxRect() const;
 	const sf::View& getExplorerView() const;
 
@@ -25,6 +28,8 @@ private:
 
 	sf::View _exView;
 	bool _isMaximized;
+
+	std::list<ExplorerItem> _explorerItems;
 	//std::list<ExItem> _exItems;
 	//std::list<ExItem>::iterator _currentItem;
 };

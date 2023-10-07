@@ -1,12 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #define GAME_NAME "How to dissapear completely"
 
 #define WIDTH				1280
 #define HEIGHT				720
 #define TOTAL_VIDS			6
-
-#define EXPLORER_TOP_RECT	WIDTH*0.02f
 
 #define EXITEM_X_POS		WIDTH*0.1f
 #define EXITEM_Y_POS		WIDTH*0.1f
@@ -40,3 +38,11 @@
 #define TEXT_NOTE_SIZE		75
 
 #define SAVES_DIR			"C:/_FILES/CATEGORIES/MY_FILM-GAME/code/detective_film_game/game/saves"
+
+// Настройки всего окна файл-менеджера
+#define EXPLORER_TOP_RECT			HEIGHT*0.025f
+#define VID_DIR						"rsc/vid"
+#define EXPLORER_ITEM_FONT			"rsc/fonts/JetBrainsMonoNL-Medium.ttf"
+#define EXPLORER_ITEM_TEXT_SIZE		24
+#define EXPLORER_ITEM_TEXT_COLOR	sf::Color::White
+#define EXPLORER_ITEM_SIZE_Y		HEIGHT*0.1f

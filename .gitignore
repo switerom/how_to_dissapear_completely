@@ -22,6 +22,7 @@ mono_crash.*
 [Rr]elease/
 [Rr]eleases/
 x64/
+<<<<<<< HEAD
 x86/
 [Ww][Ii][Nn]32/
 [Aa][Rr][Mm]/
@@ -400,3 +401,5 @@ FodyWeavers.xsd
 x64/
 .vs/
 *.dll
+.vs/
+rsc/vid/

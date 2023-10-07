@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClInclude Include="src\include\collisiondetection.h" />
     <ClInclude Include="src\include\explorer.h" />
+    <ClInclude Include="src\include\exploreritem.h" />
     <ClInclude Include="src\include\settings.h" />
     <ClInclude Include="src\include\stdafx.h" />
     <ClInclude Include="src\include\timecontroller.h" />
@@ -140,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\collisiondetection.cpp" />
+    <ClCompile Include="src\exlporeritem.cpp" />
     <ClCompile Include="src\explorer.cpp" />
     <ClCompile Include="src\how_to_dissapear_comletely.cpp" />
     <ClCompile Include="src\timecontroller.cpp" />
