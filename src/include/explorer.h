@@ -16,6 +16,7 @@ public:
 	void toggleMaximize();
 
 	sf::FloatRect getTopBoxRect() const;
+	const sf::View& getExplorerView() const;
 
 private:
 	
@@ -23,6 +24,7 @@ private:
 	sf::RectangleShape _topRect;	// заменить это на текстуру из AssetManagera
 
 	sf::View _exView;
+	bool _isMaximized;
 	//std::list<ExItem> _exItems;
 	//std::list<ExItem>::iterator _currentItem;
 };

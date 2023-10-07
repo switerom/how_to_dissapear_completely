@@ -29,10 +29,9 @@ int main()
                 {
                     if(timeController.isDoubleClick(window))
                     {
-                        if(isColliding(sf::Mouse::getPosition(window), explorer.getTopBoxRect()))    // может быть переписать так, чтобы мышь была внутри isColliding функции
+                        if (isColliding(window, explorer))
                         {
-                            std::cout << "True" << "\n";
-                            //explorer.toggleMaximize();
+                            explorer.toggleMaximize();
                         }
                     }
                 }

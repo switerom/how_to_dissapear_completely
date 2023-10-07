@@ -1,10 +1,16 @@
 #include "collisiondetection.h"
+#include "explorer.h"
 
-bool isColliding(sf::Vector2i mousePos, sf::FloatRect boxRect) 
+bool isColliding(const sf::RenderWindow& window, const Explorer& explorer)
 {
-    // Convert mouse position to sf::Vector2f
-    sf::Vector2f mousePosition(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    auto exView = explorer.getExplorerView();
+
+    sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, exView);
+
+    auto topBoxRect = explorer.getTopBoxRect();
 
     // Check if the FloatRect contains the mouse position
-    return boxRect.contains(mousePosition);
+    return topBoxRect.contains(mousePosView);
 }
