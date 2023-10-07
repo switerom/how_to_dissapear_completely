@@ -16,12 +16,27 @@ void Explorer::Init()
 	_topRect.setSize(sf::Vector2f(WIDTH, EXPLORER_TOP_RECT));
 
 	// Размер окна
-	_exView.reset(sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT));	// так мы указываем, что вся область explorera будет отображаться
-	_exView.setViewport(sf::FloatRect(0.f, 0.5f, 0.5f, 0.5f));	// так мы указываем, что отображаться должно в левой нижней четверти основного окна
+	_windowView.reset(sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT));	// так мы указываем, что вся область explorera будет отображаться
+	_windowView.setViewport(EXPLORER_MIN_BOUNDS);	// так мы указываем, что отображаться должно в левой нижней четверти основного окна
 
+	// Размер области файлов
+	_itemsView.reset(sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT));	// так мы указываем, что вся область explorera будет отображаться
+
+	_itemsView.setViewport(getItemsBounds(EXPLORER_MIN_BOUNDS));	
+	
 	_isMaximized = false;
+	_scrollPos = 0.f;
 
 	loadFiles();
+}
+
+sf::FloatRect Explorer::getItemsBounds(const sf::FloatRect& explorerBounds)
+{
+	auto itemsBounds = explorerBounds;
+	itemsBounds.top = itemsBounds.top + EXPLORER_TOP_RECT / HEIGHT * itemsBounds.height;
+	itemsBounds.height = itemsBounds.height - (EXPLORER_TOP_RECT / HEIGHT * itemsBounds.height);
+
+	return itemsBounds;
 }
 
 void Explorer::loadFiles()
@@ -60,10 +75,11 @@ Explorer::Explorer()
 
 void Explorer::Draw(sf::RenderWindow& window)
 {
-	window.setView(_exView);	// применяем View, иначе будет на весь экран
+	window.setView(_windowView);	// применяем View, иначе будет на весь экран
 	window.draw(_bigRect);
 	window.draw(_topRect);
 
+	window.setView(_itemsView);		// Применяем View конкретно для файлов (чтобы правильно работал скроллинг)
 
 	for (auto& i : _explorerItems)
 	{
@@ -79,12 +95,16 @@ void Explorer::toggleMaximize()
 {
 	if (_isMaximized)
 	{
-		_exView.setViewport(sf::FloatRect(0.f, 0.5f, 0.5f, 0.5f));
+		_windowView.setViewport(EXPLORER_MIN_BOUNDS);
+		_itemsView.setViewport(getItemsBounds(EXPLORER_MIN_BOUNDS));
+
 		_isMaximized = false;
 	}
 	else
 	{
-		_exView.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
+		_windowView.setViewport(EXPLORER_MAX_BOUNDS);
+		_itemsView.setViewport(getItemsBounds(EXPLORER_MAX_BOUNDS));
+
 		_isMaximized = true;
 	}
 }
@@ -96,5 +116,22 @@ sf::FloatRect Explorer::getTopBoxRect() const
 
 const sf::View& Explorer::getExplorerView() const
 {
-	return _exView;
+	return _windowView;
+}
+
+void Explorer::scrollView(float scrollDelta)
+{
+	float scrollDist = scrollDelta * EXPLORER_SCROLL_SPEED;
+
+	// Calculate the new scroll position
+	float newScrollPos = _scrollPos - scrollDist;
+
+
+	float maxScrollPos = HEIGHT - _explorerItems.size() * EXPLORER_ITEM_SIZE_Y;
+
+	if (newScrollPos >= maxScrollPos || newScrollPos < 0.f)
+		return;
+
+	_scrollPos = newScrollPos;
+	_itemsView.move(0.f, scrollDist);
 }

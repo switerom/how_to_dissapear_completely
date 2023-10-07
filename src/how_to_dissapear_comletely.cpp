@@ -36,6 +36,11 @@ int main()
                     }
                 }
             }
+            else if (event.type == sf::Event::MouseWheelScrolled) 
+            {
+                // добавить условие проверки на коллизию
+                explorer.scrollView(event.mouseWheelScroll.delta);
+            }
         }
 
         window.clear();

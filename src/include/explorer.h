@@ -21,15 +21,21 @@ public:
 	sf::FloatRect getTopBoxRect() const;
 	const sf::View& getExplorerView() const;
 
+	void scrollView(float scrollDelta);
+
+	sf::FloatRect getItemsBounds(const sf::FloatRect& explorerBounds);
+
 private:
 	
 	sf::RectangleShape _bigRect;	// заменить это на текстуру из AssetManagera
 	sf::RectangleShape _topRect;	// заменить это на текстуру из AssetManagera
 
-	sf::View _exView;
+	sf::View _windowView;
 	bool _isMaximized;
 
 	std::list<ExplorerItem> _explorerItems;
+	sf::View _itemsView;
+	float _scrollPos;
 	//std::list<ExItem> _exItems;
 	//std::list<ExItem>::iterator _currentItem;
 };
