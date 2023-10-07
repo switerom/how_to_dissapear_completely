@@ -18,24 +18,26 @@ public:
 	// To count total number of videos
 	void loadFiles();
 
-	sf::FloatRect getTopBoxRect() const;
-	const sf::View& getExplorerView() const;
+	sf::FloatRect getTopBoxRect() const { return _topRect.getGlobalBounds(); };
+	const sf::View& getExplorerView() const { return _windowView; };
 
 	void scrollView(float scrollDelta);
 
 	sf::FloatRect getItemsBounds(const sf::FloatRect& explorerBounds);
 
+	void selectItem(sf::RenderWindow& window);
+
 private:
 	
 	sf::RectangleShape _bigRect;	// заменить это на текстуру из AssetManagera
 	sf::RectangleShape _topRect;	// заменить это на текстуру из AssetManagera
+	sf::RectangleShape _selectRect;	// заменить это на текстуру из AssetManagera
 
 	sf::View _windowView;
 	bool _isMaximized;
 
+	std::list<ExplorerItem>::iterator _selectedItem;
 	std::list<ExplorerItem> _explorerItems;
 	sf::View _itemsView;
 	float _scrollPos;
-	//std::list<ExItem> _exItems;
-	//std::list<ExItem>::iterator _currentItem;
 };

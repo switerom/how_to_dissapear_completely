@@ -2,18 +2,23 @@
 #include "stdafx.h"
 #include "settings.h"
 #include "exploreritem.h"
+#include "collisiondetection.h"
 
 namespace fs = std::filesystem;
 
 void Explorer::Init()
 {
 	// Фон окна
-	_bigRect.setFillColor(sf::Color::Red);
+	_bigRect.setFillColor(EXPLORER_BACK_COLOR);
 	_bigRect.setSize(sf::Vector2f(WIDTH, HEIGHT));
 
 	// Верхняя рамка
-	_topRect.setFillColor(sf::Color::Blue);
+	_topRect.setFillColor(EXPLORER_FRAME_COLOR);
 	_topRect.setSize(sf::Vector2f(WIDTH, EXPLORER_TOP_RECT));
+
+	// Выделенный файл
+	_selectRect.setFillColor(EXPLORER_SELECT_COLOR);
+	_selectRect.setSize(sf::Vector2f(WIDTH, EXPLORER_ITEM_SIZE_Y));
 
 	// Размер окна
 	_windowView.reset(sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT));	// так мы указываем, что вся область explorera будет отображаться
@@ -28,6 +33,11 @@ void Explorer::Init()
 	_scrollPos = 0.f;
 
 	loadFiles();
+
+	if (!_explorerItems.empty()) 
+		_selectedItem = _explorerItems.begin();
+
+	_selectedItem->setSelect(true);
 }
 
 sf::FloatRect Explorer::getItemsBounds(const sf::FloatRect& explorerBounds)
@@ -81,9 +91,11 @@ void Explorer::Draw(sf::RenderWindow& window)
 
 	window.setView(_itemsView);		// Применяем View конкретно для файлов (чтобы правильно работал скроллинг)
 
-	for (auto& i : _explorerItems)
+	window.draw(_selectRect);
+
+	for (auto& item : _explorerItems)
 	{
-		window.draw(i.getText());
+		window.draw(item.getText());
 	}
 }
 
@@ -109,16 +121,6 @@ void Explorer::toggleMaximize()
 	}
 }
 
-sf::FloatRect Explorer::getTopBoxRect() const
-{
-	return _topRect.getGlobalBounds();
-}
-
-const sf::View& Explorer::getExplorerView() const
-{
-	return _windowView;
-}
-
 void Explorer::scrollView(float scrollDelta)
 {
 	float scrollDist = scrollDelta * EXPLORER_SCROLL_SPEED;
@@ -134,4 +136,19 @@ void Explorer::scrollView(float scrollDelta)
 
 	_scrollPos = newScrollPos;
 	_itemsView.move(0.f, scrollDist);
+}
+
+void Explorer::selectItem(sf::RenderWindow& window)
+{
+	for (auto it{ _explorerItems.begin() }; it != _explorerItems.end(); ++it)
+	{
+
+	//for (auto& item: _explorerItems)
+	//{
+		if (isColliding(window, _itemsView, *it))
+		{
+			_selectedItem = it;
+			_selectRect.setPosition(_selectedItem->getItemBounds().left, _selectedItem->getItemBounds().top);
+		}
+	}
 }

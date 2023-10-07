@@ -27,12 +27,14 @@ int main()
             {
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
-                    if(timeController.isDoubleClick(window))
+                    if (isColliding(window, explorer))
                     {
-                        if (isColliding(window, explorer))
+                        if(timeController.isDoubleClick(window) && isColliding(window, explorer, explorer.getTopBoxRect()))
                         {
                             explorer.toggleMaximize();
                         }
+                        
+                        explorer.selectItem(window);
                     }
                 }
             }

@@ -13,7 +13,12 @@ void ExplorerItem::Init(const std::string& str, unsigned int id)
 
     _text.setString(str);
 
-    _text.setPosition(0.f, _id * EXPLORER_ITEM_SIZE_Y);
+    _bounds.top = _id * EXPLORER_ITEM_SIZE_Y;
+    _bounds.left = 0.f;
+    _bounds.width = WIDTH;
+    _bounds.height = EXPLORER_ITEM_SIZE_Y;
+
+    _text.setPosition(0.f, _bounds.top);
 
     static sf::Font font;
     font.loadFromFile(EXPLORER_ITEM_FONT);
@@ -21,4 +26,11 @@ void ExplorerItem::Init(const std::string& str, unsigned int id)
     _text.setFont(font);
     _text.setCharacterSize(EXPLORER_ITEM_TEXT_SIZE);
     _text.setFillColor(EXPLORER_ITEM_TEXT_COLOR);
+
+    bool _selected = false;
+}
+
+void ExplorerItem::setSelect(bool select)
+{
+    _selected = select;
 }
