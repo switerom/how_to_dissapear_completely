@@ -21,7 +21,7 @@ public:
 	sf::FloatRect getTopBoxRect() const { return _topRect.getGlobalBounds(); };
 	const sf::View& getExplorerView() const { return _windowView; };
 
-	void scrollView(float scrollDelta);
+	void scrollView(float scrollDelta, float dt);
 
 	sf::FloatRect getItemsBounds(const sf::FloatRect& explorerBounds);
 

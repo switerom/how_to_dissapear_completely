@@ -28,9 +28,10 @@ void Explorer::Init()
 	_itemsView.reset(sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT));	// так мы указываем, что вся область explorera будет отображаться
 
 	_itemsView.setViewport(getItemsBounds(EXPLORER_MIN_BOUNDS));	
+	//_itemsView.setCenter(WIDTH / 2, HEIGHT / 2);
 	
 	_isMaximized = false;
-	_scrollPos = 0.f;
+	_scrollPos = HEIGHT/2;	// ставим позицию скроллинга в центр экрана, чтобы правильно работала функция setCenter()
 
 	loadFiles();
 
@@ -121,21 +122,36 @@ void Explorer::toggleMaximize()
 	}
 }
 
-void Explorer::scrollView(float scrollDelta)
+void Explorer::scrollView(float scrollDelta, float dt)
 {
-	float scrollDist = scrollDelta * EXPLORER_SCROLL_SPEED;
+	float itemsBounds = _explorerItems.size() * EXPLORER_ITEM_SIZE_Y;
 
-	// Calculate the new scroll position
+	if (itemsBounds <= HEIGHT)
+	{
+		return;
+	}
+
+	float scrollDist = scrollDelta * EXPLORER_SCROLL_SPEED * dt;
+
 	float newScrollPos = _scrollPos - scrollDist;
 
+	float maxScrollPos = _explorerItems.size() * EXPLORER_ITEM_SIZE_Y - HEIGHT / 2;
+	float minScrollPos = HEIGHT / 2;
 
-	float maxScrollPos = HEIGHT - _explorerItems.size() * EXPLORER_ITEM_SIZE_Y;
+	if (newScrollPos > maxScrollPos)
+	{
+		_scrollPos = maxScrollPos;
+	}
+	else if (newScrollPos < minScrollPos)
+	{
+		_scrollPos = minScrollPos;
+	}
+	else 
+	{
+		_scrollPos = newScrollPos;
+	}
 
-	if (newScrollPos >= maxScrollPos || newScrollPos < 0.f)
-		return;
-
-	_scrollPos = newScrollPos;
-	_itemsView.move(0.f, scrollDist);
+	_itemsView.setCenter(WIDTH/2, _scrollPos);
 }
 
 void Explorer::selectItem(sf::RenderWindow& window)

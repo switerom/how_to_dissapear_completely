@@ -41,13 +41,13 @@ int main()
             else if (event.type == sf::Event::MouseWheelScrolled) 
             {
                 // добавить условие проверки на коллизию
-                explorer.scrollView(event.mouseWheelScroll.delta);
+                explorer.scrollView(event.mouseWheelScroll.delta, timeController.getDt());
             }
         }
 
         window.clear();
 
-        //explorer.Update(dt.get());
+        //explorer.Update();
         explorer.Draw(window);
 
         window.display();

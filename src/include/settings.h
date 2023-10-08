@@ -49,6 +49,6 @@
 #define EXPLORER_BACK_COLOR			sf::Color::Red
 #define EXPLORER_FRAME_COLOR		sf::Color::Blue
 #define EXPLORER_ITEM_SIZE_Y		HEIGHT*0.1f
-#define EXPLORER_SCROLL_SPEED		50.f
-#define EXPLORER_MIN_BOUNDS			sf::FloatRect(0.f, 0.5f, 0.5f, 0.5f)
+#define EXPLORER_SCROLL_SPEED		2500.f
+#define EXPLORER_MIN_BOUNDS			sf::FloatRect(0.f, 0.f, 0.5f, 0.5f)
 #define EXPLORER_MAX_BOUNDS			sf::FloatRect(0.f, 0.f, 1.f, 1.f)
