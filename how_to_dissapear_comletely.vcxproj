@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\include\area.h" />
+    <ClInclude Include="src\include\areacontroller.h" />
     <ClInclude Include="src\include\assetmanager.h" />
     <ClInclude Include="src\include\collisiondetection.h" />
     <ClInclude Include="src\include\explorer.h" />
@@ -144,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\area.cpp" />
+    <ClCompile Include="src\areacontroller.cpp" />
     <ClCompile Include="src\assetmanager.cpp" />
     <ClCompile Include="src\collisiondetection.cpp" />
     <ClCompile Include="src\exlporeritem.cpp" />

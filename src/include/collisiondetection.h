@@ -1,3 +1,5 @@
+#pragma once
+
 #include "stdafx.h"
 #include "explorer.h"
 #include "area.h"

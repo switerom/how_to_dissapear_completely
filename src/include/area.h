@@ -15,6 +15,7 @@ public:
 
 	sf::FloatRect getTopBoxRect() const { return _topRect.getGlobalBounds(); };
 	const sf::View& getAreaView() const { return _areaView; };
+	bool isMaximized() const { return _isMaximized; };
 
 protected:
 	sf::RectangleShape _topRect;	// заменить это на текстуру из AssetManagera
