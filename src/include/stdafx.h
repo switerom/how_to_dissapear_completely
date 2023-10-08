@@ -8,6 +8,7 @@
 //#include <srtparser.h>
 
 #include <string>
+#include <initializer_list>
 #include <list>
 #include <unordered_map>
 #include <map>

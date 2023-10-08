@@ -8,6 +8,7 @@
 #include "assetmanager.h"
 #include "videoplayer.h"
 #include "area.h"
+#include "areacontroller.h"
 
 int main()
 {
@@ -17,6 +18,7 @@ int main()
     TimeController timeController;
     Explorer explorer;
     VideoPlayer videoplayer;
+    AreaController areacontroller { &explorer, &videoplayer };
     AssetManager assetmanager;
 
     while (window.isOpen())
@@ -71,13 +73,14 @@ int main()
             }
         }
 
-        // возможно добавить условие
-        videoplayer.Update(timeController.getDt());
+        //videoplayer.Update(timeController.getDt());
+        areacontroller.Update(timeController.getDt());
 
         window.clear();
 
-        explorer.Draw(window);
-        videoplayer.Draw(window);
+        areacontroller.Draw(window);
+        //explorer.Draw(window);
+        //videoplayer.Draw(window);
         window.display();
     }
 
