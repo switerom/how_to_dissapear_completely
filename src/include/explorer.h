@@ -7,8 +7,10 @@
 class Explorer: public Area
 {
 public:
-	void Draw(sf::RenderWindow& window);
-	void Update(float dt);
+	virtual void Draw(sf::RenderWindow& window) override;
+	virtual void toggleMaximize() override;
+
+	virtual void Update(float dt) override;
 
 	Explorer();
 	void Init();
@@ -16,14 +18,14 @@ public:
 	// To count total number of videos
 	void loadFiles();
 
-	virtual void toggleMaximize() override;
-
 	void scrollView(float scrollDelta, float dt);
 
 	sf::FloatRect getItemsBounds(const sf::FloatRect& explorerBounds);
 	const sf::View& getItemsView() const { return _itemsView; };
 
 	void selectItem(sf::RenderWindow& window);
+
+	std::string getCurrentVideo() const;
 
 private:
 	

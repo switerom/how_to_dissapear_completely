@@ -5,11 +5,13 @@
 class Area
 {
 public:
+	virtual void Draw(sf::RenderWindow& window) = 0;
+	virtual void Update(float dt) = 0;
+	virtual void toggleMaximize();
+
 	// Maximize or minimize Explorer window
 	Area(const sf::FloatRect& minBounds);
 	void Init(const sf::FloatRect& minBounds);
-	void Draw(sf::RenderWindow& window);
-	virtual void toggleMaximize();
 
 	sf::FloatRect getTopBoxRect() const { return _topRect.getGlobalBounds(); };
 	const sf::View& getAreaView() const { return _areaView; };

@@ -1,5 +1,6 @@
 #include "assetmanager.h"
 #include "stdafx.h"
+#include "settings.h"
 
 AssetManager* AssetManager::sInstance = nullptr;
 
@@ -39,13 +40,15 @@ sfe::Movie* AssetManager::getVideo(const std::string& filename)
 	auto& vidMap = sInstance->_vids;
 	vidMap.clear();
 
-	auto pairFound = vidMap.find(filename);
+	std::string filepath = VID_DIR + filename;
 
-	auto& vid = vidMap[filename];
+	auto pairFound = vidMap.find(filepath);
 
-	if (!vid.openFromFile(filename))
+	auto& vid = vidMap[filepath];
+
+	if (!vid.openFromFile(filepath))
 	{
-		// Handle font loading error here
+		// Handle video loading error here
 		// For example, throw an exception or log an error message
 		// You can also return a default font or an empty font object
 	}
@@ -70,7 +73,7 @@ sf::Texture& AssetManager::getTexture(const std::string& filename)
 
 		if (!tex.loadFromFile(filename))
 		{
-			// Handle font loading error here
+			// Handle texture loading error here
 			// For example, throw an exception or log an error message
 			// You can also return a default font or an empty font object
 		}

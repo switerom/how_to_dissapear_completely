@@ -5,7 +5,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
 #include <sfeMovie/Movie.hpp>
-#include <srtparser.h>
+//#include <srtparser.h>
 
 #include <string>
 #include <list>

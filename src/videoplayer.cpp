@@ -2,43 +2,53 @@
 #include "settings.h"
 #include "assetmanager.h"
 
-VideoPlayer::VideoPlayer()
+VideoPlayer::VideoPlayer(): Area{ VIDEOPLAYER_MIN_BOUNDS }
 {
 	Init();
 }
 
 void VideoPlayer::Init()
 {
-	//_playerView.reset(sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT));
-	//_playerView.setViewport(sf::FloatRect(0.f, 0.f, 0.5f, 0.5f));
-	//_currentVideo = AssetManager::getVideo(filename);
+	_currentVideo = nullptr;
+}
 
-	//_subSelection.setFillColor(SUB_SELECT_COLOR);
+void VideoPlayer::toggleVideoPlayback(const std::string& filename)
+{
+	//sfe::Movie* _prevvideo = _currentVideo;
+	_currentVideo = AssetManager::getVideo(filename);
 
-	//_interface._bar.setFillColor(sf::Color::White);
-	//_interface._progress.setFillColor(sf::Color::Blue);
+	if (!_currentVideo)
+		return;
 
-	//_interface._bar.setPosition(sf::Vector2f(0.f, HEIGHT - BAR_HEIGHT));
-	//_interface._progress.setPosition(sf::Vector2f(0.f, HEIGHT - BAR_HEIGHT));
+	if (_currentVideo->getStatus() == sfe::Status::Playing)
+		_currentVideo->pause();
+	else
+		_currentVideo->play();
+}
 
-	//_interface._bar.setSize(sf::Vector2f(WIDTH, BAR_HEIGHT));
-	//_interface._progress.setSize(sf::Vector2f(WIDTH, BAR_HEIGHT));
+// Override для того, чтобы можно было просто мышью щелкать по видео для play/pause
+void VideoPlayer::toggleVideoPlayback()
+{
+	if (!_currentVideo)
+		return;
 
-	////_startEndSubSelect.first = _subText.begin();
-	////_startEndSubSelect.second = _subText.end();
+	if (_currentVideo->getStatus() == sfe::Status::Playing)
+		_currentVideo->pause();
+	else
+		_currentVideo->play();
+}
 
-	//_startEndSubSelect.first = 0.f;
-	//_startEndSubSelect.second = 0.f;
 
-	//// Для реализации выделения текста, у нас всегда будет 3 sf::Text объекта в векторе
-	//for (int i{ 0 }; i < 3; ++i)
-	//{
-	//	_captions.setFont(AssetManager::getFont(FONT));
-	//	_captions.setCharacterSize(SUB_SIZE);
-	//	_captions.setFillColor(SUB_COLOR);
-	//	_captions.setString("");
-	//	sf::FloatRect textBounds = _captions.getLocalBounds();
-	//	_captions.setOrigin(textBounds.left + textBounds.width * 0.5f, textBounds.top + textBounds.height * 0.5f);
-	//	_captions.setPosition(SUB_POSITION);
-	//}
+void VideoPlayer::Draw(sf::RenderWindow& window)
+{
+	window.setView(_areaView);
+
+	if (_currentVideo)
+		window.draw(*_currentVideo);
+}
+
+void VideoPlayer::Update(float dt)
+{
+	if (_currentVideo)
+		_currentVideo->update();	// dt не передается параметром потому, что sfeMovie сам внутри это контролирует
 }

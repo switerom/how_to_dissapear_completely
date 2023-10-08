@@ -16,13 +16,8 @@ int main()
     windowSettings.initWindow(window);  
     TimeController timeController;
     Explorer explorer;
-    //VideoPlayer videoplayer;
+    VideoPlayer videoplayer;
     AssetManager assetmanager;
-    //Area area;
-
-    //sfe::Movie _currentVideo;
-    //_currentVideo.openFromFile("rsc/vid/2.mp4");
-    //_currentVideo.play();
 
     while (window.isOpen())
     {
@@ -39,20 +34,29 @@ int main()
                 {
                     if (isColliding(window, explorer))
                     {
-                        if(timeController.isDoubleClick(window) && isColliding(window, explorer, explorer.getTopBoxRect()))
-                        {
-                            explorer.toggleMaximize();
-                        }
-                        
                         explorer.selectItem(window);
+
+                        if(timeController.isDoubleClick(window))
+                        {
+                            if (isColliding(window, explorer, explorer.getTopBoxRect()))
+                            {
+                                explorer.toggleMaximize();
+                            }
+                            else
+                            {
+                                videoplayer.toggleVideoPlayback(explorer.getCurrentVideo());
+                            }
+                        }
                     }
-                    //else if (isColliding(window, area))
-                    //{
-                    //    if (timeController.isDoubleClick(window) && isColliding(window, area, area.getTopBoxRect()))
-                    //    {
-                    //        area.toggleMaximize();
-                    //    }
-                    //}
+                    else if (isColliding(window, videoplayer))
+                    {
+                        if (timeController.isDoubleClick(window))
+                        {
+                            videoplayer.toggleMaximize();
+                        }
+
+                        videoplayer.toggleVideoPlayback();
+                    }
                 }
             }
             else if (event.type == sf::Event::MouseWheelScrolled) 
@@ -61,11 +65,13 @@ int main()
             }
         }
 
+        // возможно добавить условие
+            videoplayer.Update(timeController.getDt());
+
         window.clear();
 
         explorer.Draw(window);
-        //_currentVideo.update();
-        //window.draw(_currentVideo);
+        videoplayer.Draw(window);
         window.display();
     }
 

@@ -4,6 +4,7 @@
 #include "exploreritem.h"
 #include "collisiondetection.h"
 #include "area.h"
+#include "assetmanager.h"
 
 namespace fs = std::filesystem;
 
@@ -159,13 +160,16 @@ void Explorer::selectItem(sf::RenderWindow& window)
 {
 	for (auto it{ _explorerItems.begin() }; it != _explorerItems.end(); ++it)
 	{
-
-	//for (auto& item: _explorerItems)
-	//{
 		if (isColliding(window, _itemsView, *it))
 		{
 			_selectedItem = it;
+
 			_selectRect.setPosition(_selectedItem->getItemBounds().left, _selectedItem->getItemBounds().top);
 		}
 	}
+}
+
+std::string Explorer::getCurrentVideo() const
+{ 
+	return _selectedItem->getText().getString(); 
 }

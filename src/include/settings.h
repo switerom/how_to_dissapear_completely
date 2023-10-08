@@ -45,7 +45,7 @@
 #define WINDOW_MAX_BOUNDS			sf::FloatRect(0.f, 0.f, 1.f, 1.f)
 
 // Настройки всего окна файл-менеджера
-#define VID_DIR						"rsc/vid"
+#define VID_DIR						"rsc/vid/"
 #define EXPLORER_ITEM_FONT			"rsc/fonts/JetBrainsMonoNL-Medium.ttf"
 #define EXPLORER_ITEM_TEXT_SIZE		24
 #define EXPLORER_ITEM_TEXT_COLOR	sf::Color::White

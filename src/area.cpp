@@ -36,9 +36,3 @@ void Area::toggleMaximize()
 		_isMaximized = true;
 	}
 }
-
-void Area::Draw(sf::RenderWindow& window)
-{
-	window.setView(_areaView);
-	window.draw(_topRect);
-}

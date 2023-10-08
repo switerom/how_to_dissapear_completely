@@ -1,17 +1,17 @@
 #pragma once
 
 #include "stdafx.h"
+#include "area.h"
 
-class VideoPlayer
+class VideoPlayer: public Area
 {
 public:
 	VideoPlayer();
 	void Init();
-	//void Draw(sf::RenderWindow& window);
-	//void Update(float dt, sf::RenderWindow& window);
-	//void play(const std::string& filename);
-	//void pause();
-	//void stop();
+	virtual void Draw(sf::RenderWindow& window) override;
+	virtual void Update(float dt) override;
+	void toggleVideoPlayback(const std::string& filename);
+	void toggleVideoPlayback();
 
 private:
 	sf::View _playerView;
