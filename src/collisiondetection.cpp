@@ -15,7 +15,7 @@ bool isColliding(const sf::RenderWindow& window, const Area& area)
     return areaRect.contains(mousePosView);
 }
 
-bool isColliding(const sf::RenderWindow& window, const Area& area, const sf::FloatRect& topBoxRect)
+bool isColliding(const sf::RenderWindow& window, const Area& area, const sf::FloatRect& rect)
 {
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
     auto areaView = area.getAreaView();
@@ -23,7 +23,7 @@ bool isColliding(const sf::RenderWindow& window, const Area& area, const sf::Flo
     sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, areaView);
 
     // Check if the FloatRect contains the mouse position
-    return topBoxRect.contains(mousePosView);
+    return rect.contains(mousePosView);
 }
 
 bool isColliding(const sf::RenderWindow& window, sf::View itemsView, const ExplorerItem& item)

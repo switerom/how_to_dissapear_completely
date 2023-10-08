@@ -54,8 +54,14 @@ int main()
                         {
                             videoplayer.toggleMaximize();
                         }
-
-                        videoplayer.toggleVideoPlayback();
+                        else if (isColliding(window, videoplayer, videoplayer.getBarBounds()))
+                        {
+                            videoplayer.changePlayTime(window);
+                        }
+                        else
+                        {
+                            videoplayer.toggleVideoPlayback();
+                        }
                     }
                 }
             }
@@ -66,7 +72,7 @@ int main()
         }
 
         // возможно добавить условие
-            videoplayer.Update(timeController.getDt());
+        videoplayer.Update(timeController.getDt());
 
         window.clear();
 

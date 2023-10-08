@@ -3,6 +3,13 @@
 #include "stdafx.h"
 #include "area.h"
 
+struct VideoPlayerInterface
+{
+	sf::RectangleShape _bar;
+	sf::RectangleShape _seeker;
+};
+
+
 class VideoPlayer: public Area
 {
 public:
@@ -12,10 +19,13 @@ public:
 	virtual void Update(float dt) override;
 	void toggleVideoPlayback(const std::string& filename);
 	void toggleVideoPlayback();
+	void changePlayTime(sf::RenderWindow& window);
+	sf::FloatRect getBarBounds() const { return _interface._bar.getGlobalBounds(); };
 
 private:
-	sf::View _playerView;
 
 	sfe::Movie* _currentVideo;
+
+	VideoPlayerInterface _interface;
 };
 

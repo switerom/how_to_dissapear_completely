@@ -2,8 +2,8 @@
 
 #define GAME_NAME "How to dissapear completely"
 
-#define WIDTH				1280
-#define HEIGHT				720
+#define WIDTH				1920
+#define HEIGHT				1080
 #define TOTAL_VIDS			6
 
 #define EXITEM_X_POS		WIDTH*0.1f
@@ -24,7 +24,6 @@
 #define LINE_THICKNESS		7.f
 #define EPSILON				0.0001f
 
-#define BAR_HEIGHT			15.f
 
 #define FONT				"rsc/fonts/CascadiaCode.ttf"
 #define SUB_SIZE			35
@@ -57,3 +56,7 @@
 
 // Настройки всего окна видеоплеера
 #define VIDEOPLAYER_MIN_BOUNDS		sf::FloatRect(0.f, 0.f, 0.5f, 0.5f)
+#define VIDEOPLAYER_SEEKER_COLOR	sf::Color::Magenta
+#define VIDEOPLAYER_BAR_COLOR		sf::Color::Yellow
+#define VIDEOPLAYER_BAR_HEIGHT		HEIGHT*0.025f
+
