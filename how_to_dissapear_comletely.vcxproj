@@ -131,20 +131,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\include\area.h" />
+    <ClInclude Include="src\include\assetmanager.h" />
     <ClInclude Include="src\include\collisiondetection.h" />
     <ClInclude Include="src\include\explorer.h" />
     <ClInclude Include="src\include\exploreritem.h" />
     <ClInclude Include="src\include\settings.h" />
     <ClInclude Include="src\include\stdafx.h" />
     <ClInclude Include="src\include\timecontroller.h" />
+    <ClInclude Include="src\include\videoplayer.h" />
     <ClInclude Include="src\include\windowsettings.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\area.cpp" />
+    <ClCompile Include="src\assetmanager.cpp" />
     <ClCompile Include="src\collisiondetection.cpp" />
     <ClCompile Include="src\exlporeritem.cpp" />
     <ClCompile Include="src\explorer.cpp" />
     <ClCompile Include="src\how_to_dissapear_comletely.cpp" />
     <ClCompile Include="src\timecontroller.cpp" />
+    <ClCompile Include="src\videoplayer.cpp" />
     <ClCompile Include="src\windowsettings.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

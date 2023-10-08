@@ -5,6 +5,9 @@
 #include "windowsettings.h"
 #include "explorer.h"
 #include "collisiondetection.h"
+#include "assetmanager.h"
+#include "videoplayer.h"
+#include "area.h"
 
 int main()
 {
@@ -13,7 +16,14 @@ int main()
     windowSettings.initWindow(window);  
     TimeController timeController;
     Explorer explorer;
-    
+    //VideoPlayer videoplayer;
+    AssetManager assetmanager;
+    //Area area;
+
+    //sfe::Movie _currentVideo;
+    //_currentVideo.openFromFile("rsc/vid/2.mp4");
+    //_currentVideo.play();
+
     while (window.isOpen())
     {
         timeController.restartDt();
@@ -36,20 +46,26 @@ int main()
                         
                         explorer.selectItem(window);
                     }
+                    //else if (isColliding(window, area))
+                    //{
+                    //    if (timeController.isDoubleClick(window) && isColliding(window, area, area.getTopBoxRect()))
+                    //    {
+                    //        area.toggleMaximize();
+                    //    }
+                    //}
                 }
             }
             else if (event.type == sf::Event::MouseWheelScrolled) 
             {
-                // добавить условие проверки на коллизию
                 explorer.scrollView(event.mouseWheelScroll.delta, timeController.getDt());
             }
         }
 
         window.clear();
 
-        //explorer.Update();
         explorer.Draw(window);
-
+        //_currentVideo.update();
+        //window.draw(_currentVideo);
         window.display();
     }
 

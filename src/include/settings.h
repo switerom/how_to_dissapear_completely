@@ -39,16 +39,21 @@
 
 #define SAVES_DIR			"C:/_FILES/CATEGORIES/MY_FILM-GAME/code/detective_film_game/game/saves"
 
+// Настройки всех окон
+#define WINDOW_TOP_RECT				HEIGHT*0.025f
+#define WINDOW_FRAME_COLOR			sf::Color::Blue
+#define WINDOW_MAX_BOUNDS			sf::FloatRect(0.f, 0.f, 1.f, 1.f)
+
 // Настройки всего окна файл-менеджера
-#define EXPLORER_TOP_RECT			HEIGHT*0.025f
 #define VID_DIR						"rsc/vid"
 #define EXPLORER_ITEM_FONT			"rsc/fonts/JetBrainsMonoNL-Medium.ttf"
 #define EXPLORER_ITEM_TEXT_SIZE		24
 #define EXPLORER_ITEM_TEXT_COLOR	sf::Color::White
 #define EXPLORER_SELECT_COLOR		sf::Color::Green
 #define EXPLORER_BACK_COLOR			sf::Color::Red
-#define EXPLORER_FRAME_COLOR		sf::Color::Blue
 #define EXPLORER_ITEM_SIZE_Y		HEIGHT*0.1f
 #define EXPLORER_SCROLL_SPEED		2500.f
-#define EXPLORER_MIN_BOUNDS			sf::FloatRect(0.f, 0.f, 0.5f, 0.5f)
-#define EXPLORER_MAX_BOUNDS			sf::FloatRect(0.f, 0.f, 1.f, 1.f)
+#define EXPLORER_MIN_BOUNDS			sf::FloatRect(0.f, 0.5f, 0.5f, 0.5f)
+
+// Настройки всего окна видеоплеера
+#define VIDEOPLAYER_MIN_BOUNDS		sf::FloatRect(0.f, 0.f, 0.5f, 0.5f)

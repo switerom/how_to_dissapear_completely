@@ -3,8 +3,14 @@
 #include "settings.h"
 #include "exploreritem.h"
 #include "collisiondetection.h"
+#include "area.h"
 
 namespace fs = std::filesystem;
+
+Explorer::Explorer(): Area{EXPLORER_MIN_BOUNDS}
+{
+	Init();
+}
 
 void Explorer::Init()
 {
@@ -13,16 +19,16 @@ void Explorer::Init()
 	_bigRect.setSize(sf::Vector2f(WIDTH, HEIGHT));
 
 	// Верхняя рамка
-	_topRect.setFillColor(EXPLORER_FRAME_COLOR);
-	_topRect.setSize(sf::Vector2f(WIDTH, EXPLORER_TOP_RECT));
+	_topRect.setFillColor(WINDOW_FRAME_COLOR);
+	_topRect.setSize(sf::Vector2f(WIDTH, WINDOW_TOP_RECT));
 
 	// Выделенный файл
 	_selectRect.setFillColor(EXPLORER_SELECT_COLOR);
 	_selectRect.setSize(sf::Vector2f(WIDTH, EXPLORER_ITEM_SIZE_Y));
 
 	// Размер окна
-	_windowView.reset(sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT));	// так мы указываем, что вся область explorera будет отображаться
-	_windowView.setViewport(EXPLORER_MIN_BOUNDS);	// так мы указываем, что отображаться должно в левой нижней четверти основного окна
+	//_windowView.reset(sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT));	// так мы указываем, что вся область explorera будет отображаться
+	//_windowView.setViewport(EXPLORER_MIN_BOUNDS);	// так мы указываем, что отображаться должно в левой нижней четверти основного окна
 
 	// Размер области файлов
 	_itemsView.reset(sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT));	// так мы указываем, что вся область explorera будет отображаться
@@ -44,8 +50,8 @@ void Explorer::Init()
 sf::FloatRect Explorer::getItemsBounds(const sf::FloatRect& explorerBounds)
 {
 	auto itemsBounds = explorerBounds;
-	itemsBounds.top = itemsBounds.top + EXPLORER_TOP_RECT / HEIGHT * itemsBounds.height;
-	itemsBounds.height = itemsBounds.height - (EXPLORER_TOP_RECT / HEIGHT * itemsBounds.height);
+	itemsBounds.top = itemsBounds.top + WINDOW_TOP_RECT / HEIGHT * itemsBounds.height;
+	itemsBounds.height = itemsBounds.height - (WINDOW_TOP_RECT / HEIGHT * itemsBounds.height);
 
 	return itemsBounds;
 }
@@ -79,14 +85,9 @@ void Explorer::loadFiles()
 	}
 }
 
-Explorer::Explorer()
-{
-	Init();
-}
-
 void Explorer::Draw(sf::RenderWindow& window)
 {
-	window.setView(_windowView);	// применяем View, иначе будет на весь экран
+	window.setView(_areaView);	// применяем View, иначе будет на весь экран
 	window.draw(_bigRect);
 	window.draw(_topRect);
 
@@ -108,15 +109,15 @@ void Explorer::toggleMaximize()
 {
 	if (_isMaximized)
 	{
-		_windowView.setViewport(EXPLORER_MIN_BOUNDS);
-		_itemsView.setViewport(getItemsBounds(EXPLORER_MIN_BOUNDS));
+		_areaView.setViewport(_minBounds);
+		_itemsView.setViewport(getItemsBounds(_minBounds));
 
 		_isMaximized = false;
 	}
 	else
 	{
-		_windowView.setViewport(EXPLORER_MAX_BOUNDS);
-		_itemsView.setViewport(getItemsBounds(EXPLORER_MAX_BOUNDS));
+		_areaView.setViewport(WINDOW_MAX_BOUNDS);
+		_itemsView.setViewport(getItemsBounds(WINDOW_MAX_BOUNDS));
 
 		_isMaximized = true;
 	}
