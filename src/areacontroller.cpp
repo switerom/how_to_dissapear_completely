@@ -11,13 +11,27 @@ void AreaController::Init(std::initializer_list<Area*> areas)
 	{
 		_areas.push_back(area);
 	}
+
+	_maximized = AreaID::None;
 }
 
 void AreaController::Draw(sf::RenderWindow& window)
 {
 	for (auto& area : _areas)
 	{
-		area->Draw(window);
+		if (area->isMaximized())
+		{
+			_maximized = area->getAreaID();
+			area->Draw(window);
+		}
+	}
+
+	if (_maximized == AreaID::None)
+	{
+		for (auto& area : _areas)
+		{
+			area->Draw(window);
+		}
 	}
 }
 
@@ -25,6 +39,23 @@ void AreaController::Update(float dt)
 {
 	for (auto& area : _areas)
 	{
-		area->Update(dt);
+		if (area->isMaximized())
+		{
+			_maximized = area->getAreaID();
+			area->Update(dt);
+		}
 	}
+
+	if (_maximized == AreaID::None)
+	{
+		for (auto& area : _areas)
+		{
+			area->Update(dt);
+		}
+	}
+}
+
+void AreaController::setAreaID(AreaID area)
+{
+	_maximized = area;
 }
