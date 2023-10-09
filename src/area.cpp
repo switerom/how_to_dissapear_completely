@@ -19,6 +19,7 @@ void Area::Init(const sf::FloatRect& minBounds)
 	_areaView.setViewport(_minBounds);	// так мы указываем, что отображаться должно в левой нижней четверти основного окна
 
 	_isMaximized = false;
+	_areaID = AreaID::None;
 }
 
 void Area::toggleMaximize()

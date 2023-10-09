@@ -10,6 +10,7 @@ VideoPlayer::VideoPlayer(): Area{ VIDEOPLAYER_MIN_BOUNDS }
 void VideoPlayer::Init()
 {
 	_currentVideo = nullptr;
+	_areaID = AreaID::Videoplayer;
 
 	_interface._bar.setFillColor(VIDEOPLAYER_BAR_COLOR);
 	_interface._seeker.setFillColor(VIDEOPLAYER_SEEKER_COLOR);
