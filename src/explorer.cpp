@@ -43,10 +43,7 @@ void Explorer::Init()
 
 	loadFiles();
 
-	if (!_explorerItems.empty()) 
-		_selectedItem = _explorerItems.begin();
-
-	_selectedItem->setSelect(true);
+	_selectedItem = _explorerItems.end();
 }
 
 sf::FloatRect Explorer::getItemsBounds(const sf::FloatRect& explorerBounds)
@@ -95,7 +92,8 @@ void Explorer::Draw(sf::RenderWindow& window)
 
 	window.setView(_itemsView);		// Применяем View конкретно для файлов (чтобы правильно работал скроллинг)
 
-	window.draw(_selectRect);
+	if (_selectedItem != _explorerItems.end())
+		window.draw(_selectRect);
 
 	for (auto& item : _explorerItems)
 	{
@@ -159,6 +157,8 @@ void Explorer::scrollView(float scrollDelta, float dt)
 
 void Explorer::selectItem(sf::RenderWindow& window)
 {
+	bool selected { false };
+
 	for (auto it{ _explorerItems.begin() }; it != _explorerItems.end(); ++it)
 	{
 		if (isColliding(window, _itemsView, *it))
@@ -166,11 +166,19 @@ void Explorer::selectItem(sf::RenderWindow& window)
 			_selectedItem = it;
 
 			_selectRect.setPosition(_selectedItem->getItemBounds().left, _selectedItem->getItemBounds().top);
+
+			selected = true;
 		}
 	}
+
+	if (!selected)
+		_selectedItem = _explorerItems.end();
 }
 
 std::string Explorer::getCurrentVideo() const
 { 
-	return _selectedItem->getText().getString(); 
+	if (_selectedItem == _explorerItems.end())
+		return "";
+	else
+		return _selectedItem->getText().getString();
 }
