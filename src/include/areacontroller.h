@@ -17,8 +17,8 @@ public:
 	void setAreaID(Area::ID area);
 
 	void EventControl(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller);
-	void explorerEvents(sf::RenderWindow& window, Explorer& explorer);
-	void videoplayerEvents(sf::RenderWindow& window, VideoPlayer& videoplayer);
+	void explorerEvents(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller);
+	void videoplayerEvents(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller);
 
 private:
 	std::vector<Area*> _areas;

@@ -17,15 +17,15 @@ void AreaController::Draw(sf::RenderWindow& window)
 		{
 			_maximized = area->getAreaID();
 			area->Draw(window);
+            return;
 		}
 	}
 
-	if (_maximized == Area::None)
+    _maximized == Area::None;
+
+	for (auto& area : _areas)
 	{
-		for (auto& area : _areas)
-		{
-			area->Draw(window);
-		}
+		area->Draw(window);
 	}
 }
 
@@ -37,16 +37,16 @@ void AreaController::Update(float dt)
 		{
 			_maximized = area->getAreaID();
 			area->Update(dt);
+            return;
 		}
 	}
 
-	if (_maximized == Area::None)
-	{
-		for (auto& area : _areas)
-		{
-			area->Update(dt);
-		}
-	}
+    _maximized == Area::None;
+
+    for (auto& area : _areas)
+    {
+        area->Update(dt);
+    }
 }
 
 void AreaController::setAreaID(Area::ID area)
@@ -56,39 +56,80 @@ void AreaController::setAreaID(Area::ID area)
 
 void AreaController::EventControl(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller)
 { 
+    if (_explorer.isMaximized())
+    {
+        explorerEvents(event, window, timecontroller);
+    }
+    else if(_videoplayer.isMaximized())
+        videoplayerEvents(event, window, timecontroller);
+    else
+    {
+        if(isColliding(window, _explorer))
+            explorerEvents(event, window, timecontroller);
+        else if (isColliding(window, _videoplayer))
+            videoplayerEvents(event, window, timecontroller);
+    }
+    
+    //if (event.type == sf::Event::MouseButtonPressed)
+    //{
+    //    if (event.mouseButton.button == sf::Mouse::Left)
+    //    {
+    //        if (isColliding(window, _explorer))  
+    //        {
+    //            _explorer.selectItem(window);
+
+    //            if (timecontroller.isDoubleClick(window))
+    //            {
+    //                if (isColliding(window, _explorer, _explorer.getTopBoxRect()))
+    //                {
+    //                    _explorer.toggleMaximize();
+    //                }
+    //                else
+    //                {
+    //                    _videoplayer.toggleVideoPlayback(_explorer.getCurrentVideo());
+    //                }
+    //            }
+    //        }
+    //        else if (isColliding(window, _videoplayer))
+    //        {
+    //            if (timecontroller.isDoubleClick(window))
+    //            {
+    //                _videoplayer.toggleMaximize();
+    //            }
+    //            else if (isColliding(window, _videoplayer, _videoplayer.getBarBounds()))
+    //            {
+    //                _videoplayer.changePlayTime(window);
+    //            }
+    //            else
+    //            {
+    //                _videoplayer.toggleVideoPlayback();
+    //            }
+    //        }
+    //    }
+    //}
+    //else if (event.type == sf::Event::MouseWheelScrolled)
+    //{
+    //    _explorer.scrollView(event.mouseWheelScroll.delta, timecontroller.getDt());
+    //}
+}
+
+void AreaController::explorerEvents(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller)
+{
     if (event.type == sf::Event::MouseButtonPressed)
     {
         if (event.mouseButton.button == sf::Mouse::Left)
         {
-            if (isColliding(window, _explorer))  
-            {
-                _explorer.selectItem(window);
+            _explorer.selectItem(window);
 
-                if (timecontroller.isDoubleClick(window))
-                {
-                    if (isColliding(window, _explorer, _explorer.getTopBoxRect()))
-                    {
-                        _explorer.toggleMaximize();
-                    }
-                    else
-                    {
-                        _videoplayer.toggleVideoPlayback(_explorer.getCurrentVideo());
-                    }
-                }
-            }
-            else if (isColliding(window, _videoplayer))
+            if (timecontroller.isDoubleClick(window))
             {
-                if (timecontroller.isDoubleClick(window))
+                if (isColliding(window, _explorer, _explorer.getTopBoxRect()))
                 {
-                    _videoplayer.toggleMaximize();
-                }
-                else if (isColliding(window, _videoplayer, _videoplayer.getBarBounds()))
-                {
-                    _videoplayer.changePlayTime(window);
+                    _explorer.toggleMaximize();
                 }
                 else
                 {
-                    _videoplayer.toggleVideoPlayback();
+                    _videoplayer.toggleVideoPlayback(_explorer.getCurrentVideo());
                 }
             }
         }
@@ -99,12 +140,24 @@ void AreaController::EventControl(sf::Event& event, sf::RenderWindow& window, Ti
     }
 }
 
-void AreaController::explorerEvents(sf::RenderWindow& window, Explorer& _explorer)
+void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller)
 {
-
-}
-
-void AreaController::videoplayerEvents(sf::RenderWindow& window, VideoPlayer& videoplayer)
-{
-
+    if (event.type == sf::Event::MouseButtonPressed)
+    {
+        if (event.mouseButton.button == sf::Mouse::Left)
+        {
+            if (timecontroller.isDoubleClick(window))
+            {
+                _videoplayer.toggleMaximize();
+            }
+            else if (isColliding(window, _videoplayer, _videoplayer.getBarBounds()))
+            {
+                _videoplayer.changePlayTime(window);
+            }
+            else
+            {
+                _videoplayer.toggleVideoPlayback();
+            }
+        }
+    }
 }
