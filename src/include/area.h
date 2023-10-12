@@ -2,16 +2,18 @@
 
 #include "stdafx.h"
 
-enum class AreaID
-{
-	Videoplayer,
-	Explorer,
-	None,
-};
+
 
 class Area
 {
 public:
+	enum ID
+	{
+		Explorer,
+		Videoplayer,
+		None,
+	};
+
 	virtual void Draw(sf::RenderWindow& window) = 0;
 	virtual void Update(float dt) = 0;
 	virtual void toggleMaximize();
@@ -22,12 +24,14 @@ public:
 	sf::FloatRect getTopBoxRect() const { return _topRect.getGlobalBounds(); };
 	const sf::View& getAreaView() const { return _areaView; };
 	bool isMaximized() const { return _isMaximized; };
-	AreaID getAreaID() const { return _areaID; };
+	//bool isFocused() const { return _isFocused; };
+	ID getAreaID() const { return _id; };
 
 protected:
 	sf::RectangleShape _topRect;	// заменить это на текстуру из AssetManagera
 	sf::View _areaView;
 	bool _isMaximized;
+	//bool _isFocused;
 	sf::FloatRect _minBounds;
-	AreaID _areaID;
+	ID _id;
 };

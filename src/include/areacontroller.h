@@ -2,21 +2,27 @@
 
 #include "stdafx.h"
 #include "Area.h"
+#include "videoplayer.h"
+#include "explorer.h"
+#include "timecontroller.h"
 
 class AreaController
 {
 public:
 
-	AreaController(std::initializer_list<Area*> areas);
-
-	void Init(std::initializer_list<Area*> areas);
+	AreaController(Explorer& explorer, VideoPlayer& videoplayer);
 
 	void Draw(sf::RenderWindow& window);
 	void Update(float dt);
-	void setAreaID(AreaID area);
+	void setAreaID(Area::ID area);
 
+	void EventControl(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller);
+	void explorerEvents(sf::RenderWindow& window, Explorer& explorer);
+	void videoplayerEvents(sf::RenderWindow& window, VideoPlayer& videoplayer);
 
 private:
 	std::vector<Area*> _areas;
-	AreaID _maximized;
+	Area::ID _maximized;
+	Explorer& _explorer;
+	VideoPlayer& _videoplayer;
 };

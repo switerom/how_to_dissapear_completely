@@ -39,7 +39,7 @@ void Explorer::Init()
 	
 	_isMaximized = false;
 	_scrollPos = HEIGHT/2;	// ставим позицию скроллинга в центр экрана, чтобы правильно работала функция setCenter()
-	_areaID = AreaID::Explorer;
+	_id = ID::Explorer;
 
 	loadFiles();
 

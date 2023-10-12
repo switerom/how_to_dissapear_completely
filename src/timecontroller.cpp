@@ -2,6 +2,10 @@
 #include "timecontroller.h"
 #include "stdafx.h"
 
+TimeController::TimeController()
+{
+}
+
 void TimeController::restartDt()
 {
     _dtTime = _dtClock.restart();
@@ -11,9 +15,6 @@ float TimeController::getDt() const
 {
     return _dtTime.asSeconds();
 }
-
-TimeController::TimeController() : _dtClock(), _dtTime()
-{}
 
 bool TimeController::isDoubleClick(sf::RenderWindow& window)
 {
