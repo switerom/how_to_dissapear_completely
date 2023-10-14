@@ -33,7 +33,7 @@ void VideoPlayer::toggleVideoPlayback(const std::string& filename)
 		_currentVideo->pause();
 	else
 	{
-		toggleMaximize();
+		//toggleMaximize();
 		_currentVideo->play();
 	}
 }

@@ -125,7 +125,7 @@ void AreaController::explorerEvents(sf::Event& event, sf::RenderWindow& window, 
             {
                 if (isColliding(window, _explorer, _explorer.getTopBoxRect()))
                 {
-                    _explorer.toggleMaximize();
+                    //_explorer.toggleMaximize();
                 }
                 else
                 {
@@ -148,7 +148,7 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
         {
             if (timecontroller.isDoubleClick(window))
             {
-                _videoplayer.toggleMaximize();
+                //_videoplayer.toggleMaximize();
             }
             else if (isColliding(window, _videoplayer, _videoplayer.getBarBounds()))
             {
