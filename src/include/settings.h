@@ -14,8 +14,6 @@
 #define MIN_VIEW_SIZE 		700.f
 #define MAX_VIEW_SIZE		4000.f
 
-#define ZOOM_FACTOR			(delta_zoom) (1.f - (delta_zoom) / 10.f)
-
 #define NOT_SELECTED		0
 
 #define LINE_THICKNESS		7.f
@@ -61,5 +59,8 @@
 // Настройки всего окна доски
 #define BOARD_BACK_COLOR			sf::Color::Cyan
 #define BOARD_MIN_BOUNDS			sf::FloatRect(0.5f, 0.f, 0.5f, 1.f)
-#define BOARD_VIEWPORT				sf::FloatRect(0.25f*WIDTH, 0.f, 0.75f*WIDTH, HEIGHT)
+#define BOARD_VIEWPORT				sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT)
 #define BOARD_MOVE_SPEED			50.f
+#define BOARD_ZOOM_SPEED			6.f
+
+

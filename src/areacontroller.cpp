@@ -1,4 +1,4 @@
-#include "areacontroller.h"
+﻿#include "areacontroller.h"
 #include "collisiondetection.h"
 
 AreaController::AreaController(Explorer& explorer, VideoPlayer& videoplayer, Board& board): _explorer(explorer), _videoplayer(videoplayer), _board(board)
@@ -137,6 +137,13 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         if (event.mouseButton.button == sf::Mouse::Middle)
         {
             _board.setViewMoving(window, false);
+        }
+    }
+    else if (event.type == sf::Event::MouseWheelScrolled)
+    {
+        if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
+        {
+            _board.zoomView(window, event.mouseWheelScroll.delta, timecontroller.getDt());
         }
     }
 }
