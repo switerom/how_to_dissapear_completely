@@ -16,7 +16,7 @@ public:
 	VideoPlayer();
 	void Init();
 	virtual void Draw(sf::RenderWindow& window) override;
-	virtual void Update(float dt) override;
+	virtual void Update(sf::RenderWindow& window, float dt) override;
 	void toggleVideoPlayback(const std::string& filename);
 	void toggleVideoPlayback();
 	void changePlayTime(sf::RenderWindow& window);

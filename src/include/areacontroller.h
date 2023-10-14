@@ -14,12 +14,13 @@ public:
 	AreaController(Explorer& explorer, VideoPlayer& videoplayer, Board& board);
 
 	void Draw(sf::RenderWindow& window);
-	void Update(float dt);
+	void Update(sf::RenderWindow& window, float dt);
 	void setAreaID(Area::ID area);
 
 	void EventControl(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller);
 	void explorerEvents(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller);
 	void videoplayerEvents(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller);
+	void boardEvents(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller);
 
 private:
 	std::vector<Area*> _areas;

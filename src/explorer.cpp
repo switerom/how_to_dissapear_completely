@@ -101,7 +101,7 @@ void Explorer::Draw(sf::RenderWindow& window)
 	}
 }
 
-void Explorer::Update(float dt)
+void Explorer::Update(sf::RenderWindow& window, float dt)
 {
 }
 

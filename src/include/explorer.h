@@ -10,7 +10,7 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 	virtual void toggleMaximize() override;
 
-	virtual void Update(float dt) override;
+	virtual void Update(sf::RenderWindow& window, float dt) override;
 
 	Explorer();
 	void Init();

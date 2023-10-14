@@ -65,7 +65,7 @@ void VideoPlayer::Draw(sf::RenderWindow& window)
 	window.draw(_interface._seeker);
 }
 
-void VideoPlayer::Update(float dt)
+void VideoPlayer::Update(sf::RenderWindow& window, float dt)
 {
 	if (!_currentVideo)
 		return;

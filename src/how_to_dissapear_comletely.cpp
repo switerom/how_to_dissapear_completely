@@ -36,7 +36,7 @@ int main()
             areacontroller.EventControl(event, window, timeController);
         }
 
-        areacontroller.Update(timeController.getDt());
+        areacontroller.Update(window, timeController.getDt());
 
         window.clear();
         areacontroller.Draw(window);
