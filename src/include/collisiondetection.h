@@ -8,4 +8,6 @@ bool isColliding(const sf::RenderWindow& window, const Area& area);
 
 bool isColliding(const sf::RenderWindow& window, const Area& area, const sf::FloatRect& rect);
 
-bool isColliding(const sf::RenderWindow& window, sf::View itemsView, const ExplorerItem& item);
+bool isColliding(const sf::RenderWindow& window, const sf::View& itemsView, const ExplorerItem& item);
+
+bool isColliding(const sf::RenderWindow& window, const sf::View& view);

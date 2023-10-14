@@ -26,7 +26,7 @@ bool isColliding(const sf::RenderWindow& window, const Area& area, const sf::Flo
     return rect.contains(mousePosView);
 }
 
-bool isColliding(const sf::RenderWindow& window, sf::View itemsView, const ExplorerItem& item)
+bool isColliding(const sf::RenderWindow& window, const sf::View& itemsView, const ExplorerItem& item)
 {
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
     sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, itemsView);
@@ -34,4 +34,15 @@ bool isColliding(const sf::RenderWindow& window, sf::View itemsView, const Explo
     auto itemBounds= item.getItemBounds();
 
     return itemBounds.contains(mousePosView);;
+}
+
+bool isColliding(const sf::RenderWindow& window, const sf::View& view)
+{
+    sf::FloatRect viewport = view.getViewport();
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+    return  (mousePosition.x >= window.getSize().x * viewport.left) &&
+            (mousePosition.x <= window.getSize().x * (viewport.left + viewport.width)) &&
+            (mousePosition.y >= window.getSize().y * viewport.top) &&
+            (mousePosition.y <= window.getSize().y * (viewport.top + viewport.height));
 }

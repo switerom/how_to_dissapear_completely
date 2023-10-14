@@ -65,11 +65,11 @@ void AreaController::EventControl(sf::Event& event, sf::RenderWindow& window, Ti
         boardEvents(event, window, timecontroller);
     else
     {
-        if(isColliding(window, _explorer))
+        if(isColliding(window, _explorer.getAreaView()))
             explorerEvents(event, window, timecontroller);
-        else if (isColliding(window, _videoplayer))
+        else if (isColliding(window, _videoplayer.getAreaView()))
             videoplayerEvents(event, window, timecontroller);
-        else if (isColliding(window, _board))
+        else if (isColliding(window, _board.getAreaView()))
             boardEvents(event, window, timecontroller);
     }
 }
