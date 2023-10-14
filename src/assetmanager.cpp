@@ -48,9 +48,7 @@ sfe::Movie* AssetManager::getVideo(const std::string& filename)
 
 	if (!vid.openFromFile(filepath))
 	{
-		// Handle video loading error here
-		// For example, throw an exception or log an error message
-		// You can also return a default font or an empty font object
+		return nullptr;
 	}
 
 	return &vid;

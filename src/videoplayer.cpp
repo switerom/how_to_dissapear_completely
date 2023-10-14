@@ -27,7 +27,10 @@ void VideoPlayer::toggleVideoPlayback(const std::string& filename)
 	_currentVideo = AssetManager::getVideo(filename);
 
 	if (!_currentVideo)
+	{
+		_interface._seeker.setSize(sf::Vector2f(0.f, VIDEOPLAYER_BAR_HEIGHT));
 		return;
+	}
 
 	if (_currentVideo->getStatus() == sfe::Status::Playing)
 		_currentVideo->pause();
@@ -79,7 +82,9 @@ void VideoPlayer::Update(float dt)
 void VideoPlayer::changePlayTime(sf::RenderWindow& window)
 {
 	if (!_currentVideo)
+	{
 		return;
+	}
 
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, _areaView);
