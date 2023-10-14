@@ -62,5 +62,8 @@
 #define BOARD_VIEWPORT				sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT)
 #define BOARD_MOVE_SPEED			50.f
 #define BOARD_ZOOM_SPEED			6.f
+#define CARCASS_COLOR				sf::Color::Blue
+#define CARCASS_HEIGHT				100.f
+#define TIMELINE_WIDTH_FACTOR		5.f
 
 

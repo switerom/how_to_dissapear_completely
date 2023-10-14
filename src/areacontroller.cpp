@@ -120,6 +120,13 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
                 _videoplayer.toggleVideoPlayback();
             }
         }
+        else if (event.mouseButton.button == sf::Mouse::Right)
+        {
+            if (timecontroller.isDoubleClick(window))
+            {
+                _board.createVideoPreset(_videoplayer.getCurrentVideo());
+            }
+        }
     }
 }
 
@@ -130,6 +137,10 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         if (event.mouseButton.button == sf::Mouse::Middle)
         {
             _board.setViewMoving(window, true);
+        }
+        else if (event.mouseButton.button == sf::Mouse::Left)
+        {
+            //_board.moveCarcass();
         }
     }
     else if (event.type == sf::Event::MouseButtonReleased)

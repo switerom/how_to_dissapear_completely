@@ -21,6 +21,7 @@ public:
 	void toggleVideoPlayback();
 	void changePlayTime(sf::RenderWindow& window);
 	sf::FloatRect getBarBounds() const { return _interface._bar.getGlobalBounds(); };
+	const sfe::Movie* getCurrentVideo() const { return _currentVideo; };
 
 private:
 

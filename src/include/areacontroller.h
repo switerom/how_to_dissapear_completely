@@ -7,6 +7,12 @@
 #include "timecontroller.h"
 #include "board.h"
 
+struct MouseController
+{
+	sf::Vector2f _leftPressed;
+	sf::Vector2f _leftReleased;
+};
+
 class AreaController
 {
 public:
@@ -28,4 +34,5 @@ private:
 	Explorer& _explorer;
 	Board& _board;
 	VideoPlayer& _videoplayer;
+	MouseController _mousecontroller;
 };

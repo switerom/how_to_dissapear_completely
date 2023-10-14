@@ -6,6 +6,12 @@ Board::Board(): Area ( BOARD_MIN_BOUNDS, BOARD_VIEWPORT)
 	Init();
 }
 
+Board::~Board()
+{
+	for (auto& i : _carcasses)
+		delete i;
+}
+
 void Board::Init()
 {
 	// Фон окна
@@ -13,6 +19,7 @@ void Board::Init()
 	_bigRect.setSize(sf::Vector2f(WIDTH, HEIGHT));
 
 	_viewControl.isMoving = false;
+	//_videoPreset.video = nullptr;
 }
 
 void Board::Draw(sf::RenderWindow& window)
@@ -20,6 +27,9 @@ void Board::Draw(sf::RenderWindow& window)
 	window.setView(_areaView);
 
 	window.draw(_bigRect);
+
+	for (auto& i : _carcasses)
+		i->Draw(window);
 }
 
 void Board::Update(sf::RenderWindow& window, float dt)
@@ -49,7 +59,6 @@ void Board::setViewMoving(sf::RenderWindow& window, bool isMoving)
 		_viewControl.prevMousePos = sf::Mouse::getPosition(window);
 };
 
-// Ошибка. т.к. не учитывается deltaTime в zoom_factor;
 void Board::zoomView(sf::RenderWindow& window, float dt_zoom, float dt)
 {
 	float zoom_factor;
@@ -67,4 +76,19 @@ void Board::zoomView(sf::RenderWindow& window, float dt_zoom, float dt)
 
 	_areaView.setCenter(view_center);
 	_areaView.zoom(zoom_factor);
+}
+
+void Board::createVideoPreset(const sfe::Movie* video)
+{
+	if (!video)
+		return;
+
+	Carcass* carcass = new Carcass(video->getDuration());
+	_carcasses.push_back(carcass);
+	//video->getPlayingOffset();
+}
+
+void Board::moveCarcass(bool is_move, sf::RenderWindow& window)
+{
+
 }

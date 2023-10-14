@@ -135,6 +135,7 @@
     <ClInclude Include="src\include\areacontroller.h" />
     <ClInclude Include="src\include\assetmanager.h" />
     <ClInclude Include="src\include\board.h" />
+    <ClInclude Include="src\include\carcass.h" />
     <ClInclude Include="src\include\collisiondetection.h" />
     <ClInclude Include="src\include\explorer.h" />
     <ClInclude Include="src\include\exploreritem.h" />
@@ -149,6 +150,7 @@
     <ClCompile Include="src\areacontroller.cpp" />
     <ClCompile Include="src\assetmanager.cpp" />
     <ClCompile Include="src\board.cpp" />
+    <ClCompile Include="src\carcass.cpp" />
     <ClCompile Include="src\collisiondetection.cpp" />
     <ClCompile Include="src\exlporeritem.cpp" />
     <ClCompile Include="src\explorer.cpp" />
