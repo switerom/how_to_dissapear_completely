@@ -9,6 +9,7 @@
 #include "videoplayer.h"
 #include "area.h"
 #include "areacontroller.h"
+#include "board.h"
 
 int main()
 {
@@ -18,13 +19,14 @@ int main()
     TimeController timeController;
     Explorer explorer;
     VideoPlayer videoplayer;
-    AreaController areacontroller ( explorer, videoplayer );
+    Board board;
+    AreaController areacontroller ( explorer, videoplayer, board );
     AssetManager assetmanager;
 
     while (window.isOpen())
     {
         timeController.restartDt();
-
+        
         sf::Event event;
         while (window.pollEvent(event))
         {

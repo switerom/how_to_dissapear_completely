@@ -5,12 +5,13 @@
 #include "videoplayer.h"
 #include "explorer.h"
 #include "timecontroller.h"
+#include "board.h"
 
 class AreaController
 {
 public:
 
-	AreaController(Explorer& explorer, VideoPlayer& videoplayer);
+	AreaController(Explorer& explorer, VideoPlayer& videoplayer, Board& board);
 
 	void Draw(sf::RenderWindow& window);
 	void Update(float dt);
@@ -24,5 +25,6 @@ private:
 	std::vector<Area*> _areas;
 	Area::ID _maximized;
 	Explorer& _explorer;
+	Board& _board;
 	VideoPlayer& _videoplayer;
 };

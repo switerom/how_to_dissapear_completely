@@ -2,7 +2,7 @@
 #include "settings.h"
 #include "assetmanager.h"
 
-VideoPlayer::VideoPlayer(): Area{ VIDEOPLAYER_MIN_BOUNDS }
+VideoPlayer::VideoPlayer(): Area( VIDEOPLAYER_MIN_BOUNDS, VIDEOPLAYER_VIEWPORT)
 {
 	Init();
 }

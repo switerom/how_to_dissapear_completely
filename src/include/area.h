@@ -18,8 +18,8 @@ public:
 	virtual void Update(float dt) = 0;
 	virtual void toggleMaximize();
 
-	Area(const sf::FloatRect& minBounds);
-	void Init(const sf::FloatRect& minBounds);
+	Area(const sf::FloatRect& minBounds, const sf::FloatRect& viewport);
+	void Init(const sf::FloatRect& minBounds, const sf::FloatRect& viewport);
 
 	sf::FloatRect getTopBoxRect() const { return _topRect.getGlobalBounds(); };
 	const sf::View& getAreaView() const { return _areaView; };

@@ -1,10 +1,11 @@
 #include "areacontroller.h"
 #include "collisiondetection.h"
 
-AreaController::AreaController(Explorer& explorer, VideoPlayer& videoplayer): _explorer(explorer), _videoplayer(videoplayer)
+AreaController::AreaController(Explorer& explorer, VideoPlayer& videoplayer, Board& board): _explorer(explorer), _videoplayer(videoplayer), _board(board)
 {
     _areas.push_back(&explorer);
     _areas.push_back(&videoplayer);
+    _areas.push_back(&board);
 
     _maximized = Area::None;
 }
@@ -21,7 +22,7 @@ void AreaController::Draw(sf::RenderWindow& window)
 		}
 	}
 
-    _maximized == Area::None;
+    _maximized = Area::None;
 
 	for (auto& area : _areas)
 	{
@@ -41,7 +42,7 @@ void AreaController::Update(float dt)
 		}
 	}
 
-    _maximized == Area::None;
+    _maximized = Area::None;
 
     for (auto& area : _areas)
     {

@@ -8,7 +8,7 @@
 
 namespace fs = std::filesystem;
 
-Explorer::Explorer(): Area{EXPLORER_MIN_BOUNDS}
+Explorer::Explorer(): Area (EXPLORER_MIN_BOUNDS, EXPLORER_VIEWPORT)
 {
 	Init();
 }
