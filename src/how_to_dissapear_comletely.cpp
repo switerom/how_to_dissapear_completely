@@ -10,6 +10,7 @@
 #include "area.h"
 #include "areacontroller.h"
 #include "board.h"
+#include "keygen.h"
 
 int main()
 {

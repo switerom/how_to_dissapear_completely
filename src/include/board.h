@@ -21,6 +21,7 @@ struct ViewCnotrol
 struct MoveControl
 {
 	bool isCarcassMoving;
+	int selectedCarcass;
 };
 
 class Board: public Area
@@ -36,15 +37,20 @@ public:
 	void setViewMoving(sf::RenderWindow& window, bool isMoving);
 	void zoomView(sf::RenderWindow& window, float dt_zoom, float dt);
 
-	void createVideoPreset(const sfe::Movie* video);
+	void createCarcass(const sfe::Movie* video);
 
 	void moveCarcass(bool is_move, sf::RenderWindow& window);
+	void selectCarcass(sf::RenderWindow& window);
 
 private:
 	sf::View _boardView;
 	sf::RectangleShape _bigRect;
 	ViewCnotrol _viewControl;
 	//VideoPreset _videoPreset;
-	std::vector<Carcass*> _carcasses;
+
+	std::map<int, Carcass*> _carcasses;
+	std::list<int> _layers;
+	//std::vector<Carcass*> _carcasses;
+
 	MoveControl _movecontrol;
 };

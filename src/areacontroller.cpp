@@ -124,7 +124,7 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
         {
             if (timecontroller.isDoubleClick(window))
             {
-                _board.createVideoPreset(_videoplayer.getCurrentVideo());
+                _board.createCarcass(_videoplayer.getCurrentVideo());
             }
         }
     }
@@ -141,6 +141,7 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         else if (event.mouseButton.button == sf::Mouse::Left)
         {
             //_board.moveCarcass();
+            _board.selectCarcass(window);
         }
     }
     else if (event.type == sf::Event::MouseButtonReleased)

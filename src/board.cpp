@@ -1,5 +1,7 @@
 ﻿#include "board.h"
 #include "settings.h"
+#include "keygen.h"
+#include "collisiondetection.h"
 
 Board::Board(): Area ( BOARD_MIN_BOUNDS, BOARD_VIEWPORT)
 {
@@ -8,8 +10,11 @@ Board::Board(): Area ( BOARD_MIN_BOUNDS, BOARD_VIEWPORT)
 
 Board::~Board()
 {
+	if (_carcasses.empty())
+		return;
+
 	for (auto& i : _carcasses)
-		delete i;
+		delete i.second;
 }
 
 void Board::Init()
@@ -28,8 +33,8 @@ void Board::Draw(sf::RenderWindow& window)
 
 	window.draw(_bigRect);
 
-	for (auto& i : _carcasses)
-		i->Draw(window);
+	for (auto& i : _layers)
+		_carcasses.at(i)->Draw(window);
 }
 
 void Board::Update(sf::RenderWindow& window, float dt)
@@ -78,17 +83,51 @@ void Board::zoomView(sf::RenderWindow& window, float dt_zoom, float dt)
 	_areaView.zoom(zoom_factor);
 }
 
-void Board::createVideoPreset(const sfe::Movie* video)
+void Board::createCarcass(const sfe::Movie* video)
 {
 	if (!video)
 		return;
 
 	Carcass* carcass = new Carcass(video->getDuration());
-	_carcasses.push_back(carcass);
-	//video->getPlayingOffset();
+
+	int id{ KeyGen::getKey() };
+
+	while (_carcasses.find(id) != _carcasses.end())
+		id = KeyGen::getKey();
+
+	_carcasses.emplace(id, carcass);
+	_layers.push_back(id);
 }
 
 void Board::moveCarcass(bool is_move, sf::RenderWindow& window)
 {
 
+}
+
+void Board::selectCarcass(sf::RenderWindow& window)
+{
+	if (_carcasses.empty())
+		return;
+
+	auto it = std::make_reverse_iterator(_layers.end());  // reverse итератор потому, что мы в конце находится слой, который выше отображается
+
+	while (it != std::make_reverse_iterator(_layers.begin()))
+	{
+		sf::FloatRect bounds = _carcasses.at(*it)->getBounds();
+
+		if (isColliding(window, *this, bounds))
+		{
+			_movecontrol.selectedCarcass = *it;
+
+			// меняем порядок слоев
+			auto it = std::find(_layers.begin(), _layers.end(), _movecontrol.selectedCarcass);
+			_layers.erase(it);
+			_layers.push_back(_movecontrol.selectedCarcass);
+
+			return;
+		}
+		++it;
+	}
+
+	_movecontrol.selectedCarcass = NOT_SELECTED;
 }

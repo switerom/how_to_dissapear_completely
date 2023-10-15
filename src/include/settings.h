@@ -59,11 +59,13 @@
 // Настройки всего окна доски
 #define BOARD_BACK_COLOR			sf::Color::Cyan
 #define BOARD_MIN_BOUNDS			sf::FloatRect(0.5f, 0.f, 0.5f, 1.f)
-#define BOARD_VIEWPORT				sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT)
+#define BOARD_VIEWPORT				sf::FloatRect(0.f, 0.f, WIDTH*0.5f, HEIGHT)
 #define BOARD_MOVE_SPEED			50.f
 #define BOARD_ZOOM_SPEED			6.f
 #define CARCASS_COLOR				sf::Color::Blue
 #define CARCASS_HEIGHT				100.f
+#define CARCASS_OUTLINE_THICKNESS	10.f
+#define CARCASS_OUTLINE_COLOR		sf::Color::Red
 #define TIMELINE_WIDTH_FACTOR		5.f
 
 

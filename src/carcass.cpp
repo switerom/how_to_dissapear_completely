@@ -9,6 +9,8 @@ Carcass::Carcass(sf::Time timeline)
 
 	_background.setFillColor(CARCASS_COLOR);
 	_background.setSize(sf::Vector2f(width, CARCASS_HEIGHT));
+	_background.setOutlineThickness(CARCASS_OUTLINE_THICKNESS);
+	_background.setOutlineColor(CARCASS_OUTLINE_COLOR);
 }
 
 void Carcass::Draw(sf::RenderWindow& window)

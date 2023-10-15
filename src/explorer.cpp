@@ -168,11 +168,12 @@ void Explorer::selectItem(sf::RenderWindow& window)
 			_selectRect.setPosition(_selectedItem->getItemBounds().left, _selectedItem->getItemBounds().top);
 
 			selected = true;
+
+			return;
 		}
 	}
 
-	if (!selected)
-		_selectedItem = _explorerItems.end();
+	_selectedItem = _explorerItems.end();
 }
 
 std::string Explorer::getCurrentVideo() const
