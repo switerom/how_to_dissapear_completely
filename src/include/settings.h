@@ -9,7 +9,6 @@
 #define EXITEM_X_POS		WIDTH*0.1f
 #define EXITEM_Y_POS		WIDTH*0.1f
 #define EXITEM_Y_DIST		WIDTH*0.05f
-#define LINE_THK			3.f
 
 #define MIN_VIEW_SIZE 		700.f
 #define MAX_VIEW_SIZE		4000.f
@@ -66,16 +65,23 @@
 #define CARCASS_HEIGHT				100.f
 #define CARCASS_OUTLINE_THICKNESS	10.f
 #define CARCASS_OUTLINE_COLOR		sf::Color::Red
-#define TIMELINE_WIDTH_FACTOR		5.f
+#define TIMELINE_WIDTH_FACTOR		5
 #define TIMELINE_HEIGHT				5.f
 #define TIMELINE_COLOR				sf::Color::White
 #define TIMELINE_LEFT_INDENTATION	10.f
 #define TIMELINE_TOP_INDENTATION	10.f
 
+// Настройки каркаса
 #define DELIMITER_COLOR				sf::Color::White
 #define DELIMITER_WIDTH				5.f
 #define DELIMITER_HEIGHT			10.f
 #define DELIMITER_FREQUENCY			5
 #define DELIMITER_LEFT_INDENTATION	TIMELINE_LEFT_INDENTATION
 #define DELIMITER_TOP_INDENTATION	TIMELINE_TOP_INDENTATION
+
+// Настройки скриншота
+#define SCREENSHOT_LINES_COLOR_A	sf::Color::White
+#define SCREENSHOT_LINES_COLOR_B	sf::Color::Green
+#define SCREENSHOT_LINES_COLOR_C	sf::Color::Yellow
+#define SCREENSHOT_LINE_THK			3.f
 

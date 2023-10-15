@@ -127,6 +127,14 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
                 _board.createCarcass(_videoplayer.getCurrentVideo());
             }
         }
+        else if (event.mouseButton.button == sf::Mouse::Middle)
+        {
+            //_videoplayer.getScreenshot()->takeScreenshot(window, _videoplayer.getCurrentVideo(), _videoplayer.getAreaView());
+        }
+    }
+    else if (event.type == sf::Event::MouseMoved)
+    {
+        _videoplayer.getScreenshot()->moveLines(window, _videoplayer.getAreaView());
     }
 }
 

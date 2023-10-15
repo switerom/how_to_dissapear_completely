@@ -7,6 +7,12 @@ VideoPlayer::VideoPlayer(): Area( VIDEOPLAYER_MIN_BOUNDS, VIDEOPLAYER_VIEWPORT)
 	Init();
 }
 
+VideoPlayer::~VideoPlayer()
+{
+	if (_screenshot)
+		delete _screenshot;
+}
+
 void VideoPlayer::Init()
 {
 	_currentVideo = nullptr;
@@ -20,6 +26,8 @@ void VideoPlayer::Init()
 
 	_interface._bar.setSize(sf::Vector2f(WIDTH, VIDEOPLAYER_BAR_HEIGHT));
 	_interface._seeker.setSize(sf::Vector2f(WIDTH, VIDEOPLAYER_BAR_HEIGHT));
+
+	_screenshot = new Screenshot();
 }
 
 void VideoPlayer::toggleVideoPlayback(const std::string& filename)
@@ -63,6 +71,8 @@ void VideoPlayer::Draw(sf::RenderWindow& window)
 
 	window.draw(_interface._bar);
 	window.draw(_interface._seeker);
+
+	_screenshot->Draw(window);
 }
 
 void VideoPlayer::Update(sf::RenderWindow& window, float dt)
