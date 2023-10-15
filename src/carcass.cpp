@@ -23,3 +23,9 @@ void Carcass::Update(sf::RenderWindow& window, float dt)
 
 }
 
+void Carcass::setPosition(const sf::Vector2f& pos)
+{
+	_background.setPosition(pos.x, pos.y);
+}
+
+

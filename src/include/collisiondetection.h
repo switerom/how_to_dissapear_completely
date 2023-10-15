@@ -11,3 +11,5 @@ bool isColliding(const sf::RenderWindow& window, const Area& area, const sf::Flo
 bool isColliding(const sf::RenderWindow& window, const sf::View& itemsView, const ExplorerItem& item);
 
 bool isColliding(const sf::RenderWindow& window, const sf::View& view);
+
+bool isColliding(const sf::Vector2f& worldPos, const  sf::FloatRect& rect);

@@ -24,7 +24,10 @@ void Board::Init()
 	_bigRect.setSize(sf::Vector2f(WIDTH, HEIGHT));
 
 	_viewControl.isMoving = false;
-	//_videoPreset.video = nullptr;
+
+	_movecontrol.isCarcassMoving = false;
+	_movecontrol.selectedCarcass = NOT_SELECTED;
+	_movecontrol.selectPosShift = sf::Vector2f(0.f, 0.f);
 }
 
 void Board::Draw(sf::RenderWindow& window)
@@ -43,8 +46,8 @@ void Board::Update(sf::RenderWindow& window, float dt)
 
 	if (_viewControl.isMoving)
 		moveView(window, dt);
-	//else if (_viewControl.isZooming)
-	//	zoomView(window, dt);
+	else if (_movecontrol.isCarcassMoving)
+		moveCarcass(window);
 }
 
 void Board::moveView(sf::RenderWindow& window, float dt)
@@ -99,9 +102,14 @@ void Board::createCarcass(const sfe::Movie* video)
 	_layers.push_back(id);
 }
 
-void Board::moveCarcass(bool is_move, sf::RenderWindow& window)
+void Board::moveCarcass(sf::RenderWindow& window)
 {
+	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
 
+	if (_movecontrol.selectedCarcass != NOT_SELECTED)
+		_carcasses.at(_movecontrol.selectedCarcass)->setPosition(sf::Vector2f(worldPos.x - _movecontrol.selectPosShift.x + CARCASS_OUTLINE_THICKNESS,
+																				worldPos.y - _movecontrol.selectPosShift.y + CARCASS_OUTLINE_THICKNESS));
 }
 
 void Board::selectCarcass(sf::RenderWindow& window)
@@ -109,15 +117,23 @@ void Board::selectCarcass(sf::RenderWindow& window)
 	if (_carcasses.empty())
 		return;
 
+	// Координаты мыши нужны здесь, а не в isColliding, потому, что это еще нужно для _movecontrol.selectPosShift
+	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
+
 	auto it = std::make_reverse_iterator(_layers.end());  // reverse итератор потому, что мы в конце находится слой, который выше отображается
 
 	while (it != std::make_reverse_iterator(_layers.begin()))
 	{
 		sf::FloatRect bounds = _carcasses.at(*it)->getBounds();
 
-		if (isColliding(window, *this, bounds))
+		if (isColliding(worldPos, bounds))
 		{
 			_movecontrol.selectedCarcass = *it;
+
+			// нужно для того, чтобы каркасс перемещался ровно из того места, где его взяли
+			_movecontrol.selectPosShift.x = worldPos.x - bounds.left;
+			_movecontrol.selectPosShift.y = worldPos.y - bounds.top;
 
 			// меняем порядок слоев
 			auto it = std::find(_layers.begin(), _layers.end(), _movecontrol.selectedCarcass);

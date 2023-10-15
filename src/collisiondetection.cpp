@@ -39,10 +39,18 @@ bool isColliding(const sf::RenderWindow& window, const sf::View& itemsView, cons
 bool isColliding(const sf::RenderWindow& window, const sf::View& view)
 {
     sf::FloatRect viewport = view.getViewport();
-    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
-    return  (mousePosition.x >= window.getSize().x * viewport.left) &&
-            (mousePosition.x <= window.getSize().x * (viewport.left + viewport.width)) &&
-            (mousePosition.y >= window.getSize().y * viewport.top) &&
-            (mousePosition.y <= window.getSize().y * (viewport.top + viewport.height));
+    return  (mousePos.x >= window.getSize().x * viewport.left) &&
+            (mousePos.x <= window.getSize().x * (viewport.left + viewport.width)) &&
+            (mousePos.y >= window.getSize().y * viewport.top) &&
+            (mousePos.y <= window.getSize().y * (viewport.top + viewport.height));
+}
+
+bool isColliding(const sf::Vector2f& worldPos, const  sf::FloatRect& rect)
+{
+    return  (worldPos.x >= rect.left) &&
+            (worldPos.x <= (rect.left + rect.width)) &&
+            (worldPos.y >= rect.top) &&
+            (worldPos.y <= rect.top + rect.height);
 }

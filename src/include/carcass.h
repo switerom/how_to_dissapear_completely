@@ -11,10 +11,10 @@ public:
 	void Draw(sf::RenderWindow& window);
 	void Update(sf::RenderWindow& window, float dt);
 
-	const sf::FloatRect& getBounds() const { return _background.getGlobalBounds(); };
+	sf::FloatRect getBounds() const { return _background.getGlobalBounds(); };
+	void setPosition(const sf::Vector2f& pos);
 
 private:
 	sf::RectangleShape _background;
 	sf::Time _timeline;
-	
 };

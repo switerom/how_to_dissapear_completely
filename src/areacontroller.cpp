@@ -140,8 +140,8 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         }
         else if (event.mouseButton.button == sf::Mouse::Left)
         {
-            //_board.moveCarcass();
             _board.selectCarcass(window);
+            _board.setCarcassMoving(true);
         }
     }
     else if (event.type == sf::Event::MouseButtonReleased)
@@ -149,6 +149,10 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         if (event.mouseButton.button == sf::Mouse::Middle)
         {
             _board.setViewMoving(window, false);
+        }
+        else if (event.mouseButton.button == sf::Mouse::Left)
+        {
+            _board.setCarcassMoving(false);
         }
     }
     else if (event.type == sf::Event::MouseWheelScrolled)
