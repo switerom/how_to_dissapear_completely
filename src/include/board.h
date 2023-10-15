@@ -5,27 +5,22 @@
 #include "timecontroller.h"
 #include "carcass.h"
 
-struct ViewCnotrol
-{
-	sf::Vector2i prevMousePos;
-	bool isMoving;
-};
-
-//struct VideoPreset
-//{
-//	const sfe::Movie* video;
-//};
-
-struct MoveControl
-{
-	bool isCarcassMoving;
-	int selectedCarcass;
-	sf::Vector2f selectPosShift;
-};
-
 class Board: public Area
 {
 public:
+	struct ViewCnotrol
+	{
+		sf::Vector2i prevMousePos;
+		bool isMoving;
+	};
+
+	struct MoveControl
+	{
+		bool isCarcassMoving;
+		int selectedCarcass;
+		sf::Vector2f selectPosShift;
+	};
+
 	Board();
 	~Board();
 	void Init();

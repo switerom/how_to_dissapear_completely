@@ -3,16 +3,15 @@
 #include "stdafx.h"
 #include "area.h"
 
-struct VideoPlayerInterface
-{
-	sf::RectangleShape _bar;
-	sf::RectangleShape _seeker;
-};
-
-
 class VideoPlayer: public Area
 {
 public:
+	struct Interface
+	{
+		sf::RectangleShape _bar;
+		sf::RectangleShape _seeker;
+	};
+
 	VideoPlayer();
 	void Init();
 	virtual void Draw(sf::RenderWindow& window) override;
@@ -27,6 +26,6 @@ private:
 
 	sfe::Movie* _currentVideo;
 
-	VideoPlayerInterface _interface;
+	Interface _interface;
 };
 

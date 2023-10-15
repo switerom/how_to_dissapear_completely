@@ -2,8 +2,6 @@
 
 #include "stdafx.h"
 
-
-
 class Area
 {
 public:
@@ -24,14 +22,12 @@ public:
 	sf::FloatRect getTopBoxRect() const { return _topRect.getGlobalBounds(); };
 	const sf::View& getAreaView() const { return _areaView; };
 	bool isMaximized() const { return _isMaximized; };
-	//bool isFocused() const { return _isFocused; };
 	ID getAreaID() const { return _id; };
 
 protected:
 	sf::RectangleShape _topRect;	// заменить это на текстуру из AssetManagera
 	sf::View _areaView;
 	bool _isMaximized;
-	//bool _isFocused;
 	sf::FloatRect _minBounds;
 	ID _id;
 };
