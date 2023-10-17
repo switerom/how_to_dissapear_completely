@@ -50,9 +50,9 @@
 
 // Настройки всего окна видеоплеера
 #define VIDEOPLAYER_MIN_BOUNDS		sf::FloatRect(0.f, 0.f, 0.5f, 0.5f)
-#define VIDEOPLAYER_SEEKER_COLOR	sf::Color::Magenta
-#define VIDEOPLAYER_BAR_COLOR		sf::Color::Yellow
-#define VIDEOPLAYER_BAR_HEIGHT		HEIGHT*0.025f
+#define VIDEOPLAYERseeker_COLOR	sf::Color::Magenta
+#define VIDEOPLAYERbar_COLOR		sf::Color::Yellow
+#define VIDEOPLAYERbar_HEIGHT		HEIGHT*0.025f
 #define VIDEOPLAYER_VIEWPORT		sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT)
 
 // Настройки всего окна доски
@@ -80,8 +80,8 @@
 #define DELIMITER_TOP_INDENTATION	TIMELINE_TOP_INDENTATION
 
 // Настройки скриншота
-#define SCREENSHOT_LINES_COLOR_A	sf::Color::White
-#define SCREENSHOT_LINES_COLOR_B	sf::Color::Green
-#define SCREENSHOT_LINES_COLOR_C	sf::Color::Yellow
-#define SCREENSHOT_LINE_THK			3.f
+#define SCREENSHOT_RECT_COLOR_A		sf::Color::White
+#define SCREENSHOT_RECT_COLOR_B		sf::Color::Green
+#define SCREENSHOT_RECT_COLOR_C		sf::Color::Yellow
+#define SCREENSHOT_RECT_THICKNESS	3.f
 

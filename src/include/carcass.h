@@ -11,7 +11,7 @@ public:
 		sf::RectangleShape background;
 		sf::RectangleShape timeline;
 		sf::RectangleShape delimiter;
-		int delimiter_amt;
+		int delimiter_amt{};
 		sf::Vector2f delimiter_pos;
 	};
 
