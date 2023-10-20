@@ -35,6 +35,9 @@ void VideoPlayer::Init()
 
 void VideoPlayer::toggleVideoPlayback(const std::string& filename)
 {
+	if(_currentVideo)
+		_currentVideo->stop();
+
 	_currentVideo = AssetManager::getVideo(filename);
 
 	if (!_currentVideo)
