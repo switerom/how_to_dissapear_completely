@@ -47,7 +47,9 @@ void Board::Update(sf::RenderWindow& window, float dt)
 	if (_viewControl.isMoving)
 		moveView(window, dt);
 	else if (_movecontrol.isCarcassMoving)
+	{
 		moveCarcass(window);
+	}
 }
 
 void Board::moveView(sf::RenderWindow& window, float dt)
@@ -108,8 +110,13 @@ void Board::moveCarcass(sf::RenderWindow& window)
 	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
 
 	if (_movecontrol.selectedCarcass != NOT_SELECTED)
-		_carcasses.at(_movecontrol.selectedCarcass)->setPosition(sf::Vector2f(worldPos.x - _movecontrol.selectPosShift.x + CARCASS_OUTLINE_THICKNESS,
-																				worldPos.y - _movecontrol.selectPosShift.y + CARCASS_OUTLINE_THICKNESS));
+	{
+		sf::Vector2f pos;
+		pos.x = worldPos.x - _movecontrol.selectPosShift.x + CARCASS_OUTLINE_THICKNESS;
+		pos.y = worldPos.y - _movecontrol.selectPosShift.y + CARCASS_OUTLINE_THICKNESS;
+		_carcasses.at(_movecontrol.selectedCarcass)->setPosition(pos);
+	}
+
 }
 
 void Board::selectCarcass(sf::RenderWindow& window)
@@ -150,5 +157,18 @@ void Board::selectCarcass(sf::RenderWindow& window)
 
 void Board::addScreenshot(const Screenshot& screenshot)
 {
-	//screenshot.video
+	if (!screenshot.video)
+		return;
+
+	auto carcass = _carcasses.find(screenshot.video);
+		
+	if (carcass != _carcasses.end())
+	{
+		carcass->second->addScreenshot(screenshot);
+	}
+	else
+	{
+		createCarcass(screenshot.video);
+		_carcasses.at(screenshot.video)->addScreenshot(screenshot);
+	}
 }

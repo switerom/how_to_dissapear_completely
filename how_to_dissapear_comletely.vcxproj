@@ -140,6 +140,7 @@
     <ClInclude Include="src\include\explorer.h" />
     <ClInclude Include="src\include\exploreritem.h" />
     <ClInclude Include="src\include\keygen.h" />
+    <ClInclude Include="src\include\node.h" />
     <ClInclude Include="src\include\settings.h" />
     <ClInclude Include="src\include\stdafx.h" />
     <ClInclude Include="src\include\timecontroller.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="src\explorer.cpp" />
     <ClCompile Include="src\how_to_dissapear_comletely.cpp" />
     <ClCompile Include="src\keygen.cpp" />
+    <ClCompile Include="src\node.cpp" />
     <ClCompile Include="src\timecontroller.cpp" />
     <ClCompile Include="src\videoplayer.cpp" />
     <ClCompile Include="src\windowsettings.cpp" />

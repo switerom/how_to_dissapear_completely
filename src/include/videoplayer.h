@@ -37,7 +37,7 @@ public:
 	void startScreenshot(sf::RenderWindow& window);
 	void endScreenshot();
 	void setScreenshotRect(sf::RenderWindow& window);
-	const Screenshot& getScreenshot() { return _screenshot; };
+	const Screenshot& getScreenshot() const { return _screenshot; };
 
 
 private:

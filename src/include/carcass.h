@@ -1,7 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
-
+#include "node.h"
 
 class Carcass
 {
@@ -25,11 +25,13 @@ public:
 
 	const sfe::Movie* getVideo() const { return _video; };
 
+	void addScreenshot(const Screenshot& tex);
+
 private:
 
 	Interface _interface;
 	const sfe::Movie* _video;
 
-	//std::map<int, sf::Sprite*> _nodes;
-	//std::list<int> _layers;
+	std::map<int, Node*> _nodes;
+	std::list<int> _layers;
 };

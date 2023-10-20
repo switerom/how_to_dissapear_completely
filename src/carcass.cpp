@@ -1,5 +1,6 @@
 ﻿#include "carcass.h"
 #include "settings.h"
+#include "keygen.h"
 
 Carcass::Carcass(const sfe::Movie* video)
 {
@@ -46,6 +47,11 @@ void Carcass::Draw(sf::RenderWindow& window)
 
 		window.draw(_interface.delimiter);
 	}
+
+	for (auto& i : _layers)
+	{
+		_nodes.at(i)->Draw(window);
+	}
 }
 
 void Carcass::Update(sf::RenderWindow& window, float dt)
@@ -61,6 +67,20 @@ void Carcass::setPosition(const sf::Vector2f& pos)
 
 	_interface.delimiter_pos.x = pos.x + DELIMITER_LEFT_INDENTATION;
 	_interface.delimiter_pos.y = pos.y + DELIMITER_TOP_INDENTATION;
+
+	for (auto& i : _nodes)
+	{
+		i.second->setPosition(pos);
+	}
 }
 
- 
+void Carcass::addScreenshot(const Screenshot& screenshot)
+{
+	Node* node = new Node(screenshot, _interface.delimiter_pos);
+
+	int key = KeyGen::getKey();
+
+	_nodes.emplace(key, node);
+
+	_layers.push_back(key);
+}

@@ -28,6 +28,9 @@ void VideoPlayer::Init()
 	_screenshot.rect.setFillColor(sf::Color::Transparent);
 	_screenshot.rect.setOutlineColor(SCREENSHOT_RECT_COLOR_A);
 	_screenshot.rect.setOutlineThickness(SCREENSHOT_RECT_THICKNESS);
+
+	_screenshot.video = nullptr;
+	_screenshot.inProcess = false;
 }
 
 void VideoPlayer::toggleVideoPlayback(const std::string& filename)
