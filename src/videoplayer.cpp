@@ -16,14 +16,14 @@ void VideoPlayer::Init()
 	_currentVideo = nullptr;
 	_id = ID::Videoplayer;
 
-	_interface.bar.setFillColor(VIDEOPLAYERbar_COLOR);
-	_interface.seeker.setFillColor(VIDEOPLAYERseeker_COLOR);
+	_interface.bar.setFillColor(VIDEOPLAYER_BAR_COLOR);
+	_interface.seeker.setFillColor(VIDEOPLAYER_SEEKER_COLOR);
 
-	_interface.bar.setPosition(sf::Vector2f(0.f, HEIGHT - VIDEOPLAYERbar_HEIGHT));
-	_interface.seeker.setPosition(sf::Vector2f(0.f, HEIGHT - VIDEOPLAYERbar_HEIGHT));
+	_interface.bar.setPosition(sf::Vector2f(0.f, HEIGHT - VIDEOPLAYER_BAR_HEIGHT));
+	_interface.seeker.setPosition(sf::Vector2f(0.f, HEIGHT - VIDEOPLAYER_BAR_HEIGHT));
 
-	_interface.bar.setSize(sf::Vector2f(WIDTH, VIDEOPLAYERbar_HEIGHT));
-	_interface.seeker.setSize(sf::Vector2f(WIDTH, VIDEOPLAYERbar_HEIGHT));
+	_interface.bar.setSize(sf::Vector2f(WIDTH, VIDEOPLAYER_BAR_HEIGHT));
+	_interface.seeker.setSize(sf::Vector2f(WIDTH, VIDEOPLAYER_BAR_HEIGHT));
 
 	_screenshot.rect.setFillColor(sf::Color::Transparent);
 	_screenshot.rect.setOutlineColor(SCREENSHOT_RECT_COLOR_A);
@@ -39,7 +39,7 @@ void VideoPlayer::toggleVideoPlayback(const std::string& filename)
 
 	if (!_currentVideo)
 	{
-		_interface.seeker.setSize(sf::Vector2f(0.f, VIDEOPLAYERbar_HEIGHT));
+		_interface.seeker.setSize(sf::Vector2f(0.f, VIDEOPLAYER_BAR_HEIGHT));
 		return;
 	}
 
@@ -90,7 +90,7 @@ void VideoPlayer::Update(sf::RenderWindow& window, float dt)
 	_currentVideo->update();	// dt не передается параметром потому, что sfeMovie сам внутри это контролирует
 
 	float progressWidth = WIDTH * _currentVideo->getPlayingOffset().asSeconds() / _currentVideo->getDuration().asSeconds();
-	_interface.seeker.setSize(sf::Vector2f(progressWidth, VIDEOPLAYERbar_HEIGHT));
+	_interface.seeker.setSize(sf::Vector2f(progressWidth, VIDEOPLAYER_BAR_HEIGHT));
 }
 
 void VideoPlayer::changePlayTime(sf::RenderWindow& window)
@@ -103,7 +103,7 @@ void VideoPlayer::changePlayTime(sf::RenderWindow& window)
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, _areaView);
 
-	_interface.seeker.setSize(sf::Vector2f(mousePosView.x, VIDEOPLAYERbar_HEIGHT));				// возможно заменить на setPosition()
+	_interface.seeker.setSize(sf::Vector2f(mousePosView.x, VIDEOPLAYER_BAR_HEIGHT));				// возможно заменить на setPosition()
 
 	auto playTime = mousePosView.x * _currentVideo->getDuration().asSeconds() / WIDTH;
 	_currentVideo->setPlayingOffset(sf::seconds(playTime));

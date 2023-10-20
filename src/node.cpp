@@ -19,17 +19,20 @@ void Node::setTexture(const Screenshot& screenshot)
 	auto rect = screenshot.frame;
 	int temp;
 
+	std::cout << rect.left << '\t' << rect.top << '\n';
+	std::cout << rect.width << '\t' << rect.height << '\n';
+
 	if (rect.width < 0)
 	{
-		temp = rect.left;
-		rect.left = rect.width + rect.left;
-		rect.width = rect.left;
+		temp = rect.width;
+		rect.width = -rect.width;
+		rect.left = temp + rect.left;;
 	}
 	if (rect.height < 0)
 	{
-		temp = rect.top;
-		rect.top = rect.height + rect.top;
-		rect.height = rect.top;
+		temp = rect.height;
+		rect.height = -rect.height;
+		rect.top = temp + rect.top;
 	}
 
 	_spr.setTextureRect(rect);

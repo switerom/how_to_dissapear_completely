@@ -50,9 +50,9 @@
 
 // Настройки всего окна видеоплеера
 #define VIDEOPLAYER_MIN_BOUNDS		sf::FloatRect(0.f, 0.f, 0.5f, 0.5f)
-#define VIDEOPLAYERseeker_COLOR	sf::Color::Magenta
-#define VIDEOPLAYERbar_COLOR		sf::Color::Yellow
-#define VIDEOPLAYERbar_HEIGHT		HEIGHT*0.025f
+#define VIDEOPLAYER_SEEKER_COLOR		sf::Color::Magenta
+#define VIDEOPLAYER_BAR_COLOR		sf::Color::Yellow
+#define VIDEOPLAYER_BAR_HEIGHT		HEIGHT*0.025f
 #define VIDEOPLAYER_VIEWPORT		sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT)
 
 // Настройки всего окна доски
