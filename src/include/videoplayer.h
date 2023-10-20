@@ -3,6 +3,17 @@
 #include "stdafx.h"
 #include "area.h"
 
+struct Screenshot
+{
+	//MetaData _metaData;
+	const sfe::Movie* video;
+	bool inProcess;
+	sf::Texture tex;
+	//sf::Sprite spr;			// исправить это
+	sf::IntRect frame;
+	sf::RectangleShape rect;
+};
+
 class VideoPlayer: public Area
 {
 public:
@@ -10,16 +21,6 @@ public:
 	{
 		sf::RectangleShape bar;
 		sf::RectangleShape seeker;
-	};
-
-	struct Screenshot
-	{
-		//MetaData _metaData;
-		bool inProcess;
-		sf::Texture tex;
-		sf::Sprite spr;			// исправить это
-		sf::IntRect frame;
-		sf::RectangleShape rect;
 	};
 
 	VideoPlayer();
@@ -36,7 +37,7 @@ public:
 	void startScreenshot(sf::RenderWindow& window);
 	void endScreenshot();
 	void setScreenshotRect(sf::RenderWindow& window);
-	sf::Sprite getScreenshot() { return _screenshot.spr; };
+	const Screenshot& getScreenshot() { return _screenshot; };
 
 
 private:

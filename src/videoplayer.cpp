@@ -129,6 +129,7 @@ void VideoPlayer::endScreenshot()
 	if (_currentVideo)
 	{
 		_screenshot.tex = _currentVideo->getCurrentImage();
+		_screenshot.video = _currentVideo;
 	}
 
 	//_screenshot.spr.setTexture(_screenshot.tex);

@@ -1,9 +1,11 @@
 ﻿#include "carcass.h"
 #include "settings.h"
 
-Carcass::Carcass(sf::Time timeline)
+Carcass::Carcass(const sfe::Movie* video)
 {
-	_timeline = timeline;
+	_video = video;
+
+	sf::Time _timeline = video->getDuration();
 
 	float width = _timeline.asSeconds() * TIMELINE_WIDTH_FACTOR;
 

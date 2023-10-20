@@ -91,15 +91,15 @@ void Board::createCarcass(const sfe::Movie* video)
 	if (!video)
 		return;
 
-	Carcass* carcass = new Carcass(video->getDuration());
+	Carcass* carcass = new Carcass(video);
 
-	int id{ KeyGen::getKey() };
+	//int id{ KeyGen::getKey() };
 
-	while (_carcasses.find(id) != _carcasses.end())
-		id = KeyGen::getKey();
+	//while (_carcasses.find(video) != _carcasses.end())
+	//	id = KeyGen::getKey();
 
-	_carcasses.emplace(id, carcass);
-	_layers.push_back(id);
+	_carcasses.emplace(video, carcass);
+	_layers.push_back(video);
 }
 
 void Board::moveCarcass(sf::RenderWindow& window)
@@ -146,4 +146,9 @@ void Board::selectCarcass(sf::RenderWindow& window)
 	}
 
 	_movecontrol.selectedCarcass = NOT_SELECTED;
+}
+
+void Board::addScreenshot(const Screenshot& screenshot)
+{
+	//screenshot.video
 }

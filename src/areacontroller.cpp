@@ -141,7 +141,7 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
         if (event.mouseButton.button == sf::Mouse::Right)
         {
             _videoplayer.endScreenshot();
-            //_board.addScreenshot(_videoplayer.getScreenshot(), _videoplayer.getCurrentVideo())
+            _board.addScreenshot(_videoplayer.getScreenshot());
         }
     }
 }

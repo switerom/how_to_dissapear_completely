@@ -15,7 +15,7 @@ public:
 		sf::Vector2f delimiter_pos;
 	};
 
-	Carcass(sf::Time timeline);
+	Carcass(const sfe::Movie* video);
 
 	void Draw(sf::RenderWindow& window);
 	void Update(sf::RenderWindow& window, float dt);
@@ -23,7 +23,13 @@ public:
 	sf::FloatRect getBounds() const { return _interface.background.getGlobalBounds(); };
 	void setPosition(const sf::Vector2f& pos);
 
+	const sfe::Movie* getVideo() const { return _video; };
+
 private:
-	sf::Time _timeline;
+
 	Interface _interface;
+	const sfe::Movie* _video;
+
+	//std::map<int, sf::Sprite*> _nodes;
+	//std::list<int> _layers;
 };
