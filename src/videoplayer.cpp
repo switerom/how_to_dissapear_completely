@@ -126,10 +126,13 @@ void VideoPlayer::endScreenshot()
 {
 	_screenshot.inProcess = false;
 
-	_screenshot.tex = _currentVideo->getCurrentImage();
+	if (_currentVideo)
+	{
+		_screenshot.tex = _currentVideo->getCurrentImage();
+	}
 
-	_screenshot.spr.setTexture(_screenshot.tex);
-	_screenshot.spr.setTextureRect(_screenshot.frame);
+	//_screenshot.spr.setTexture(_screenshot.tex);
+	//_screenshot.spr.setTextureRect(_screenshot.frame);
 }
 
 void VideoPlayer::setScreenshotRect(sf::RenderWindow& window)

@@ -10,6 +10,16 @@ AssetManager::AssetManager()
 	sInstance = this;
 }
 
+AssetManager::~AssetManager()
+{
+	for (auto& i : _vids)
+		delete i.second;
+
+	_vids.clear();
+	_fonts.clear();
+	_texs.clear();
+}
+
 sf::Font& AssetManager::getFont(const std::string& filename)
 {
 	auto& fontMap = sInstance->_fonts;
@@ -38,20 +48,20 @@ sf::Font& AssetManager::getFont(const std::string& filename)
 sfe::Movie* AssetManager::getVideo(const std::string& filename)
 {
 	auto& vidMap = sInstance->_vids;
-	vidMap.clear();
 
 	std::string filepath = VID_DIR + filename;
 
 	auto pairFound = vidMap.find(filepath);
 
-	auto& vid = vidMap[filepath];
+	if (pairFound != vidMap.end())
+		return pairFound->second;
 
-	if (!vid.openFromFile(filepath))
-	{
+	sfe::Movie* vid = new sfe::Movie();
+
+	if(!vid->openFromFile(filepath))
 		return nullptr;
-	}
 
-	return &vid;
+	return vid;
 
 }
 
