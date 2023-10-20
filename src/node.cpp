@@ -10,7 +10,29 @@ Node::Node(const Screenshot& screenshot, const sf::Vector2f& pos)
 	_tex = screenshot.tex;
 	_spr.setTexture(_tex);
 	_spr.setPosition(_pos.x, _pos.y);
-	_spr.setTextureRect(screenshot.frame);
+
+	setTexture(screenshot);
+}
+
+void Node::setTexture(const Screenshot& screenshot)
+{
+	auto rect = screenshot.frame;
+	int temp;
+
+	if (rect.width < 0)
+	{
+		temp = rect.left;
+		rect.left = rect.width + rect.left;
+		rect.width = rect.left;
+	}
+	if (rect.height < 0)
+	{
+		temp = rect.top;
+		rect.top = rect.height + rect.top;
+		rect.height = rect.top;
+	}
+
+	_spr.setTextureRect(rect);
 }
 
 void Node::Update(float dt)

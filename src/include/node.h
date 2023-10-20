@@ -10,6 +10,8 @@ public:
 	void Update(float dt);
 	void Draw(sf::RenderWindow& window);
 	void setPosition(const sf::Vector2f& pos);
+	void setTexture(const Screenshot& screenshot);
+
 private:
 	sf::Texture _tex;
 	sf::Sprite _spr;

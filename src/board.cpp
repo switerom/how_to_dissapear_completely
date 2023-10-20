@@ -116,7 +116,6 @@ void Board::moveCarcass(sf::RenderWindow& window)
 		pos.y = worldPos.y - _movecontrol.selectPosShift.y + CARCASS_OUTLINE_THICKNESS;
 		_carcasses.at(_movecontrol.selectedCarcass)->setPosition(pos);
 	}
-
 }
 
 void Board::selectCarcass(sf::RenderWindow& window)
