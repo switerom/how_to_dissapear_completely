@@ -66,7 +66,8 @@
 #define CARCASS_COLOR				sf::Color::Blue
 #define CARCASS_HEIGHT				100.f
 #define CARCASS_OUTLINE_THICKNESS	10.f
-#define CARCASS_OUTLINE_COLOR		sf::Color::Red
+#define CARCASS_COLOR_SELECT		sf::Color::Yellow
+#define CARCASS_COLOR_UNSELECT		sf::Color::Transparent
 #define TIMELINE_WIDTH_FACTOR		5
 #define TIMELINE_HEIGHT				5.f
 #define TIMELINE_COLOR				sf::Color::White

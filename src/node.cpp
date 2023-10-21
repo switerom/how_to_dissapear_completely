@@ -17,7 +17,7 @@ Node::Node(const Screenshot& screenshot, const sf::Vector2f& pos)
 
 	setTexture(screenshot);
 
-	_select_frame.setOutlineColor(NODE_COLOR_SELECT);
+	_select_frame.setOutlineColor(NODE_COLOR_UNSELECT);
 	_select_frame.setOutlineThickness(NODE_OUTLINE_THK);
 	_select_frame.setPosition(spr_pos);
 }
@@ -79,4 +79,13 @@ void Node::setPosition(const sf::Vector2f& pos)
 	_spr.setPosition(_pos);
 	_select_frame.setPosition(_pos);
 }
+
+void Node::select(bool s) 
+{ 
+	if(s)
+		_select_frame.setOutlineColor(NODE_COLOR_SELECT);
+	else
+		_select_frame.setOutlineColor(NODE_COLOR_UNSELECT);
+};
+
 

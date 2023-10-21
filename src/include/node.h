@@ -13,6 +13,8 @@ public:
 	void setTexture(const Screenshot& screenshot);
 	void setSpriteScale();
 	void setSpriteScale(const sf::IntRect& rect);
+	sf::FloatRect getBounds() const { return _spr.getGlobalBounds(); };
+	void select(bool s);
 
 private:
 	sf::Texture _tex;
@@ -22,5 +24,4 @@ private:
 	sf::Time _timestamp;
 
 	sf::RectangleShape _select_frame;
-
 };

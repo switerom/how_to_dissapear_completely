@@ -28,11 +28,16 @@ public:
 
 	void addScreenshot(const Screenshot& screenshot);
 
-private:
+	void selectNode(const sf::Vector2f& mousePos);
 
+	void select(bool s);
+
+private:
 	Interface _interface;
 	const sfe::Movie* _video;
 
 	std::map<int, Node*> _nodes;
 	std::list<int> _layers;
+
+	Node* _selectedNode;
 };

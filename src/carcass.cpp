@@ -2,10 +2,13 @@
 #include "settings.h"
 #include "keygen.h"
 #include "assetmanager.h"
+#include "collisiondetection.h"
 
 Carcass::Carcass(const sfe::Movie* video, const std::string& vid_name)
 {
 	_video = video;
+
+	_selectedNode = nullptr;
 
 	sf::Time _timeline = _video->getDuration();
 
@@ -14,7 +17,7 @@ Carcass::Carcass(const sfe::Movie* video, const std::string& vid_name)
 	_interface.background.setFillColor(CARCASS_COLOR);
 	_interface.background.setSize(sf::Vector2f(width, CARCASS_HEIGHT));
 	_interface.background.setOutlineThickness(CARCASS_OUTLINE_THICKNESS);
-	_interface.background.setOutlineColor(CARCASS_OUTLINE_COLOR);
+	_interface.background.setOutlineColor(CARCASS_COLOR_UNSELECT);
 
 	float timeline_width = width - TIMELINE_LEFT_INDENTATION * 2;
 
@@ -94,4 +97,49 @@ void Carcass::addScreenshot(const Screenshot& screenshot)
 	_nodes.emplace(key, node);
 
 	_layers.push_back(key);
+}
+
+void Carcass::selectNode(const sf::Vector2f& mousePos)
+{	
+	if (_nodes.empty())
+		return;
+
+	auto it = _nodes.begin();  // reverse итератор потому, что мы в конце находится слой, который выше отображается
+
+	while (it != _nodes.end())
+	{
+		sf::FloatRect bounds = it->second->getBounds();
+
+		if (isColliding(mousePos, bounds))
+		{
+			if(_selectedNode)
+				_selectedNode->select(false);
+
+			_selectedNode = it->second;
+			it->second->select(true);
+
+			return;
+		}
+		++it;
+	}
+
+	if (_selectedNode)
+		_selectedNode->select(false);
+
+	_selectedNode = NOT_SELECTED;
+}
+
+void Carcass::select(bool s)
+{
+	if (s)
+	{
+		_interface.background.setOutlineColor(NODE_COLOR_SELECT);
+	}
+	else
+	{
+		_interface.background.setOutlineColor(NODE_COLOR_UNSELECT);
+
+		if(_selectedNode)
+			_selectedNode->select(false);
+	}
 }

@@ -134,11 +134,22 @@ void Board::selectCarcass(sf::RenderWindow& window)
 
 		if (isColliding(worldPos, bounds))
 		{
+			if (_movecontrol.selectedCarcass)
+				_carcasses.at(_movecontrol.selectedCarcass)->select(false);
+
 			_movecontrol.selectedCarcass = *it;
+
+			//визуальное выделение
+			if (_movecontrol.selectedCarcass)
+				_carcasses.at(_movecontrol.selectedCarcass)->select(true);
 
 			// нужно для того, чтобы каркасс перемещался ровно из того места, где его взяли
 			_movecontrol.selectPosShift.x = worldPos.x - bounds.left;
 			_movecontrol.selectPosShift.y = worldPos.y - bounds.top;
+
+			// Внутри условие на проверку коллизии с нодами
+			_carcasses.at(*it)->selectNode(worldPos);
+			//_carcasses.at(*it).selectNode(window);
 
 			// меняем порядок слоев
 			auto it = std::find(_layers.begin(), _layers.end(), _movecontrol.selectedCarcass);
@@ -149,6 +160,9 @@ void Board::selectCarcass(sf::RenderWindow& window)
 		}
 		++it;
 	}
+
+	if (_movecontrol.selectedCarcass)
+		_carcasses.at(_movecontrol.selectedCarcass)->select(false);
 
 	_movecontrol.selectedCarcass = NOT_SELECTED;
 }
