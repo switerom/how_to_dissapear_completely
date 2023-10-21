@@ -28,7 +28,7 @@ public:
 
 	void addScreenshot(const Screenshot& screenshot);
 
-	void selectNode(const sf::Vector2f& mousePos);
+	bool selectNode(const sf::Vector2f& mousePos);
 
 	void select(bool s);
 

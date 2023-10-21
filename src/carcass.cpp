@@ -99,10 +99,10 @@ void Carcass::addScreenshot(const Screenshot& screenshot)
 	_layers.push_back(key);
 }
 
-void Carcass::selectNode(const sf::Vector2f& mousePos)
+bool Carcass::selectNode(const sf::Vector2f& mousePos)
 {	
 	if (_nodes.empty())
-		return;
+		return false;
 
 	auto it = _nodes.begin();  // reverse итератор потому, что мы в конце находится слой, который выше отображается
 
@@ -118,7 +118,7 @@ void Carcass::selectNode(const sf::Vector2f& mousePos)
 			_selectedNode = it->second;
 			it->second->select(true);
 
-			return;
+			return true;
 		}
 		++it;
 	}
@@ -127,6 +127,8 @@ void Carcass::selectNode(const sf::Vector2f& mousePos)
 		_selectedNode->select(false);
 
 	_selectedNode = NOT_SELECTED;
+
+	return false;
 }
 
 void Carcass::select(bool s)
