@@ -61,6 +61,8 @@
 #define BOARD_VIEWPORT				sf::FloatRect(0.f, 0.f, WIDTH*0.5f, HEIGHT)
 #define BOARD_MOVE_SPEED			50.f
 #define BOARD_ZOOM_SPEED			6.f
+
+// Настройки каркаса
 #define CARCASS_COLOR				sf::Color::Blue
 #define CARCASS_HEIGHT				100.f
 #define CARCASS_OUTLINE_THICKNESS	10.f
@@ -71,7 +73,6 @@
 #define TIMELINE_LEFT_INDENTATION	10.f
 #define TIMELINE_TOP_INDENTATION	10.f
 
-// Настройки каркаса
 #define DELIMITER_COLOR				sf::Color::White
 #define DELIMITER_WIDTH				5.f
 #define DELIMITER_HEIGHT			10.f
@@ -88,6 +89,8 @@
 #define SCREENSHOT_RECT_COLOR_B		sf::Color::Green
 #define SCREENSHOT_RECT_COLOR_C		sf::Color::Yellow
 #define SCREENSHOT_RECT_THICKNESS	3.f
+#define SCREENSHOT_SIZE				1000.f
+#define SCREENSHOT_POS_Y			CARCASS_HEIGHT * 0.15f
 
 // Настройки ассет менеджера
 #define FONTS_DIR					"rsc/fonts/"

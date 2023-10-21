@@ -9,7 +9,7 @@ Node::Node(const Screenshot& screenshot, const sf::Vector2f& pos)
 
 	_tex = screenshot.tex;
 	_spr.setTexture(_tex);
-	_spr.setPosition(_pos.x, _pos.y);
+	_spr.setPosition(_pos.x, pos.y + SCREENSHOT_POS_Y);
 
 	setTexture(screenshot);
 }
@@ -33,6 +33,21 @@ void Node::setTexture(const Screenshot& screenshot)
 	}
 
 	_spr.setTextureRect(rect);
+
+	setSpriteScale(rect);
+}
+
+void Node::setSpriteScale(const sf::IntRect& rect)
+{
+	float crop_factor = std::sqrt(SCREENSHOT_SIZE / (rect.width * rect.height));
+
+	float new_width = rect.width * crop_factor;
+	float new_height = rect.height * crop_factor;
+
+	float new_x_size = new_width / rect.width;
+	float new_y_size = new_height / rect.height;
+
+	_spr.setScale(sf::Vector2f(new_x_size, new_y_size));
 }
 
 void Node::Update(float dt)
@@ -46,9 +61,8 @@ void Node::Draw(sf::RenderWindow& window)
 
 void Node::setPosition(const sf::Vector2f& pos)
 {
-	// добавить, чтобы позиция менялась в зависимости от позиции доски
 	_pos.x = pos.x + _timestamp.asSeconds() * TIMELINE_WIDTH_FACTOR;
-	_pos.y = pos.y;
+	_pos.y = pos.y + SCREENSHOT_POS_Y;
 
 	_spr.setPosition(_pos);
 }
