@@ -44,6 +44,7 @@ void VideoPlayer::toggleVideoPlayback(const std::string& filename)
 	if (!_currentVideo)
 	{
 		_interface.seeker.setSize(sf::Vector2f(0.f, VIDEOPLAYER_BAR_HEIGHT));
+		_screenshot.video = nullptr;
 		return;
 	}
 
