@@ -9,7 +9,7 @@ Node::Node(const Screenshot& screenshot, const sf::Vector2f& pos)
 
 	_tex = screenshot.tex;
 	_spr.setTexture(_tex);
-	_spr.setPosition(_pos.x, pos.y + SCREENSHOT_POS_Y);
+	_spr.setPosition(_pos.x, pos.y + SCREENSHOT_POS_Y - CARCASS_OUTLINE_THICKNESS);
 
 	setTexture(screenshot);
 }
