@@ -94,3 +94,8 @@
 
 // Настройки ассет менеджера
 #define FONTS_DIR					"rsc/fonts/"
+
+// Настройки нод
+#define NODE_COLOR_SELECT			sf::Color::Yellow
+#define NODE_COLOR_UNSELECT			sf::Color::Transparent
+#define NODE_OUTLINE_THK			2.f

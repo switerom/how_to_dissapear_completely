@@ -20,4 +20,7 @@ private:
 	sf::Text _text;
 	sf::Vector2f _pos;
 	sf::Time _timestamp;
+
+	sf::RectangleShape _select_frame;
+
 };
