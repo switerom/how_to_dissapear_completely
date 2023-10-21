@@ -124,7 +124,7 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
         {
             if (timecontroller.isDoubleClick(window))
             {
-                _board.createCarcass(_videoplayer.getCurrentVideo());
+                _board.createCarcass(_videoplayer.getCurrentVideo(), _videoplayer.getVideoName());
             }
             else
             {

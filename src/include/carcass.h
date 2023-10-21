@@ -13,9 +13,10 @@ public:
 		sf::RectangleShape delimiter;
 		int delimiter_amt{};
 		sf::Vector2f delimiter_pos;
+		sf::Text vid_name;
 	};
 
-	Carcass(const sfe::Movie* video);
+	Carcass(const sfe::Movie* video, const std::string& vid_name);
 
 	void Draw(sf::RenderWindow& window);
 	void Update(sf::RenderWindow& window, float dt);
@@ -25,7 +26,7 @@ public:
 
 	const sfe::Movie* getVideo() const { return _video; };
 
-	void addScreenshot(const Screenshot& tex);
+	void addScreenshot(const Screenshot& screenshot);
 
 private:
 

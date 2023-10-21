@@ -1,12 +1,13 @@
 ﻿#include "carcass.h"
 #include "settings.h"
 #include "keygen.h"
+#include "assetmanager.h"
 
-Carcass::Carcass(const sfe::Movie* video)
+Carcass::Carcass(const sfe::Movie* video, const std::string& vid_name)
 {
 	_video = video;
 
-	sf::Time _timeline = video->getDuration();
+	sf::Time _timeline = _video->getDuration();
 
 	float width = _timeline.asSeconds() * TIMELINE_WIDTH_FACTOR;
 
@@ -27,6 +28,12 @@ Carcass::Carcass(const sfe::Movie* video)
 	_interface.delimiter_pos = sf::Vector2f(DELIMITER_LEFT_INDENTATION, DELIMITER_TOP_INDENTATION);
 	_interface.delimiter.setPosition(_interface.delimiter_pos.x, _interface.delimiter_pos.y);
 	_interface.delimiter_amt = static_cast<int>(_timeline.asSeconds()) / DELIMITER_FREQUENCY;
+
+	_interface.vid_name.setString(vid_name);
+	_interface.vid_name.setFont(AssetManager::getFont(CARCASS_VID_NAME_FONT));
+	_interface.vid_name.setCharacterSize(CARCASS_VID_NAME_SIZE);
+	_interface.vid_name.setFillColor(CARCASS_VID_NAME_COLOR);
+	_interface.vid_name.setPosition(sf::Vector2f(_interface.delimiter_pos.x, _interface.delimiter_pos.y - CARCASS_VID_NAME_POS_Y));
 }
 
 void Carcass::Draw(sf::RenderWindow& window)
@@ -52,6 +59,8 @@ void Carcass::Draw(sf::RenderWindow& window)
 	{
 		_nodes.at(i)->Draw(window);
 	}
+
+	window.draw(_interface.vid_name);
 }
 
 void Carcass::Update(sf::RenderWindow& window, float dt)
@@ -72,6 +81,8 @@ void Carcass::setPosition(const sf::Vector2f& pos)
 	{
 		i.second->setPosition(pos);
 	}
+
+	_interface.vid_name.setPosition(sf::Vector2f(_interface.delimiter_pos.x, _interface.delimiter_pos.y - CARCASS_VID_NAME_POS_Y));
 }
 
 void Carcass::addScreenshot(const Screenshot& screenshot)

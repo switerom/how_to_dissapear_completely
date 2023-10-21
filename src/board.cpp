@@ -2,6 +2,7 @@
 #include "settings.h"
 #include "keygen.h"
 #include "collisiondetection.h"
+#include "assetmanager.h"
 
 Board::Board(): Area ( BOARD_MIN_BOUNDS, BOARD_VIEWPORT)
 {
@@ -88,20 +89,18 @@ void Board::zoomView(sf::RenderWindow& window, float dt_zoom, float dt)
 	_areaView.zoom(zoom_factor);
 }
 
-void Board::createCarcass(const sfe::Movie* video)
+void Board::createCarcass(const sfe::Movie* video, const std::string& vid_name)
 {
+	//sfe::Movie* video = AssetManager::getVideo(vid_name);
+
 	if (!video)
 		return;
 
-	Carcass* carcass = new Carcass(video);
-
-	//int id{ KeyGen::getKey() };
-
-	//while (_carcasses.find(video) != _carcasses.end())
-	//	id = KeyGen::getKey();
+	Carcass* carcass = new Carcass(video, vid_name);
 
 	_carcasses.emplace(video, carcass);
 	_layers.push_back(video);
+
 }
 
 void Board::moveCarcass(sf::RenderWindow& window)
@@ -167,7 +166,7 @@ void Board::addScreenshot(const Screenshot& screenshot)
 	}
 	else
 	{
-		createCarcass(screenshot.video);
+		createCarcass(screenshot.video, screenshot.vid_name);
 		_carcasses.at(screenshot.video)->addScreenshot(screenshot);
 	}
 }

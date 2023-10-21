@@ -19,9 +19,6 @@ void Node::setTexture(const Screenshot& screenshot)
 	auto rect = screenshot.frame;
 	int temp;
 
-	std::cout << rect.left << '\t' << rect.top << '\n';
-	std::cout << rect.width << '\t' << rect.height << '\n';
-
 	if (rect.width < 0)
 	{
 		temp = rect.width;

@@ -50,13 +50,13 @@
 
 // Настройки всего окна видеоплеера
 #define VIDEOPLAYER_MIN_BOUNDS		sf::FloatRect(0.f, 0.f, 0.5f, 0.5f)
-#define VIDEOPLAYER_SEEKER_COLOR		sf::Color::Magenta
+#define VIDEOPLAYER_SEEKER_COLOR	sf::Color::Magenta
 #define VIDEOPLAYER_BAR_COLOR		sf::Color::Yellow
 #define VIDEOPLAYER_BAR_HEIGHT		HEIGHT*0.025f
 #define VIDEOPLAYER_VIEWPORT		sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT)
 
 // Настройки всего окна доски
-#define BOARD_BACK_COLOR			sf::Color::Cyan
+#define BOARD_BACK_COLOR			sf::Color::Black
 #define BOARD_MIN_BOUNDS			sf::FloatRect(0.5f, 0.f, 0.5f, 1.f)
 #define BOARD_VIEWPORT				sf::FloatRect(0.f, 0.f, WIDTH*0.5f, HEIGHT)
 #define BOARD_MOVE_SPEED			50.f
@@ -78,6 +78,10 @@
 #define DELIMITER_FREQUENCY			5
 #define DELIMITER_LEFT_INDENTATION	TIMELINE_LEFT_INDENTATION
 #define DELIMITER_TOP_INDENTATION	TIMELINE_TOP_INDENTATION
+#define CARCASS_VID_NAME_FONT		"B52____.TTF"
+#define CARCASS_VID_NAME_COLOR		sf::Color::White
+#define CARCASS_VID_NAME_SIZE		25
+#define CARCASS_VID_NAME_POS_Y		50.f
 
 // Настройки скриншота
 #define SCREENSHOT_RECT_COLOR_A		sf::Color::White
@@ -85,3 +89,5 @@
 #define SCREENSHOT_RECT_COLOR_C		sf::Color::Yellow
 #define SCREENSHOT_RECT_THICKNESS	3.f
 
+// Настройки ассет менеджера
+#define FONTS_DIR					"rsc/fonts/"

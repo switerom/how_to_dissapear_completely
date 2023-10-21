@@ -39,6 +39,7 @@ void VideoPlayer::toggleVideoPlayback(const std::string& filename)
 		_currentVideo->stop();
 
 	_currentVideo = AssetManager::getVideo(filename);
+	_vid_name = filename;
 
 	if (!_currentVideo)
 	{
@@ -138,8 +139,7 @@ void VideoPlayer::endScreenshot()
 		_screenshot.video = _currentVideo;
 	}
 
-	//_screenshot.spr.setTexture(_screenshot.tex);
-	//_screenshot.spr.setTextureRect(_screenshot.frame);
+	_screenshot.vid_name = _vid_name;
 }
 
 void VideoPlayer::setScreenshotRect(sf::RenderWindow& window)

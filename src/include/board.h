@@ -33,7 +33,7 @@ public:
 	void setViewMoving(sf::RenderWindow& window, bool isMoving);
 	void zoomView(sf::RenderWindow& window, float dt_zoom, float dt);
 
-	void createCarcass(const sfe::Movie* video);
+	void createCarcass(const sfe::Movie* video, const std::string& vid_name);
 
 	void setCarcassMoving(bool isCarcassMoving) { _movecontrol.isCarcassMoving = isCarcassMoving; };
 	void moveCarcass(sf::RenderWindow& window);

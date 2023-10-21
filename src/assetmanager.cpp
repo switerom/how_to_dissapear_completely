@@ -34,7 +34,9 @@ sf::Font& AssetManager::getFont(const std::string& filename)
 	{
 		auto& font = fontMap[filename];
 
-		if (!font.loadFromFile(filename))
+		std::string filepath = FONTS_DIR + filename;
+
+		if (!font.loadFromFile(filepath))
 		{
 			// Handle font loading error here
 			// For example, throw an exception or log an error message

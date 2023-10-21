@@ -12,6 +12,7 @@ struct Screenshot
 	//sf::Sprite spr;			// исправить это
 	sf::IntRect frame;
 	sf::RectangleShape rect;
+	std::string vid_name{};
 };
 
 class VideoPlayer: public Area
@@ -33,6 +34,7 @@ public:
 	void changePlayTime(sf::RenderWindow& window);
 	sf::FloatRect getBarBounds() const { return _interface.bar.getGlobalBounds(); };
 	const sfe::Movie* getCurrentVideo() const { return _currentVideo; };
+	const std::string& getVideoName() const { return _vid_name; }
 
 	void startScreenshot(sf::RenderWindow& window);
 	void endScreenshot();
@@ -43,7 +45,7 @@ public:
 private:
 
 	sfe::Movie* _currentVideo;
-
+	std::string _vid_name;
 	Screenshot _screenshot;
 	Interface _interface;
 };
