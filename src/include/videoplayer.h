@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "area.h"
+#include "subtitles.h"
 
 struct Screenshot
 {
@@ -22,6 +23,9 @@ public:
 	{
 		sf::RectangleShape bar;
 		sf::RectangleShape seeker;
+
+		sf::Text captions;
+		std::string subText;
 	};
 
 	VideoPlayer();
@@ -43,10 +47,12 @@ public:
 
 
 private:
+	std::string getSubName(const std::string& filename) const;
 
 	sfe::Movie* _currentVideo;
 	std::string _vid_name;
 	Screenshot _screenshot;
 	Interface _interface;
+	Subtitles _subs;
 };
 

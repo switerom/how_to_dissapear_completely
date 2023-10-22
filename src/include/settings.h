@@ -100,3 +100,10 @@
 #define NODE_COLOR_SELECT			sf::Color::Yellow
 #define NODE_COLOR_UNSELECT			sf::Color::Transparent
 #define NODE_OUTLINE_THK			2.f
+
+// Настроки субтитров
+#define SUBS_DIR					"rsc/subs/"
+#define SUBS_FONT					"B52____.TTF"
+#define SUBS_COLOR					sf::Color::White
+#define SUBS_SIZE					25
+#define SUBS_POS					sf::Vector2f(0.f, 0.f)

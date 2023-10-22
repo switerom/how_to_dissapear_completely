@@ -17,12 +17,12 @@ int main()
     WindowSettings windowSettings;
     sf::RenderWindow window;
     windowSettings.initWindow(window);  
+    AssetManager assetmanager;
     TimeController timeController;
     Explorer explorer;
     VideoPlayer videoplayer;
     Board board;
     AreaController areacontroller ( explorer, videoplayer, board );
-    AssetManager assetmanager;
 
     while (window.isOpen())
     {

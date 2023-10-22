@@ -143,6 +143,7 @@
     <ClInclude Include="src\include\node.h" />
     <ClInclude Include="src\include\settings.h" />
     <ClInclude Include="src\include\stdafx.h" />
+    <ClInclude Include="src\include\subtitles.h" />
     <ClInclude Include="src\include\timecontroller.h" />
     <ClInclude Include="src\include\videoplayer.h" />
     <ClInclude Include="src\include\windowsettings.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="src\how_to_dissapear_comletely.cpp" />
     <ClCompile Include="src\keygen.cpp" />
     <ClCompile Include="src\node.cpp" />
+    <ClCompile Include="src\subtitles.cpp" />
     <ClCompile Include="src\timecontroller.cpp" />
     <ClCompile Include="src\videoplayer.cpp" />
     <ClCompile Include="src\windowsettings.cpp" />

@@ -38,8 +38,11 @@ void VideoPlayer::toggleVideoPlayback(const std::string& filename)
 	if(_currentVideo)
 		_currentVideo->stop();
 
+	// AssetManager нужно убрать для видео
 	_currentVideo = AssetManager::getVideo(filename);
 	_vid_name = filename;
+
+	_subs.loadSubs(getSubName(filename));
 
 	if (!_currentVideo)
 	{
@@ -55,6 +58,16 @@ void VideoPlayer::toggleVideoPlayback(const std::string& filename)
 		//toggleMaximize();
 		_currentVideo->play();
 	}
+}
+
+std::string VideoPlayer::getSubName(const std::string& filename) const
+{
+	size_t last_dot = filename.find_last_of(".");
+
+	if (last_dot == std::string::npos)
+		return "";
+	else
+		return filename.substr(0, last_dot) + ".srt";
 }
 
 // Override для того, чтобы можно было просто мышью щелкать по видео для play/pause
@@ -82,6 +95,8 @@ void VideoPlayer::Draw(sf::RenderWindow& window)
 
 	if(_screenshot.inProcess)
 		window.draw(_screenshot.rect);
+
+	_subs.Draw(window);
 }
 
 void VideoPlayer::Update(sf::RenderWindow& window, float dt)
