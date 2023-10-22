@@ -11,13 +11,16 @@ class Subtitles
 
 		void Update(float dt);
 		void Draw(sf::RenderWindow& window);
+		void setText(long playtime);
+		void changeCurrentSub(sf::Time playtime);
 
 	private:
-		void setText(float playtime);
+		std::wstring convertToWideString(const std::string& str) const;
 
 		SubtitleParserFactory* _subParserFactory;
 		SubtitleParser* _parser;
 		std::vector<SubtitleItem*> _sub;
+		std::vector<SubtitleItem*>::iterator _currentSub;
 
 		sf::Text _text;
 };

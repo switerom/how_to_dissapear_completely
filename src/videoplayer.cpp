@@ -123,6 +123,8 @@ void VideoPlayer::Update(sf::RenderWindow& window, float dt)
 
 	_currentVideo->update();	// dt не передается параметром потому, что sfeMovie сам внутри это контролирует
 
+	_subs.setText(_currentVideo->getPlayingOffset().asMilliseconds());
+
 	float progressWidth = WIDTH * _currentVideo->getPlayingOffset().asSeconds() / _currentVideo->getDuration().asSeconds();
 	_interface.seeker.setSize(sf::Vector2f(progressWidth, VIDEOPLAYER_BAR_HEIGHT));
 }
@@ -141,6 +143,8 @@ void VideoPlayer::changePlayTime(sf::RenderWindow& window)
 
 	auto playTime = mousePosView.x * _currentVideo->getDuration().asSeconds() / WIDTH;
 	_currentVideo->setPlayingOffset(sf::seconds(playTime));
+
+	_subs.changeCurrentSub(sf::milliseconds(playTime));
 }
 
 void VideoPlayer::startScreenshot(sf::RenderWindow& window)
