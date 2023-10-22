@@ -47,26 +47,6 @@ sf::Font& AssetManager::getFont(const std::string& filename)
 	}
 }
 
-sfe::Movie* AssetManager::getVideo(const std::string& filename)
-{
-	auto& vidMap = sInstance->_vids;
-
-	std::string filepath = VID_DIR + filename;
-
-	auto pairFound = vidMap.find(filepath);
-
-	if (pairFound != vidMap.end())
-		return pairFound->second;
-
-	sfe::Movie* vid = new sfe::Movie();
-
-	if(!vid->openFromFile(filepath))
-		return nullptr;
-
-	return vid;
-
-}
-
 sf::Texture& AssetManager::getTexture(const std::string& filename)
 {
 	auto& texMap = sInstance->_texs;

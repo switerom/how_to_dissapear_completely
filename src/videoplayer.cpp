@@ -33,14 +33,28 @@ void VideoPlayer::Init()
 	_screenshot.inProcess = false;
 }
 
+void VideoPlayer::loadVideo(const std::string& filename)
+{
+	// AssetManager нужно убрать для видео
+	_currentVideo = new sfe::Movie;
+
+	std::string filepath = VID_DIR + filename;
+
+	if (!_currentVideo->openFromFile(filepath))
+		_currentVideo = nullptr;
+}
+
 void VideoPlayer::toggleVideoPlayback(const std::string& filename)
 {
-	if(_currentVideo)
-		_currentVideo->stop();
 
-	// AssetManager нужно убрать для видео
-	_currentVideo = AssetManager::getVideo(filename);
+	if (_currentVideo)
+	{
+		_currentVideo->stop();
+		delete _currentVideo;
+	}
+
 	_vid_name = filename;
+	loadVideo(filename);
 
 	_subs.loadSubs(getSubName(filename));
 

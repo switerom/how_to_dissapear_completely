@@ -91,8 +91,6 @@ void Board::zoomView(sf::RenderWindow& window, float dt_zoom, float dt)
 
 void Board::createCarcass(const sfe::Movie* video, const std::string& vid_name)
 {
-	//sfe::Movie* video = AssetManager::getVideo(vid_name);
-
 	if (!video)
 		return;
 
@@ -100,7 +98,6 @@ void Board::createCarcass(const sfe::Movie* video, const std::string& vid_name)
 
 	_carcasses.emplace(video, carcass);
 	_layers.push_back(video);
-
 }
 
 void Board::moveCarcass(sf::RenderWindow& window)

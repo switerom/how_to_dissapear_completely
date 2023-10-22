@@ -7,7 +7,6 @@ public:
 	AssetManager();
 	~AssetManager();
 	static sf::Font& getFont(const std::string& filename);
-	static sfe::Movie* getVideo(const std::string& filename);
 	static sf::Texture& getTexture(const std::string& filename);
 
 private:

@@ -45,9 +45,9 @@ public:
 	void setScreenshotRect(sf::RenderWindow& window);
 	const Screenshot& getScreenshot() const { return _screenshot; };
 
-
 private:
 	std::string getSubName(const std::string& filename) const;
+	void loadVideo(const std::string& filename);
 
 	sfe::Movie* _currentVideo;
 	std::string _vid_name;
