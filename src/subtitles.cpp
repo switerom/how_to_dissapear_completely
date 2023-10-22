@@ -26,8 +26,6 @@ void Subtitles::loadSubs(const std::string& sub_name)
         delete _subParserFactory;
 
     _subParserFactory = new SubtitleParserFactory(SUBS_DIR + sub_name);
-
-    std::cout << SUBS_DIR + sub_name << '\n';
     _parser = _subParserFactory->getParser();
     _sub = _parser->getSubtitles();
 
@@ -50,6 +48,7 @@ void Subtitles::Draw(sf::RenderWindow& window)
     window.draw(_text);
 }
 
+// Old version that deprecated and can be used if certain macros defined
 //void Subtitles::setText(float playtime)
 //{
 //    std::wstring wide;
@@ -64,6 +63,7 @@ void Subtitles::Draw(sf::RenderWindow& window)
 //    _text.setString(wide);
 //}
 
+// Uses Windows.h (specific to windows)
 void Subtitles::setText(float playtime)
 {
     std::wstring wide;

@@ -403,3 +403,4 @@ x64/
 *.dll
 .vs/
 rsc/vid/
+rsc/subs/
