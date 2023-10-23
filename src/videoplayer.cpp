@@ -51,13 +51,10 @@ void VideoPlayer::loadVideo(const std::string& filename)
 
 void VideoPlayer::fitVideo()
 {
-	std::cout << _currentVideo->getPosition().x << '\t' << _currentVideo->getPosition().y << '\n';
-	std::cout << _currentVideo->getSize().x << '\t' << _currentVideo->getSize().y << '\n';
-
 	sf::Vector2f old_pos(_currentVideo->getPosition().x, _currentVideo->getPosition().y);
 	sf::Vector2f old_size(_currentVideo->getSize().x, _currentVideo->getSize().y);
+	//sf::Vector2f new_pos;
 	sf::Vector2f new_size;
-	sf::Vector2f new_pos;
 
 	float crop_factor, crop_factor1, crop_factor2;
 
@@ -65,26 +62,22 @@ void VideoPlayer::fitVideo()
 	crop_factor2 = HEIGHT / old_size.y;
 
 	crop_factor = std::min(crop_factor1, crop_factor2);
-	new_size.x = _currentVideo->getSize().x * crop_factor;
-	new_size.y = _currentVideo->getSize().y * crop_factor;
-	_currentVideo->setScale(crop_factor, crop_factor);
+	//new_size.x = old_size.x * crop_factor;
+	//new_size.y = old_size.y * crop_factor;
+	sf::Vector2f shift;
 
-	if (crop_factor1 < crop_factor2)
-	{
-		new_pos.y = old_pos.y + (HEIGHT  - _currentVideo->getSize().y* _currentVideo->getScale().y) * 0.5f;
-	}
-	else if (crop_factor2 < crop_factor1)
-	{
-		new_pos.x = old_pos.x + (WIDTH- _currentVideo->getSize().x * _currentVideo->getScale().x) * 0.5f;
-	}
-	
-	_videoView.reset(sf::FloatRect(new_pos.x, new_pos.y, new_size.x, new_size.y));
+	shift.x = (WIDTH - old_size.x * crop_factor) * 0.5f;
+	shift.y = (HEIGHT - old_size.y * crop_factor) * 0.5f;
 
-	//std::cout << _currentVideo->getPosition().x << '\t' << _currentVideo->getPosition().y << '\n';
+	sf::FloatRect rect;
+	rect.left = shift.x / WIDTH * 0.5f;
+	rect.top = shift.y / HEIGHT * 0.5f;
+	rect.width = old_size.x * crop_factor / WIDTH * 0.5f;
+	rect.height = old_size.y * crop_factor / HEIGHT * 0.5f;
 
-	//std::cout << _currentVideo->getSize().x*_currentVideo->getScale().x << '\t' << _currentVideo->getSize().y*_currentVideo->getScale().y << '\n';
-	_currentVideo->setPosition(new_pos.x, new_pos.y);
-		// crop-factor
+	_videoView.reset(sf::FloatRect(0.f, 0.f, old_size.x, old_size.y));
+	_videoView.setViewport(sf::FloatRect(rect.left, rect.top, rect.width, rect.height));
+	//auto default_bounds = VIDEOPLAYER_MIN_BOUNDS;
 }
 
 void VideoPlayer::toggleVideoPlayback(const std::string& filename)
@@ -142,19 +135,19 @@ void VideoPlayer::toggleVideoPlayback()
 
 void VideoPlayer::Draw(sf::RenderWindow& window)
 {
-	//window.setView(_videoView);
-	window.setView(_areaView);
+	window.setView(_videoView);
+	//window.setView(_areaView);
 
 	if (_currentVideo)
 		window.draw(*_currentVideo);
 
-	//window.setView(_areaView);
+	if (_screenshot.inProcess)
+		window.draw(_screenshot.rect);
+
+	window.setView(_areaView);
 
 	window.draw(_interface.bar);
 	window.draw(_interface.seeker);
-
-	if(_screenshot.inProcess)
-		window.draw(_screenshot.rect);
 
 	_subs.Draw(window);
 }
@@ -198,14 +191,28 @@ void VideoPlayer::startScreenshot(sf::RenderWindow& window)
 	_screenshot.inProcess = true; 
 
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-	sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, _areaView);
+	sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, _videoView);
 
 	_screenshot.frame.left = mousePosView.x;
 	_screenshot.frame.top = mousePosView.y;
+
+	if (_screenshot.frame.left < 0)
+		_screenshot.frame.left = 0;
+
+	if(_screenshot.frame.top < 0)
+		_screenshot.frame.top = 0;
+
+	if (_screenshot.frame.left > _currentVideo->getSize().x)
+		_screenshot.frame.left = _currentVideo->getSize().x;
+
+	if (_screenshot.frame.top > _currentVideo->getSize().y)
+		_screenshot.frame.top = _currentVideo->getSize().y;
+
 	_screenshot.frame.width = 0;
 	_screenshot.frame.height = 0;
 
 	_screenshot.rect.setPosition(mousePosView.x, mousePosView.y);
+	//_screenshot.rect.setSize(sf::Vector2f(_screenshot.frame.width * _screenshot.crop_factor, _screenshot.frame.height * _screenshot.crop_factor));
 	_screenshot.rect.setSize(sf::Vector2f(_screenshot.frame.width, _screenshot.frame.height));
 };
 
@@ -228,12 +235,27 @@ void VideoPlayer::setScreenshotRect(sf::RenderWindow& window)
 		return;
 
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-	sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, _areaView);
+	sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, _videoView);
 
 	_screenshot.frame.width = mousePosView.x - _screenshot.frame.left;
 	_screenshot.frame.height = mousePosView.y - _screenshot.frame.top;
 
-	_screenshot.rect.setSize(sf::Vector2f(_screenshot.frame.width, _screenshot.frame.height));
+	sf::Vector2f pos, size;
+
+	pos.x = _screenshot.frame.left;
+	pos.y = _screenshot.frame.top;
+	_screenshot.rect.setPosition(pos);
+
+	if (_screenshot.frame.width > _currentVideo->getSize().x)
+		_screenshot.frame.width = _currentVideo->getSize().x - SCREENSHOT_RECT_THICKNESS;
+
+	if (_screenshot.frame.height > _currentVideo->getSize().y)
+		_screenshot.frame.height = _currentVideo->getSize().y - SCREENSHOT_RECT_THICKNESS;
+
+	size.x = _screenshot.frame.width;
+	size.y = _screenshot.frame.height;
+
+	_screenshot.rect.setSize(size);
 }
 
 
