@@ -41,7 +41,50 @@ void VideoPlayer::loadVideo(const std::string& filename)
 	std::string filepath = VID_DIR + filename;
 
 	if (!_currentVideo->openFromFile(filepath))
+	{
 		_currentVideo = nullptr;
+		return;
+	}
+
+	fitVideo();
+}
+
+void VideoPlayer::fitVideo()
+{
+	std::cout << _currentVideo->getPosition().x << '\t' << _currentVideo->getPosition().y << '\n';
+	std::cout << _currentVideo->getSize().x << '\t' << _currentVideo->getSize().y << '\n';
+
+	sf::Vector2f old_pos(_currentVideo->getPosition().x, _currentVideo->getPosition().y);
+	sf::Vector2f old_size(_currentVideo->getSize().x, _currentVideo->getSize().y);
+	sf::Vector2f new_size;
+	sf::Vector2f new_pos;
+
+	float crop_factor, crop_factor1, crop_factor2;
+
+	crop_factor1 = WIDTH / old_size.x;
+	crop_factor2 = HEIGHT / old_size.y;
+
+	crop_factor = std::min(crop_factor1, crop_factor2);
+	new_size.x = _currentVideo->getSize().x * crop_factor;
+	new_size.y = _currentVideo->getSize().y * crop_factor;
+	_currentVideo->setScale(crop_factor, crop_factor);
+
+	if (crop_factor1 < crop_factor2)
+	{
+		new_pos.y = old_pos.y + (HEIGHT  - _currentVideo->getSize().y* _currentVideo->getScale().y) * 0.5f;
+	}
+	else if (crop_factor2 < crop_factor1)
+	{
+		new_pos.x = old_pos.x + (WIDTH- _currentVideo->getSize().x * _currentVideo->getScale().x) * 0.5f;
+	}
+	
+	_videoView.reset(sf::FloatRect(new_pos.x, new_pos.y, new_size.x, new_size.y));
+
+	//std::cout << _currentVideo->getPosition().x << '\t' << _currentVideo->getPosition().y << '\n';
+
+	//std::cout << _currentVideo->getSize().x*_currentVideo->getScale().x << '\t' << _currentVideo->getSize().y*_currentVideo->getScale().y << '\n';
+	_currentVideo->setPosition(new_pos.x, new_pos.y);
+		// crop-factor
 }
 
 void VideoPlayer::toggleVideoPlayback(const std::string& filename)
@@ -99,10 +142,13 @@ void VideoPlayer::toggleVideoPlayback()
 
 void VideoPlayer::Draw(sf::RenderWindow& window)
 {
+	//window.setView(_videoView);
 	window.setView(_areaView);
 
 	if (_currentVideo)
 		window.draw(*_currentVideo);
+
+	//window.setView(_areaView);
 
 	window.draw(_interface.bar);
 	window.draw(_interface.seeker);
