@@ -7,6 +7,7 @@ class Subtitles
 {
 	public:
 		Subtitles();
+		~Subtitles();
 		void loadSubs(const std::string& sub_name);
 
 		void Update(float dt);
@@ -16,11 +17,12 @@ class Subtitles
 
 	private:
 		std::wstring convertToWideString(const std::string& str) const;
+		void createTextLine(const std::string& str);
 
 		SubtitleParserFactory* _subParserFactory;
 		SubtitleParser* _parser;
 		std::vector<SubtitleItem*> _sub;
 		std::vector<SubtitleItem*>::iterator _currentSub;
 
-		sf::Text _text;
+		std::vector<sf::Text*> _text;
 };

@@ -106,5 +106,4 @@
 #define SUBS_FONT					"B52____.TTF"
 #define SUBS_COLOR					sf::Color::White
 #define SUBS_SIZE					50
-#define SUBS_POS_X					WIDTH*0.5f
-#define SUBS_POS_Y					HEIGHT*0.9f
+#define SUBS_POS					sf::Vector2f(WIDTH*0.5f,HEIGHT*0.9f)

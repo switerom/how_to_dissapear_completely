@@ -25,8 +25,8 @@ public:
 		sf::RectangleShape bar;
 		sf::RectangleShape seeker;
 
-		sf::Text captions;
-		std::string subText;
+		//sf::Text captions;
+		//std::string subText;
 	};
 
 	VideoPlayer();

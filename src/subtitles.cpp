@@ -1,30 +1,46 @@
-#include "subtitles.h"
+﻿#include "subtitles.h"
 #include "assetmanager.h"
 #include "settings.h"
 
 Subtitles::Subtitles()
 {
-    _text.setFont(AssetManager::getFont(SUBS_FONT)); 
-
-    _text.setCharacterSize(SUBS_SIZE);
-
-    _text.setFillColor(SUBS_COLOR);
-
     _parser = nullptr;
     _subParserFactory = nullptr;
     _currentSub = _sub.end();
 }
 
+Subtitles::~Subtitles()
+{
+    for (auto& i : _text)
+    {
+        if(i)
+            delete i;
+
+        i = nullptr;
+    }
+
+    _text.clear();
+
+
+    delete _parser;
+    delete _subParserFactory;
+}
+
 void Subtitles::loadSubs(const std::string& sub_name)
 {
+    for (auto& i : _sub)
+    {
+        delete i;
+        i = nullptr;
+    }
+
     _sub.clear();
     _currentSub = _sub.end();
 
-    if (_parser)
-        delete _parser;
-
-    if(_subParserFactory)
-        delete _subParserFactory;
+    //delete _parser;
+    //_parser = nullptr;
+    //delete _subParserFactory;
+    //_subParserFactory = nullptr;
 
     _subParserFactory = new SubtitleParserFactory(SUBS_DIR + sub_name);
     _parser = _subParserFactory->getParser();
@@ -46,7 +62,8 @@ void Subtitles::Draw(sf::RenderWindow& window)
     if (_currentSub == _sub.end())
         return;
 
-    window.draw(_text);
+    for(auto& i: _text)
+        window.draw(*i);
 }
 
 // Old version that deprecated and can be used if certain macros defined
@@ -73,7 +90,15 @@ void Subtitles::setText(long playtime)
 
     if (_currentSub == _sub.end())
     {
-        _text.setString("");
+        for (auto& i : _text)
+        {
+            if (i)
+                delete i;
+
+            i = nullptr;
+        }
+
+        _text.clear();
 
         if (playtime >= _sub.at(0)->getStartTime())
             _currentSub = _sub.begin();
@@ -84,21 +109,75 @@ void Subtitles::setText(long playtime)
     if (playtime >= (*_currentSub)->getEndTime())
     {
         ++_currentSub;
-        _text.setString(L"");
+
+        for (auto& i : _text)
+        {
+            if (i)
+                delete i;
+
+            i = nullptr;
+        }
+
+        _text.clear();
+        //_text.at(0)->setString(L"");
         return;
     }
     else if (playtime >= (*_currentSub)->getStartTime())
     {
         str = (*_currentSub)->getText();
+
+        createTextLine(str);
+
+        for (auto& i : str)
+        {
+            if (i == '\n')
+            {
+                // переписать под substring
+                createTextLine(str);
+            }
+        }
     }
     else
     {
-        _text.setString(L"");
+        for (auto& i : _text)
+        {
+            if (i)
+                delete i;
+
+            i = nullptr;
+        }
+
+        _text.clear();
+        //_text.at(0)->setString(L"");
         return;
     }
 
-    _text.setString(convertToWideString(str));
-    _text.setPosition(SUBS_POS_X - _text.getGlobalBounds().width * 0.5f, SUBS_POS_Y);
+    for (auto& i : _text)
+    {
+        i->setString(convertToWideString(str));
+    }
+
+    //sf::FloatRect textBounds = _text.at(0)->getLocalBounds();
+    //_text.setOrigin(textBounds.left + textBounds.width * 0.5f, textBounds.top + textBounds.height * 0.5f);
+    //_text.setPosition(SUBS_POS_X - _text.getGlobalBounds().width * 0.5f, SUBS_POS_Y);
+}
+
+void Subtitles::createTextLine(const std::string& str)
+{
+    if (str == "")
+        return;
+
+    _text.push_back(new sf::Text());
+    _text.back()->setFont(AssetManager::getFont(SUBS_FONT));
+
+    _text.back()->setCharacterSize(SUBS_SIZE);
+
+    _text.back()->setFillColor(SUBS_COLOR);
+
+    _text.back()->setPosition(SUBS_POS);
+
+    std::wstring wstr = convertToWideString(str);
+    _text.back()->setString(wstr);
 }
 
 // Uses Windows.h (specific to windows)

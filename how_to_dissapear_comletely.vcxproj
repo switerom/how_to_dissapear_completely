@@ -142,6 +142,7 @@
     <ClInclude Include="src\include\keygen.h" />
     <ClInclude Include="src\include\node.h" />
     <ClInclude Include="src\include\settings.h" />
+    <ClInclude Include="src\include\srtparser.h" />
     <ClInclude Include="src\include\stdafx.h" />
     <ClInclude Include="src\include\subtitles.h" />
     <ClInclude Include="src\include\timecontroller.h" />

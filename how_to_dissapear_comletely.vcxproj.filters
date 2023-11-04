@@ -63,6 +63,9 @@
     <ClInclude Include="src\include\subtitles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\include\srtparser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\how_to_dissapear_comletely.cpp">
