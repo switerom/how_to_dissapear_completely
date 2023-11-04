@@ -49,35 +49,37 @@ void VideoPlayer::loadVideo(const std::string& filename)
 	fitVideo();
 }
 
+// Set viewport for the video to be placed in videoplayer area bounds
 void VideoPlayer::fitVideo()
 {
-	sf::Vector2f old_pos(_currentVideo->getPosition().x, _currentVideo->getPosition().y);
 	sf::Vector2f old_size(_currentVideo->getSize().x, _currentVideo->getSize().y);
-	//sf::Vector2f new_pos;
-	sf::Vector2f new_size;
-
 	float crop_factor, crop_factor1, crop_factor2;
 
+	// Find crop factor to scale video
 	crop_factor1 = WIDTH / old_size.x;
 	crop_factor2 = HEIGHT / old_size.y;
-
 	crop_factor = std::min(crop_factor1, crop_factor2);
-	//new_size.x = old_size.x * crop_factor;
-	//new_size.y = old_size.y * crop_factor;
-	sf::Vector2f shift;
 
+	// (Fix)(Thickness shouldn't change)(Rect should be drawn in area view, not video view)
+	_screenshot.rect_thk = SCREENSHOT_RECT_THICKNESS / crop_factor;
+	_screenshot.rect.setOutlineThickness(_screenshot.rect_thk);
+
+	sf::Vector2f shift;
+	sf::FloatRect rect;
+
+	// Calculate indentation (black bars)
 	shift.x = (WIDTH - old_size.x * crop_factor) * 0.5f;
 	shift.y = (HEIGHT - old_size.y * crop_factor) * 0.5f;
 
-	sf::FloatRect rect;
+	// Calculate rectangle factors
 	rect.left = shift.x / WIDTH * 0.5f;
 	rect.top = shift.y / HEIGHT * 0.5f;
 	rect.width = old_size.x * crop_factor / WIDTH * 0.5f;
 	rect.height = old_size.y * crop_factor / HEIGHT * 0.5f;
 
+	// Set viewport for the video
 	_videoView.reset(sf::FloatRect(0.f, 0.f, old_size.x, old_size.y));
 	_videoView.setViewport(sf::FloatRect(rect.left, rect.top, rect.width, rect.height));
-	//auto default_bounds = VIDEOPLAYER_MIN_BOUNDS;
 }
 
 void VideoPlayer::toggleVideoPlayback(const std::string& filename)
@@ -188,6 +190,9 @@ void VideoPlayer::changePlayTime(sf::RenderWindow& window)
 
 void VideoPlayer::startScreenshot(sf::RenderWindow& window)
 { 
+	if (!_currentVideo)
+		return;
+
 	_screenshot.inProcess = true; 
 
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -195,25 +200,30 @@ void VideoPlayer::startScreenshot(sf::RenderWindow& window)
 
 	_screenshot.frame.left = mousePosView.x;
 	_screenshot.frame.top = mousePosView.y;
-
-	if (_screenshot.frame.left < 0)
-		_screenshot.frame.left = 0;
-
-	if(_screenshot.frame.top < 0)
-		_screenshot.frame.top = 0;
-
-	if (_screenshot.frame.left > _currentVideo->getSize().x)
-		_screenshot.frame.left = _currentVideo->getSize().x;
-
-	if (_screenshot.frame.top > _currentVideo->getSize().y)
-		_screenshot.frame.top = _currentVideo->getSize().y;
-
 	_screenshot.frame.width = 0;
 	_screenshot.frame.height = 0;
 
-	_screenshot.rect.setPosition(mousePosView.x, mousePosView.y);
-	//_screenshot.rect.setSize(sf::Vector2f(_screenshot.frame.width * _screenshot.crop_factor, _screenshot.frame.height * _screenshot.crop_factor));
-	_screenshot.rect.setSize(sf::Vector2f(_screenshot.frame.width, _screenshot.frame.height));
+	//	Restrict screenshot frame from black bars (on start)
+	if (_screenshot.frame.left < 0)
+	{
+		_screenshot.frame.left = 0;
+	}
+	else if (_screenshot.frame.top < 0)
+	{
+		_screenshot.frame.top = 0;
+	}
+	else if (_screenshot.frame.left > _currentVideo->getSize().x)
+	{
+		_screenshot.frame.left = _currentVideo->getSize().x;
+	}
+	else if (_screenshot.frame.top > _currentVideo->getSize().y)
+	{
+		_screenshot.frame.top = _currentVideo->getSize().y;
+	}
+
+	// Set drawable rectangle
+	_screenshot.rect.setPosition(_screenshot.frame.left, _screenshot.frame.top);
+	_screenshot.rect.setSize(sf::Vector2f(0.f, 0.f));
 };
 
 void VideoPlayer::endScreenshot()
@@ -237,25 +247,36 @@ void VideoPlayer::setScreenshotRect(sf::RenderWindow& window)
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, _videoView);
 
+	// Set frame for texture
 	_screenshot.frame.width = mousePosView.x - _screenshot.frame.left;
 	_screenshot.frame.height = mousePosView.y - _screenshot.frame.top;
 
-	sf::Vector2f pos, size;
+	sf::Vector2i newSize = sf::Vector2i(_screenshot.frame.width, _screenshot.frame.height);
+	
+	//	Restrict screenshot frame from black bars (in process)
+	if (mousePosView.x > _currentVideo->getSize().x)
+	{
+		_screenshot.frame.width = _currentVideo->getSize().x - _screenshot.frame.left;
+		newSize.x = _screenshot.frame.width - _screenshot.rect_thk;
+	}
+	else if (mousePosView.y > _currentVideo->getSize().y)
+	{
+		_screenshot.frame.height = _currentVideo->getSize().y - _screenshot.frame.top;
+		newSize.y = _screenshot.frame.height - _screenshot.rect_thk;
+	}
+	else if (mousePosView.x < 0.f)
+	{
+		_screenshot.frame.width = -_screenshot.frame.left;
+		newSize.x = _screenshot.frame.width + _screenshot.rect_thk;
+	}
+	else if (mousePosView.y < 0.f)
+	{
+		_screenshot.frame.height = -_screenshot.frame.top;
+		newSize.y = _screenshot.frame.height + _screenshot.rect_thk;
+	}
 
-	pos.x = _screenshot.frame.left;
-	pos.y = _screenshot.frame.top;
-	_screenshot.rect.setPosition(pos);
-
-	if (_screenshot.frame.width > _currentVideo->getSize().x)
-		_screenshot.frame.width = _currentVideo->getSize().x - SCREENSHOT_RECT_THICKNESS;
-
-	if (_screenshot.frame.height > _currentVideo->getSize().y)
-		_screenshot.frame.height = _currentVideo->getSize().y - SCREENSHOT_RECT_THICKNESS;
-
-	size.x = _screenshot.frame.width;
-	size.y = _screenshot.frame.height;
-
-	_screenshot.rect.setSize(size);
+	// Set drawable rectangle
+	_screenshot.rect.setSize(sf::Vector2f(newSize.x, newSize.y));
 }
 
 

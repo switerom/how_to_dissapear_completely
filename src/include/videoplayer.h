@@ -11,6 +11,7 @@ struct Screenshot
 	bool inProcess;
 	sf::Texture tex;
 	//sf::Sprite spr;			// исправить это
+	float rect_thk;
 	sf::IntRect frame;
 	sf::RectangleShape rect;
 	std::string vid_name{};
