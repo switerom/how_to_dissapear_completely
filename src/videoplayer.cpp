@@ -39,6 +39,7 @@ void VideoPlayer::Init()
 
 	_screenshot.video = nullptr;
 	_screenshot.inProcess = false;
+	_interface.nextTimeSec = 0;
 }
 
 void VideoPlayer::loadVideo(const std::string& filename)
@@ -47,6 +48,7 @@ void VideoPlayer::loadVideo(const std::string& filename)
 	_currentVideo = new sfe::Movie;
 
 	std::string filepath = VID_DIR + filename;
+	_interface.nextTimeSec = 0;
 
 	if (!_currentVideo->openFromFile(filepath))
 	{
@@ -142,7 +144,6 @@ void VideoPlayer::toggleVideoPlayback()
 		_currentVideo->play();
 }
 
-
 void VideoPlayer::Draw(sf::RenderWindow& window)
 {
 	window.setView(_videoView);
@@ -184,8 +185,14 @@ void VideoPlayer::Update(sf::RenderWindow& window, float dt)
 
 void VideoPlayer::changeTiming()
 {
-	float durationNum = _currentVideo->getDuration().asSeconds();
 	float playTimeNum = _currentVideo->getPlayingOffset().asSeconds();
+
+	if (static_cast<int>(playTimeNum) < _interface.nextTimeSec)
+		return;
+
+	_interface.nextTimeSec = static_cast<int>(playTimeNum) + 1;
+
+	float durationNum = _currentVideo->getDuration().asSeconds();
 
 	std::string durationStr{convertToTime(durationNum)};
 	std::string playTimeStr{convertToTime(playTimeNum)};
@@ -223,7 +230,7 @@ void VideoPlayer::changePlayTime(sf::RenderWindow& window)
 	auto duration = _currentVideo->getDuration().asSeconds();
 	auto playTime = mousePosView.x * duration / WIDTH;
 	_currentVideo->setPlayingOffset(sf::seconds(playTime));
-
+	_interface.nextTimeSec = static_cast<int>(playTime) + 1;
 	changeTiming();
 
 	_subs.changeCurrentSub(sf::seconds(playTime));
@@ -320,4 +327,7 @@ void VideoPlayer::setScreenshotRect(sf::RenderWindow& window)
 	_screenshot.rect.setSize(sf::Vector2f(newSize.x, newSize.y));
 }
 
+void VideoPlayer::startSelectSubs(sf::RenderWindow& window)
+{
 
+}

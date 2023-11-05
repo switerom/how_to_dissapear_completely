@@ -25,7 +25,7 @@ public:
 		sf::RectangleShape bar;
 		sf::RectangleShape seeker;
 		sf::Text timing;
-
+		int nextTimeSec;	// needed for optimization purposes
 		//sf::Text captions;
 		//std::string subText;
 	};
@@ -46,6 +46,9 @@ public:
 	void endScreenshot();
 	void setScreenshotRect(sf::RenderWindow& window);
 	const Screenshot& getScreenshot() const { return _screenshot; };
+
+	void startSelectSubs(sf::RenderWindow& window);
+	sf::FloatRect getSubsBounds() const { return _interface.bar.getGlobalBounds(); };
 
 private:
 	std::string getSubName(const std::string& filename) const;

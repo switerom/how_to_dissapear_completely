@@ -115,6 +115,10 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
             {
                 _videoplayer.changePlayTime(window);
             }
+            else if (isColliding(window, _videoplayer, _videoplayer.getSubsBounds()))
+            {
+                _videoplayer.startSelectSubs(window);
+            }
             else
             {
                 _videoplayer.toggleVideoPlayback();

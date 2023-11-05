@@ -80,7 +80,7 @@
 #define DELIMITER_FREQUENCY			5
 #define DELIMITER_LEFT_INDENTATION	TIMELINE_LEFT_INDENTATION
 #define DELIMITER_TOP_INDENTATION	TIMELINE_TOP_INDENTATION
-#define CARCASS_VID_NAME_FONT		"B52____.TTF"
+#define CARCASS_VID_NAME_FONT		"No Limits.ttf"
 #define CARCASS_VID_NAME_COLOR		sf::Color::White
 #define CARCASS_VID_NAME_SIZE		25
 #define CARCASS_VID_NAME_POS_Y		50.f
@@ -103,14 +103,13 @@
 
 // Настроки субтитров
 #define SUBS_DIR					"rsc/subs/"
-#define SUBS_FONT					"B52____.TTF"
+#define SUBS_FONT					"No Limits.ttf"
 #define SUBS_COLOR					sf::Color::White
 #define SUBS_SIZE					50
 #define SUBS_POS					sf::Vector2f(WIDTH*0.5f,HEIGHT*0.92f)
 #define SUBS_LINES_INDENTATION		50
 
-#define TIME_FONT					"B52____.TTF"
+#define TIME_FONT					"No Limits.ttf"
 #define TIME_COLOR					sf::Color::White
 #define TIME_SIZE					30
 #define TIME_POS					sf::Vector2f(WIDTH*0.99f,HEIGHT*0.96f)
-//sf::Vector2f(WIDTH*0.85f,HEIGHT*0.925f)
