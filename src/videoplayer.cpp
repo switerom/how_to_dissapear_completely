@@ -185,7 +185,7 @@ void VideoPlayer::changePlayTime(sf::RenderWindow& window)
 	auto playTime = mousePosView.x * _currentVideo->getDuration().asSeconds() / WIDTH;
 	_currentVideo->setPlayingOffset(sf::seconds(playTime));
 
-	_subs.changeCurrentSub(sf::milliseconds(playTime));
+	_subs.changeCurrentSub(sf::seconds(playTime));
 }
 
 void VideoPlayer::startScreenshot(sf::RenderWindow& window)

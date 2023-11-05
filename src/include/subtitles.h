@@ -17,12 +17,13 @@ class Subtitles
 
 	private:
 		std::wstring convertToWideString(const std::string& str) const;
-		void createTextLine(const std::string& str);
+		void createTextLine(const std::wstring& wstr);
+		void clearText();
 
 		SubtitleParserFactory* _subParserFactory;
 		SubtitleParser* _parser;
 		std::vector<SubtitleItem*> _sub;
 		std::vector<SubtitleItem*>::iterator _currentSub;
-
 		std::vector<sf::Text*> _text;
+		bool _subChanged;
 };

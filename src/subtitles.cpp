@@ -7,20 +7,12 @@ Subtitles::Subtitles()
     _parser = nullptr;
     _subParserFactory = nullptr;
     _currentSub = _sub.end();
+    _subChanged = true;
 }
 
 Subtitles::~Subtitles()
 {
-    for (auto& i : _text)
-    {
-        if(i)
-            delete i;
-
-        i = nullptr;
-    }
-
-    _text.clear();
-
+    clearText();
 
     delete _parser;
     delete _subParserFactory;
@@ -86,19 +78,11 @@ void Subtitles::setText(long playtime)
     if (_sub.empty())
         return;
 
-    std::string str{};
+    std::wstring wstr{};
 
     if (_currentSub == _sub.end())
     {
-        for (auto& i : _text)
-        {
-            if (i)
-                delete i;
-
-            i = nullptr;
-        }
-
-        _text.clear();
+        clearText();
 
         if (playtime >= _sub.at(0)->getStartTime())
             _currentSub = _sub.begin();
@@ -109,62 +93,49 @@ void Subtitles::setText(long playtime)
     if (playtime >= (*_currentSub)->getEndTime())
     {
         ++_currentSub;
+        _subChanged = true;
 
-        for (auto& i : _text)
-        {
-            if (i)
-                delete i;
-
-            i = nullptr;
-        }
-
-        _text.clear();
-        //_text.at(0)->setString(L"");
+        clearText();
         return;
     }
     else if (playtime >= (*_currentSub)->getStartTime())
     {
-        str = (*_currentSub)->getText();
+        if (!_subChanged)
+            return;
 
-        createTextLine(str);
+        _subChanged = false;
+        wstr = convertToWideString((*_currentSub)->getText());
 
-        for (auto& i : str)
+        std::wstring::size_type index = 0;
+        std::wstring::size_type newLinePos;
+
+        while ((newLinePos = wstr.find(L"\n", index)) != std::wstring::npos)
         {
-            if (i == '\n')
-            {
-                // переписать под substring
-                createTextLine(str);
-            }
+            createTextLine(wstr.substr(index, newLinePos - index));
+            index = newLinePos + 1;
         }
+
+        // Handle the last line (or the only line if there are no newlines)
+        createTextLine(wstr.substr(index));
     }
     else
     {
-        for (auto& i : _text)
-        {
-            if (i)
-                delete i;
-
-            i = nullptr;
-        }
-
-        _text.clear();
-        //_text.at(0)->setString(L"");
+        clearText();
         return;
     }
 
-    for (auto& i : _text)
+    int num{ 0 };
+    for (auto i{ _text.rbegin()}; i != _text.rend(); ++i)
     {
-        i->setString(convertToWideString(str));
+        sf::FloatRect textBounds = (*i)->getLocalBounds();
+        (*i)->setOrigin(textBounds.left + textBounds.width * 0.5f, textBounds.top + textBounds.height * 0.5f + num * SUBS_LINES_INDENTATION);
+        ++num;
     }
-
-    //sf::FloatRect textBounds = _text.at(0)->getLocalBounds();
-    //_text.setOrigin(textBounds.left + textBounds.width * 0.5f, textBounds.top + textBounds.height * 0.5f);
-    //_text.setPosition(SUBS_POS_X - _text.getGlobalBounds().width * 0.5f, SUBS_POS_Y);
 }
 
-void Subtitles::createTextLine(const std::string& str)
+void Subtitles::createTextLine(const std::wstring& wstr)
 {
-    if (str == "")
+    if (wstr == L"")
         return;
 
     _text.push_back(new sf::Text());
@@ -176,7 +147,7 @@ void Subtitles::createTextLine(const std::string& str)
 
     _text.back()->setPosition(SUBS_POS);
 
-    std::wstring wstr = convertToWideString(str);
+   // std::wstring wstr = convertToWideString(str);
     _text.back()->setString(wstr);
 }
 
@@ -193,6 +164,17 @@ std::wstring Subtitles::convertToWideString(const std::string& str) const
     return wstr;
 }
 
+void Subtitles::clearText()
+{
+    for (auto& i : _text)
+    {
+        delete i;
+        i = nullptr;
+    }
+
+    _text.clear();
+}
+
 void Subtitles::changeCurrentSub(sf::Time playtime)
 {
     if (_sub.empty())
@@ -200,15 +182,19 @@ void Subtitles::changeCurrentSub(sf::Time playtime)
 
     _currentSub = _sub.end();
 
-    std::vector<SubtitleItem*>::reverse_iterator it{ _sub.rend() }, prev{ _sub.rend() };
+    clearText();
 
-    while(it != _sub.rbegin())
+    std::vector<SubtitleItem*>::iterator it{ _sub.begin() };
+
+    for (auto it{_sub.begin()}; it != _sub.end(); ++it)
     {
-        --it;
-
-        if (playtime.asMilliseconds() > (*it)->getStartTime())
-            _currentSub = prev.base();
-
-        --prev;
+        if (playtime.asMilliseconds() > (*it)->getStartTime() && playtime.asMilliseconds() < (*it)->getEndTime())
+        {
+            _subChanged = true;
+            _currentSub = it;
+            break;
+        }
     }
+
+    setText(playtime.asMilliseconds());
 }
