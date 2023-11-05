@@ -48,7 +48,9 @@ public:
 	const Screenshot& getScreenshot() const { return _screenshot; };
 
 	void startSelectSubs(sf::RenderWindow& window);
-	sf::FloatRect getSubsBounds() const { return _interface.bar.getGlobalBounds(); };
+	void endSelectSubs();
+	void setSelectSubs(sf::RenderWindow& window);
+	std::vector<sf::FloatRect> getSubsBounds() const;
 
 private:
 	std::string getSubName(const std::string& filename) const;

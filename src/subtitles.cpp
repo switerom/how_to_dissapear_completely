@@ -173,6 +173,11 @@ void Subtitles::clearText()
     }
 
     _text.clear();
+
+    for (auto& i : _lettersBounds)
+        i.clear();
+
+    _lettersBounds.clear();
 }
 
 void Subtitles::changeCurrentSub(sf::Time playtime)
@@ -197,4 +202,59 @@ void Subtitles::changeCurrentSub(sf::Time playtime)
     }
 
     setText(playtime.asMilliseconds());
+}
+
+std::vector<sf::FloatRect> Subtitles::getTextBounds() const
+{
+    std::vector<sf::FloatRect> subsBounds;
+
+    for (auto& i : _text)
+        subsBounds.push_back(i->getGlobalBounds());
+
+    return subsBounds;
+}
+
+void Subtitles::createLettersBounds()
+{
+    // Add letters bounds to a container
+    for (std::size_t i{ 0 }; i < _text.size(); ++i)
+    {
+        _lettersBounds.push_back(std::vector<sf::FloatRect>{}); // Maybe dynamically allocate
+
+        for (std::size_t j = 0; j < _text.at(i)->getString().getSize(); ++j)
+        {
+            sf::Text letter(_text.at(i)->getString()[j], AssetManager::getFont(SUBS_FONT), _text.at(i)->getCharacterSize());
+
+            // Set the position for the individual letter
+            letter.setPosition(_text.at(i)->findCharacterPos(j));
+
+            // Calculate the bounds for the individual letter
+            sf::FloatRect letterRect{ letter.getLocalBounds() };
+
+            letterRect.left = letter.getPosition().x + letterRect.left;
+            letterRect.top = letter.getPosition().y + letterRect.top;
+
+            _lettersBounds.at(i).push_back(letterRect);
+        }
+    }
+}
+
+sf::Vector2i Subtitles::getSelectStart(sf::RenderWindow& window, const sf::View& areaView)
+{
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, areaView);
+
+    createLettersBounds();
+
+    for (std::size_t i{ 0 }; i < _lettersBounds.size(); ++i)
+    {
+        for (std::size_t j{ 0 }; j < _lettersBounds.at(i).size(); ++j)
+        {
+            // Check which letter contains contains the mouse position
+            if (_lettersBounds.at(i).at(j).contains(mousePosView))
+                return sf::Vector2i(i, j);
+        }
+    }
+
+    return sf::Vector2i(0, 0);
 }

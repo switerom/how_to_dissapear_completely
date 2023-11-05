@@ -144,6 +144,11 @@ void VideoPlayer::toggleVideoPlayback()
 		_currentVideo->play();
 }
 
+std::vector<sf::FloatRect> VideoPlayer::getSubsBounds() const
+{
+	return _subs.getTextBounds();
+}
+
 void VideoPlayer::Draw(sf::RenderWindow& window)
 {
 	window.setView(_videoView);
@@ -328,6 +333,16 @@ void VideoPlayer::setScreenshotRect(sf::RenderWindow& window)
 }
 
 void VideoPlayer::startSelectSubs(sf::RenderWindow& window)
+{
+	std::cout << _subs.getSelectStart(window, _areaView).x << '\t' << _subs.getSelectStart(window, _areaView).y << '\n';
+}
+
+void VideoPlayer::endSelectSubs()
+{
+
+}
+
+void VideoPlayer::setSelectSubs(sf::RenderWindow& window)
 {
 
 }

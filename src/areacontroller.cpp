@@ -139,11 +139,13 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
     else if (event.type == sf::Event::MouseMoved)
     {
         _videoplayer.setScreenshotRect(window);
+        _videoplayer.setSelectSubs(window);
     }
     else if (event.type == sf::Event::MouseButtonReleased)
     {
         if (event.mouseButton.button == sf::Mouse::Right)
         {
+            _videoplayer.endSelectSubs();
             _videoplayer.endScreenshot();
             _board.addScreenshot(_videoplayer.getScreenshot());
         }

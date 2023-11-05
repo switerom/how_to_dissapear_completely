@@ -26,6 +26,23 @@ bool isColliding(const sf::RenderWindow& window, const Area& area, const sf::Flo
     return rect.contains(mousePosView);
 }
 
+bool isColliding(const sf::RenderWindow& window, const Area& area, const std::vector<sf::FloatRect>& rects)
+{
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    auto areaView = area.getAreaView();
+
+    sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, areaView);
+
+    // Check if the vector of FloatRects contains the mouse position
+    for (auto& i : rects)
+    {
+        if (i.contains(mousePosView))
+            return true;
+    }
+
+    return false;
+}
+
 bool isColliding(const sf::RenderWindow& window, const sf::View& itemsView, const ExplorerItem& item)
 {
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
