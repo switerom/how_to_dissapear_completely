@@ -108,3 +108,9 @@
 #define SUBS_SIZE					50
 #define SUBS_POS					sf::Vector2f(WIDTH*0.5f,HEIGHT*0.92f)
 #define SUBS_LINES_INDENTATION		50
+
+#define TIME_FONT					"B52____.TTF"
+#define TIME_COLOR					sf::Color::White
+#define TIME_SIZE					30
+#define TIME_POS					sf::Vector2f(WIDTH*0.99f,HEIGHT*0.96f)
+//sf::Vector2f(WIDTH*0.85f,HEIGHT*0.925f)

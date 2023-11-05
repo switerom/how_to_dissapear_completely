@@ -25,6 +25,14 @@ void VideoPlayer::Init()
 	_interface.bar.setSize(sf::Vector2f(WIDTH, VIDEOPLAYER_BAR_HEIGHT));
 	_interface.seeker.setSize(sf::Vector2f(WIDTH, VIDEOPLAYER_BAR_HEIGHT));
 
+	_interface.timing.setFont(AssetManager::getFont(TIME_FONT));
+	_interface.timing.setCharacterSize(TIME_SIZE);
+	_interface.timing.setFillColor(TIME_COLOR);
+	_interface.timing.setString("00:00 / 00:00");
+	sf::FloatRect textBounds = _interface.timing.getLocalBounds();
+	_interface.timing.setOrigin(textBounds.left + textBounds.width, textBounds.top + textBounds.height);
+	_interface.timing.setPosition(TIME_POS);
+
 	_screenshot.rect.setFillColor(sf::Color::Transparent);
 	_screenshot.rect.setOutlineColor(SCREENSHOT_RECT_COLOR_A);
 	_screenshot.rect.setOutlineThickness(SCREENSHOT_RECT_THICKNESS);
@@ -151,6 +159,8 @@ void VideoPlayer::Draw(sf::RenderWindow& window)
 	window.draw(_interface.bar);
 	window.draw(_interface.seeker);
 
+	window.draw(_interface.timing);
+
 	_subs.Draw(window);
 }
 
@@ -166,8 +176,36 @@ void VideoPlayer::Update(sf::RenderWindow& window, float dt)
 
 	_subs.setText(_currentVideo->getPlayingOffset().asMilliseconds());
 
+	changeTiming();
+
 	float progressWidth = WIDTH * _currentVideo->getPlayingOffset().asSeconds() / _currentVideo->getDuration().asSeconds();
 	_interface.seeker.setSize(sf::Vector2f(progressWidth, VIDEOPLAYER_BAR_HEIGHT));
+}
+
+void VideoPlayer::changeTiming()
+{
+	float durationNum = _currentVideo->getDuration().asSeconds();
+	float playTimeNum = _currentVideo->getPlayingOffset().asSeconds();
+
+	std::string durationStr{convertToTime(durationNum)};
+	std::string playTimeStr{convertToTime(playTimeNum)};
+
+	_interface.timing.setString(playTimeStr + " / " + durationStr);
+}
+
+std::string VideoPlayer::convertToTime(float number) const
+{
+	// Convert the number to minutes and seconds
+	int minutes = static_cast<int>(number) / 60;
+	int seconds = static_cast<int>(number) % 60;
+
+	// Create a stringstream to format the output
+	std::stringstream ss;
+	ss << std::setw(2) << std::setfill('0') << minutes << ":"
+		<< std::setw(2) << std::setfill('0') << seconds;
+
+	// Return the formatted string
+	return ss.str();
 }
 
 void VideoPlayer::changePlayTime(sf::RenderWindow& window)
@@ -182,8 +220,11 @@ void VideoPlayer::changePlayTime(sf::RenderWindow& window)
 
 	_interface.seeker.setSize(sf::Vector2f(mousePosView.x, VIDEOPLAYER_BAR_HEIGHT));				// возможно заменить на setPosition()
 
-	auto playTime = mousePosView.x * _currentVideo->getDuration().asSeconds() / WIDTH;
+	auto duration = _currentVideo->getDuration().asSeconds();
+	auto playTime = mousePosView.x * duration / WIDTH;
 	_currentVideo->setPlayingOffset(sf::seconds(playTime));
+
+	changeTiming();
 
 	_subs.changeCurrentSub(sf::seconds(playTime));
 }

@@ -24,6 +24,7 @@ public:
 	{
 		sf::RectangleShape bar;
 		sf::RectangleShape seeker;
+		sf::Text timing;
 
 		//sf::Text captions;
 		//std::string subText;
@@ -50,6 +51,8 @@ private:
 	std::string getSubName(const std::string& filename) const;
 	void loadVideo(const std::string& filename);
 	void fitVideo();
+	void changeTiming();
+	std::string convertToTime(float number) const;
 
 	sf::View _videoView;
 	sfe::Movie* _currentVideo;
