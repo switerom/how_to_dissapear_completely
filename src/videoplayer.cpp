@@ -334,15 +334,15 @@ void VideoPlayer::setScreenshotRect(sf::RenderWindow& window)
 
 void VideoPlayer::startSelectSubs(sf::RenderWindow& window)
 {
-	std::cout << _subs.getSelectStart(window, _areaView).x << '\t' << _subs.getSelectStart(window, _areaView).y << '\n';
-}
-
-void VideoPlayer::endSelectSubs()
-{
-
+	_subs.startSelect(window, _areaView);
 }
 
 void VideoPlayer::setSelectSubs(sf::RenderWindow& window)
 {
+	_subs.setSelect(window, _areaView);
+}
 
+void VideoPlayer::endSelectSubs()
+{
+	_subs.endSelect();
 }

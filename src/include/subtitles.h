@@ -15,7 +15,9 @@ class Subtitles
 		void setText(long playtime);
 		void changeCurrentSub(sf::Time playtime);
 		std::vector<sf::FloatRect> getTextBounds() const;
-		sf::Vector2i getSelectStart(sf::RenderWindow& window, const sf::View& areaView);
+		void startSelect(sf::RenderWindow& window, const sf::View& areaView);
+		void setSelect(sf::RenderWindow& window, const sf::View& areaView);
+		void endSelect();
 
 	private:
 		std::wstring convertToWideString(const std::string& str) const;
@@ -28,7 +30,9 @@ class Subtitles
 		std::vector<SubtitleItem*> _sub;
 		std::vector<SubtitleItem*>::iterator _currentSub;
 		std::vector<sf::Text*> _text;
-		//std::vector<sf::FloatRect> _lettersBounds;	
 		std::vector<std::vector<sf::FloatRect>> _lettersBounds;
+
+		std::pair<sf::Vector2i, sf::Vector2i> _selectedTextRange;
 		bool _subChanged;
+		bool inSelectProcess;
 };
