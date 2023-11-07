@@ -238,7 +238,7 @@ void VideoPlayer::changePlayTime(sf::RenderWindow& window)
 	_interface.nextTimeSec = static_cast<int>(playTime) + 1;
 	changeTiming();
 
-	_subs.changeCurrentSub(sf::seconds(playTime));
+	_subs.changeSubPlayback(sf::seconds(playTime));
 }
 
 void VideoPlayer::startScreenshot(sf::RenderWindow& window)

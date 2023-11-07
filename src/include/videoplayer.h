@@ -28,6 +28,7 @@ public:
 		int nextTimeSec;	// needed for optimization purposes
 		//sf::Text captions;
 		//std::string subText;
+		//std::vector<sf::RectangleShape> subsSelect;
 	};
 
 	VideoPlayer();

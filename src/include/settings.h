@@ -108,6 +108,8 @@
 #define SUBS_SIZE					50
 #define SUBS_POS					sf::Vector2f(WIDTH*0.5f,HEIGHT*0.92f)
 #define SUBS_LINES_INDENTATION		50
+#define SUBS_SELECT_COLOR			sf::Color::Blue
+#define SUBS_SELECT_SHIFT_Y			0.4f
 
 #define TIME_FONT					"No Limits.ttf"
 #define TIME_COLOR					sf::Color::White

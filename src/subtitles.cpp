@@ -11,11 +11,17 @@ Subtitles::Subtitles()
     _selectedTextRange.first = sf::Vector2i(0, 0);
     _selectedTextRange.second = sf::Vector2i(0, 0);
     inSelectProcess = false;
+
+    _subsSelectRects.setFillColor(SUBS_SELECT_COLOR);
 }
 
 Subtitles::~Subtitles()
 {
-    clearText();
+    for (auto& i : _text)
+    {
+        delete i;
+        i = nullptr;
+    }
 
     delete _parser;
     delete _subParserFactory;
@@ -57,24 +63,17 @@ void Subtitles::Draw(sf::RenderWindow& window)
     if (_currentSub == _sub.end())
         return;
 
+    for (int i{ 0 }; i < _subsSelectedLinesBounds.size(); ++i)
+    {
+        _subsSelectRects.setPosition(_subsSelectedLinesBounds.at(i).left, _subsSelectedLinesBounds.at(i).top);
+        _subsSelectRects.setSize(sf::Vector2f(_subsSelectedLinesBounds.at(i).width, _subsSelectedLinesBounds.at(i).height));
+
+        window.draw(_subsSelectRects);
+    }
+
     for(auto& i: _text)
         window.draw(*i);
 }
-
-// Old version that deprecated and can be used if certain macros defined
-//void Subtitles::setText(float playtime)
-//{
-//    std::wstring wide;
-//
-//    if (_sub.empty())
-//        wide = L"";
-//
-//    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-//    std::string narrow = _sub.at(0)->getText();
-//    wide = converter.from_bytes(narrow);
-//
-//    _text.setString(wide);
-//}
 
 void Subtitles::setText(long playtime)
 {
@@ -87,7 +86,7 @@ void Subtitles::setText(long playtime)
     {
         clearText();
 
-        if (playtime >= _sub.at(0)->getStartTime())
+        if (playtime >= (*_sub.begin())->getStartTime())
             _currentSub = _sub.begin();
 
         return;
@@ -143,14 +142,9 @@ void Subtitles::createTextLine(const std::wstring& wstr)
 
     _text.push_back(new sf::Text());
     _text.back()->setFont(AssetManager::getFont(SUBS_FONT));
-
     _text.back()->setCharacterSize(SUBS_SIZE);
-
     _text.back()->setFillColor(SUBS_COLOR);
-
     _text.back()->setPosition(SUBS_POS);
-
-   // std::wstring wstr = convertToWideString(str);
     _text.back()->setString(wstr);
 }
 
@@ -181,15 +175,18 @@ void Subtitles::clearText()
         i.clear();
 
     _lettersBounds.clear();
+    _subsSelectedLinesBounds.clear();
+
+    _selectedTextRange.first = sf::Vector2i(0, 0);
+    _selectedTextRange.second = sf::Vector2i(0, 0);
 }
 
-void Subtitles::changeCurrentSub(sf::Time playtime)
+void Subtitles::changeSubPlayback(sf::Time playtime)
 {
     if (_sub.empty())
         return;
 
     _currentSub = _sub.end();
-
     clearText();
 
     std::vector<SubtitleItem*>::iterator it{ _sub.begin() };
@@ -224,6 +221,8 @@ void Subtitles::createLettersBounds()
 
     _lettersBounds.clear();
 
+    //auto letterCount{ _text.size() };
+
     // Add letters bounds to a container
     for (std::size_t i{ 0 }; i < _text.size(); ++i)
     {
@@ -235,12 +234,16 @@ void Subtitles::createLettersBounds()
 
             // Set the position for the individual letter
             letter.setPosition(_text.at(i)->findCharacterPos(j));
-
             // Calculate the bounds for the individual letter
             sf::FloatRect letterRect{ letter.getLocalBounds() };
 
             letterRect.left = letter.getPosition().x + letterRect.left;
-            letterRect.top = letter.getPosition().y + letterRect.top;
+            letterRect.top = letter.getPosition().y + letterRect.top*0.5f;
+            letterRect.height = SUBS_SIZE;
+
+            // To remove empty space between letters rects, exceot last letter
+            if (j != _text.size() - 1)
+                letterRect.width = _text.at(i)->findCharacterPos(j + 1).x - letter.getPosition().x;
 
             _lettersBounds.at(i).push_back(letterRect);
         }
@@ -251,6 +254,11 @@ void Subtitles::startSelect(sf::RenderWindow& window, const sf::View& areaView)
 {
     inSelectProcess = true;
 
+    _subsSelectedLinesBounds.clear();
+
+    _selectedTextRange.first = sf::Vector2i(0, 0);
+    _selectedTextRange.second = sf::Vector2i(0, 0);
+
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
     sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, areaView);
 
@@ -260,16 +268,15 @@ void Subtitles::startSelect(sf::RenderWindow& window, const sf::View& areaView)
     {
         for (std::size_t j{ 0 }; j < _lettersBounds.at(i).size(); ++j)
         {
-            // Check which letter contains contains the mouse position
+            // Check what letter contains contains the mouse position
             if (_lettersBounds.at(i).at(j).contains(mousePosView))
             {
                 _selectedTextRange.first = sf::Vector2i(i, j);
+                _selectedTextRange.second = sf::Vector2i(i, j);
                 return;
             }
         }
     }
-
-    _selectedTextRange.first = sf::Vector2i(0, 0);
 }
 
 void Subtitles::setSelect(sf::RenderWindow& window, const sf::View& areaView)
@@ -280,47 +287,106 @@ void Subtitles::setSelect(sf::RenderWindow& window, const sf::View& areaView)
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
     sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, areaView);
 
-    int index1{}, index2{};
-
-    //std::cout << "Mouse Y: " << mousePosView.y << '\n';
-
     for (int i{0}; i < _lettersBounds.size(); ++i)
     {
         for (int j{ 0 }; j < _lettersBounds.at(i).size(); ++j)
         {
-            float topBound = _lettersBounds.at(i).at(0).top;
-            float bottomBound = _lettersBounds.at(i).at(0).top + _lettersBounds.at(i).at(0).height;
+            sf::FloatRect rect;
+            rect.top = _lettersBounds.at(i).begin()->top;
+            rect.height = _lettersBounds.at(i).begin()->height;
+            rect.width = _lettersBounds.at(i).at(j).width*0.2f;
+            rect.left = _lettersBounds.at(i).at(j).left + _lettersBounds.at(i).at(j).width*0.4f;
 
-            if (mousePosView.y > topBound && mousePosView.y < bottomBound)
+            if (rect.contains(mousePosView))
             {
-                index1 = i;
-                break;
-            }
-        }
-
-        for (int j{ 0 }; j < _lettersBounds.at(i).size(); ++j)
-        {
-            float leftBound = _lettersBounds.at(i).at(j).left;
-            float rightBound = _lettersBounds.at(i).at(j).left + _lettersBounds.at(i).at(j).width;
-
-            if (mousePosView.x > leftBound && mousePosView.x < rightBound)
-            {
-                index2 = j;
+                _selectedTextRange.second = sf::Vector2i(i, j);
+                changeSelectedLinesBounds();
                 break;
             }
         }
     }
-
-    std::cout << "Index 1: " << _selectedTextRange.first.x << '\t' << _selectedTextRange.first.y << '\t';
-    std::cout << "Index 2: " << _selectedTextRange.second.x << '\t' << _selectedTextRange.second.y << '\n';
-
-    _selectedTextRange.second = sf::Vector2i(index1, index2);
 }
 
 void Subtitles::endSelect()
 {
     inSelectProcess = false;
+}
 
-    //std::cout << "Index 1: " << _selectedTextRange.first.x << '\t' << _selectedTextRange.first.y << '\t';
-    //std::cout << "Index 2: " << _selectedTextRange.second.x << '\t' << _selectedTextRange.second.y << '\n';
+void Subtitles::changeSelectedLinesBounds()
+{
+    if (_lettersBounds.empty())
+        return ;
+
+    sf::Vector2i first{ _selectedTextRange.first }, second{ _selectedTextRange.second }, swap{};
+
+    // Could be optimized, not to be called every time, but instead specific indexes could be removed or added
+    _subsSelectedLinesBounds.clear();
+
+    //swap range indexes
+    if (first.x > second.x)
+    {
+        swap = first;
+        first = second;
+        second = swap;
+    }
+    else if (first.x == second.x && first.y > second.y)
+    {
+        swap = first;
+        first = second;
+        second = swap;
+    }
+
+    // Если выделение на одной и той же линии
+    if (first.x == second.x)
+    {
+        //// Если ничего не выделено
+        if(first.y == second.y)
+        {
+            sf::FloatRect rect4{};
+
+            _subsSelectedLinesBounds.push_back(rect4);
+            return ;
+        }
+
+        sf::FloatRect rect;
+        rect.left = _lettersBounds.at(first.x).at(first.y).getPosition().x;
+        rect.top = _lettersBounds.at(first.x).at(first.y).getPosition().y;
+        rect.height = SUBS_SIZE;
+        rect.width = _lettersBounds.at(second.x).at(second.y).getPosition().x - rect.left 
+                    + _lettersBounds.at(second.x).at(second.y).getSize().x;
+
+        _subsSelectedLinesBounds.push_back(rect);
+    }
+    else
+    {
+        sf::FloatRect rect1;
+        rect1.left = _lettersBounds.at(first.x).at(first.y).getPosition().x;
+        rect1.top = _lettersBounds.at(first.x).at(first.y).getPosition().y;
+
+        rect1.height = SUBS_SIZE;
+        auto lastLetterIndex = _lettersBounds.at(first.x).size() - 1;
+        rect1.width = _lettersBounds.at(first.x).at(lastLetterIndex).getPosition().x - rect1.left
+                     + _lettersBounds.at(first.x).at(lastLetterIndex).getSize().x;
+        _subsSelectedLinesBounds.push_back(rect1);
+
+        for (int i{ first.x + 1 }; i < second.x; ++i)
+        {
+            sf::FloatRect rect;
+            rect.left = _lettersBounds.at(i).begin()->getPosition().x;
+            rect.top = _lettersBounds.at(i).begin()->getPosition().y;
+            rect.height = SUBS_SIZE;
+            auto lastLetterIndex = _lettersBounds.at(i).size() - 1;
+            rect.width = _lettersBounds.at(i).at(lastLetterIndex).getPosition().x - rect.left
+                + _lettersBounds.at(i).at(lastLetterIndex).getSize().x;
+            _subsSelectedLinesBounds.push_back(rect);
+        }
+
+        sf::FloatRect rect2;
+        rect2.left = _lettersBounds.at(second.x).begin()->getPosition().x;
+        rect2.top = _lettersBounds.at(second.x).begin()->getPosition().y;
+        rect2.height = SUBS_SIZE;
+        rect2.width = _lettersBounds.at(second.x).at(second.y).getPosition().x - rect2.left
+            + _lettersBounds.at(second.x).at(second.y).getSize().x;
+        _subsSelectedLinesBounds.push_back(rect2);
+    }
 }
