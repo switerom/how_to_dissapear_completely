@@ -28,6 +28,7 @@
 #define SUB_SELECT_POS_Y	HEIGHT * 0.875f	
 
 #define TEXT_NOTE_SIZE		75
+#define DOUBLE_CLICK_RANGE	5
 
 #define SAVES_DIR			"C:/_FILES/CATEGORIES/MY_FILM-GAME/code/detective_film_game/game/saves"
 

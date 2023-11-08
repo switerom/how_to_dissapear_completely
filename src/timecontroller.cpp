@@ -1,5 +1,6 @@
 #include "collisiondetection.h"
 #include "timecontroller.h"
+#include "settings.h"
 #include "stdafx.h"
 
 TimeController::TimeController()
@@ -24,7 +25,12 @@ bool TimeController::isDoubleClick(sf::RenderWindow& window)
 
     _lastClickTime = _lastClickClock.restart();
 
-    if (_lastClickTime.asSeconds() < 0.5 && clickPos == _lastClickPos)
+    // Needed to make double click work even if mouse moved a little
+    float dx = clickPos.x - _lastClickPos.x;
+    float dy = clickPos.y - _lastClickPos.y;
+    float clickRange = std::sqrt(dx * dx + dy * dy);
+
+    if (_lastClickTime.asSeconds() < 0.5 && clickRange < DOUBLE_CLICK_RANGE)
         isDoubleClick = true;
     else 
         isDoubleClick = false;
