@@ -238,7 +238,7 @@ void Subtitles::createLettersBounds()
             sf::FloatRect letterRect{ letter.getLocalBounds() };
 
             letterRect.left = letter.getPosition().x + letterRect.left;
-            letterRect.top = letter.getPosition().y + letterRect.top*0.5f;
+            letterRect.top = letter.getPosition().y + SUBS_SIZE * SUBS_POS_Y_FACTOR;
             letterRect.height = SUBS_SIZE;
 
             // To remove empty space between letters rects, exceot last letter
