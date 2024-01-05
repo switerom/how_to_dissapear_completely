@@ -107,6 +107,7 @@
 #define SUBS_FONT					"No Limits.ttf"
 #define SUBS_COLOR					sf::Color::White
 #define SUBS_SIZE					50
+#define SUBS_POS_Y_FACTOR			0.25f	// 0.25f puts selection in Y middle of selected text
 #define SUBS_POS					sf::Vector2f(WIDTH*0.5f,HEIGHT*0.92f)
 #define SUBS_LINES_INDENTATION		50
 #define SUBS_SELECT_COLOR			sf::Color::Blue
