@@ -5,6 +5,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
 #include <sfeMovie/Movie.hpp>
+#include <nlohmann/json.hpp>
 //#include <srtparser.h>
 
 #include <string>
@@ -24,4 +25,5 @@
 #include <climits>
 #include <locale>
 #include <Windows.h>
+#include <cwctype>
 //#include <codecvt>

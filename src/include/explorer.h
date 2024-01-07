@@ -27,7 +27,7 @@ public:
 
 	std::string getCurrentVideo() const;
 
-	void search(const std::wstring& wstr);
+	void search(std::wstring wstr);
 
 private:
 	

@@ -5,6 +5,7 @@
 #include "collisiondetection.h"
 #include "area.h"
 #include "assetmanager.h"
+#include "utility.h"
 
 namespace fs = std::filesystem;
 
@@ -184,8 +185,44 @@ std::string Explorer::getCurrentVideo() const
 		return _selectedItem->getText().getString();
 }
 
-void Explorer::search(const std::wstring& wstr)
+void Explorer::search(std::wstring wstr)
 {
-	
+	using json = nlohmann::json;
+
+	// Convert the wstring to lowercase
+	std::transform(wstr.begin(), wstr.end(), wstr.begin(), std::towlower);
+
+	std::wstring testing = wstr;
+
+	std::ifstream f(SEARCH_DIR);
+	json data = json::parse(f);
+
+	// Loop over the JSON array
+	for (auto& element : data) {
+
+		for (auto& token : element["tokens"])
+		{
+			if (token.is_string()) 
+			{
+				// Convert JSON value to std::wstring
+				std::wstring wstrToken = convertToWideString(token.get<std::string>());
+
+				if(wstr == wstrToken)
+				{
+					std::cout << "Found!" << "\n";
+				}
+			}
+		}
+
+		// Access the videos array
+		//for (auto& video : element["videos"]) {
+		////video["video"];
+
+		//	// Access the timestamps array
+		//	for (auto& timestamp : video["timestamps"]) {
+		//		//timestamp;
+		//	}
+		//}
+	}
 }
 

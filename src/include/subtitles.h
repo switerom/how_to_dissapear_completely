@@ -21,7 +21,6 @@ class Subtitles
 		std::wstring getSelectedString();
 
 	private:
-		std::wstring convertToWideString(const std::string& str) const;
 		void createTextLine(const std::wstring& wstr);
 		void clearText();
 		void createLettersBounds();

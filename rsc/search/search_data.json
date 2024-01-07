@@ -1,0 +1,35 @@
+[
+    {
+        "word": "Roman",
+        "tokens": ["Roma", "romchik", "romuald", "здравствуйте"],
+        "videos":[
+            {
+                "video": "vid_1.mp4",
+                "timestamps": [
+                    "00:00:15",
+                    "00:01:45",
+                    "00:03:00"
+                ]
+            }, 
+            {
+                "video": "vid_2.mp4",
+                "timestamps": [
+                    "00:00:15",
+                    "00:03:00"
+                ]
+            }
+        ]
+    },
+    {
+        "word": "Alex",
+        "tokens": ["Sasha", "Aleksandr", "Alexandr", "Alexandre"],
+        "videos":[
+            {
+                "video": "vid_2.mp4",
+                "timestamps": [
+                    "00:00:15"
+                ]
+            }
+        ]
+    }
+]      

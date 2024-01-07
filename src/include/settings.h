@@ -117,3 +117,5 @@
 #define TIME_COLOR					sf::Color::White
 #define TIME_SIZE					30
 #define TIME_POS					sf::Vector2f(WIDTH*0.99f,HEIGHT*0.96f)
+
+#define SEARCH_DIR					"rsc/search/search_data.json"
