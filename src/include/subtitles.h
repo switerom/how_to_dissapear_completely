@@ -18,6 +18,7 @@ class Subtitles
 		void startSelect(sf::RenderWindow& window, const sf::View& areaView);
 		void setSelect(sf::RenderWindow& window, const sf::View& areaView);
 		void endSelect();
+		std::wstring getSelectedString();
 
 	private:
 		std::wstring convertToWideString(const std::string& str) const;
@@ -25,6 +26,7 @@ class Subtitles
 		void clearText();
 		void createLettersBounds();
 		void changeSelectedLinesBounds();
+		void swapSelection(const sf::Vector2i& select_first, const sf::Vector2i& select_second);
 
 		SubtitleParserFactory* _subParserFactory;
 		SubtitleParser* _parser;

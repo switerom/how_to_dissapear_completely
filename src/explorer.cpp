@@ -183,3 +183,9 @@ std::string Explorer::getCurrentVideo() const
 	else
 		return _selectedItem->getText().getString();
 }
+
+void Explorer::search(const std::wstring& wstr)
+{
+	
+}
+

@@ -27,6 +27,8 @@ public:
 
 	std::string getCurrentVideo() const;
 
+	void search(const std::wstring& wstr);
+
 private:
 	
 	sf::RectangleShape _bigRect;	// заменить это на текстуру из AssetManagera

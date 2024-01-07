@@ -127,6 +127,7 @@ void Subtitles::setText(long playtime)
     }
 
     int num{ 0 };
+
     for (auto i{ _text.rbegin()}; i != _text.rend(); ++i)
     {
         sf::FloatRect textBounds = (*i)->getLocalBounds();
@@ -312,6 +313,22 @@ void Subtitles::endSelect()
     inSelectProcess = false;
 }
 
+
+void Subtitles::swapSelection(const sf::Vector2i& select_first, const sf::Vector2i& select_second)
+{
+    sf::Vector2i first{ select_first }, second{ select_second };
+
+    //swap range indexes
+    if (first.x > second.x)
+    {
+        std::swap(_selectedTextRange.first, _selectedTextRange.second);
+    }
+    else if (first.x == second.x && first.y > second.y)
+    {
+        std::swap(_selectedTextRange.first, _selectedTextRange.second);
+    }
+}
+
 void Subtitles::changeSelectedLinesBounds()
 {
     if (_lettersBounds.empty())
@@ -389,4 +406,49 @@ void Subtitles::changeSelectedLinesBounds()
             + _lettersBounds.at(second.x).at(second.y).getSize().x;
         _subsSelectedLinesBounds.push_back(rect2);
     }
+}
+
+std::wstring Subtitles::getSelectedString()
+{
+    swapSelection(_selectedTextRange.first, _selectedTextRange.second);
+
+    std::wstring wstr{};
+
+    for (int i{ 0 }; i < _text.size(); ++i)
+    {
+        std::wstring substr{};
+        std::wstring sfstr = _text.at(i)->getString();
+
+        if (i == _selectedTextRange.first.x)
+        {
+            std::wstring sfstr = _text.at(i)->getString();
+
+            if (_selectedTextRange.first.x == _selectedTextRange.second.x)
+            {
+                if (_selectedTextRange.first.y == _selectedTextRange.second.y)
+                    return wstr;
+
+                substr = sfstr.substr(_selectedTextRange.first.y, _selectedTextRange.second.y - _selectedTextRange.first.y + 1);
+                wstr += substr;
+
+                return wstr;
+            }
+            else
+            {
+                substr = sfstr.substr(_selectedTextRange.first.y, sfstr.size());
+            }
+        }
+        else if (i == _selectedTextRange.second.x)
+        {
+            substr = L" " + sfstr.substr(0, _selectedTextRange.second.y + 1);
+            wstr += substr;
+            break;
+        }
+        else
+            substr = L" " + sfstr.substr(_selectedTextRange.first.y, sfstr.size());
+
+        wstr += substr;
+    }
+
+    return wstr;
 }

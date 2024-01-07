@@ -52,6 +52,7 @@ public:
 	void endSelectSubs();
 	void setSelectSubs(sf::RenderWindow& window);
 	std::vector<sf::FloatRect> getSubsBounds() const;
+	std::wstring getSelectedString() { return _subs.getSelectedString(); };
 
 private:
 	std::string getSubName(const std::string& filename) const;
