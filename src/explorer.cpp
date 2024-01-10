@@ -192,8 +192,6 @@ void Explorer::search(std::wstring wstr)
 	// Convert the wstring to lowercase
 	std::transform(wstr.begin(), wstr.end(), wstr.begin(), std::towlower);
 
-	std::wstring testing = wstr;
-
 	std::ifstream f(SEARCH_DIR);
 	json data = json::parse(f);
 

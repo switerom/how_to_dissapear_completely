@@ -415,7 +415,7 @@ std::wstring Subtitles::getSelectedString()
 
     std::wstring wstr{};
 
-    for (int i{ 0 }; i < _text.size(); ++i)
+    for (int i{ _selectedTextRange.first.x }; i < _text.size(); ++i)
     {
         std::wstring substr{};
         std::wstring sfstr = _text.at(i)->getString();
