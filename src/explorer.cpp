@@ -9,7 +9,7 @@
 
 namespace fs = std::filesystem;
 
-Explorer::Explorer(): Area (EXPLORER_MIN_BOUNDS, EXPLORER_VIEWPORT)
+Explorer::Explorer(): Area (EXPLORER_MIN_BOUNDS, EXPLORER_VIEWPORT), _currentItems (_explorerAllItems)
 {
 	Init();
 }
@@ -44,7 +44,9 @@ void Explorer::Init()
 
 	loadFiles();
 
-	_selectedItem = _explorerItems.end();
+	_selectedItem = _explorerAllItems.end();
+	//_selectedVisibleItem = _explorerVisibleItems.end();
+	finding = false;
 }
 
 sf::FloatRect Explorer::getItemsBounds(const sf::FloatRect& explorerBounds)
@@ -71,7 +73,7 @@ void Explorer::loadFiles()
 
 				auto filename = entry.path().filename();
 
-				_explorerItems.emplace_back( ExplorerItem(filename.string(), id));
+				_explorerAllItems.emplace_back( ExplorerItem(filename.string(), id));
 
 				++id;
 			}
@@ -93,12 +95,25 @@ void Explorer::Draw(sf::RenderWindow& window)
 
 	window.setView(_itemsView);		// Применяем View конкретно для файлов (чтобы правильно работал скроллинг)
 
-	if (_selectedItem != _explorerItems.end())
-		window.draw(_selectRect);
-
-	for (auto& item : _explorerItems)
+	if (!finding)
 	{
-		window.draw(item.getText());
+		if (_selectedItem != _explorerAllItems.end())
+			window.draw(_selectRect);
+
+		for (auto& item : _explorerAllItems)
+		{
+			window.draw(item.getText());
+		}
+	}
+	else
+	{
+		//if (_selectedItem != _explorerVisibleItems.end())
+			window.draw(_selectRect);
+
+		for (auto& item : _explorerVisibleItems)
+		{
+			window.draw(item.getText());
+		}
 	}
 }
 
@@ -126,7 +141,7 @@ void Explorer::toggleMaximize()
 
 void Explorer::scrollView(float scrollDelta, float dt)
 {
-	float itemsBounds = _explorerItems.size() * EXPLORER_ITEM_SIZE_Y;
+	float itemsBounds = _explorerAllItems.size() * EXPLORER_ITEM_SIZE_Y;
 
 	if (itemsBounds <= HEIGHT)
 	{
@@ -137,7 +152,7 @@ void Explorer::scrollView(float scrollDelta, float dt)
 
 	float newScrollPos = _scrollPos - scrollDist;
 
-	float maxScrollPos = _explorerItems.size() * EXPLORER_ITEM_SIZE_Y - HEIGHT / 2;
+	float maxScrollPos = _explorerAllItems.size() * EXPLORER_ITEM_SIZE_Y - HEIGHT / 2;
 	float minScrollPos = HEIGHT / 2;
 
 	if (newScrollPos > maxScrollPos)
@@ -159,8 +174,14 @@ void Explorer::scrollView(float scrollDelta, float dt)
 void Explorer::selectItem(sf::RenderWindow& window)
 {
 	bool selected { false };
+	auto& items = _explorerAllItems;
 
-	for (auto it{ _explorerItems.begin() }; it != _explorerItems.end(); ++it)
+	if (finding)
+	{
+		items = _explorerVisibleItems;
+	}
+
+	for (auto it{ items.begin() }; it != items.end(); ++it)
 	{
 		if (isColliding(window, _itemsView, *it))
 		{
@@ -174,12 +195,12 @@ void Explorer::selectItem(sf::RenderWindow& window)
 		}
 	}
 
-	_selectedItem = _explorerItems.end();
+	_selectedItem = items.end();
 }
 
 std::string Explorer::getCurrentVideo() const
 { 
-	if (_selectedItem == _explorerItems.end())
+	if (_selectedItem == _explorerAllItems.end())
 		return "";
 	else
 		return _selectedItem->getText().getString();
@@ -194,7 +215,8 @@ void Explorer::search(std::wstring wstr)
 
 	std::ifstream f(SEARCH_DIR);
 	json data = json::parse(f);
-
+	bool found{ false };
+	int id{ 0 };
 	// Loop over the JSON array
 	for (auto& element : data) {
 
@@ -207,20 +229,32 @@ void Explorer::search(std::wstring wstr)
 
 				if(wstr == wstrToken)
 				{
-					std::cout << "Found!" << "\n";
+					found = true;
+					finding = true;
+					_selectedItem = _explorerVisibleItems.end();
+					//std::cout << "Found!" << "\n";
 				}
 			}
 		}
 
-		// Access the videos array
-		//for (auto& video : element["videos"]) {
-		////video["video"];
+		if (found)
+		{
+			for (auto& video : element["videos"])
+			{
+				std::string filename{ video["video"] };
 
-		//	// Access the timestamps array
-		//	for (auto& timestamp : video["timestamps"]) {
-		//		//timestamp;
-		//	}
-		//}
+				for (auto& timestamp : video["timestamps"]) {
+
+					//std::cout << timestamp << " ";
+
+					_explorerVisibleItems.emplace_back(ExplorerItem(filename, id));
+					++id;
+				}
+				//std::cout << "\n";
+			}
+
+			return;
+		}
 	}
 }
 

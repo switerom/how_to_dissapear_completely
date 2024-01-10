@@ -30,12 +30,16 @@ public:
 	void search(std::wstring wstr);
 
 private:
-	
+
 	sf::RectangleShape _bigRect;	// заменить это на текстуру из AssetManagera
 	sf::RectangleShape _selectRect;	// заменить это на текстуру из AssetManagera
 
 	std::list<ExplorerItem>::iterator _selectedItem;
-	std::list<ExplorerItem> _explorerItems;
+	std::list<ExplorerItem>& _currentItems;
+	//std::list<ExplorerItem>::iterator _selectedVisibleItem;
+	std::list<ExplorerItem> _explorerAllItems;
+	std::list<ExplorerItem> _explorerVisibleItems;
+	bool finding;
 	sf::View _itemsView;
 	float _scrollPos;
 };
