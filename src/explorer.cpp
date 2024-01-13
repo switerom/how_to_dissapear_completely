@@ -9,7 +9,7 @@
 
 namespace fs = std::filesystem;
 
-Explorer::Explorer(): Area (EXPLORER_MIN_BOUNDS, EXPLORER_VIEWPORT), _currentItems (_explorerAllItems)
+Explorer::Explorer(): Area (EXPLORER_MIN_BOUNDS, EXPLORER_VIEWPORT)
 {
 	Init();
 }
@@ -44,9 +44,9 @@ void Explorer::Init()
 
 	loadFiles();
 
-	_selectedItem = _explorerAllItems.end();
+	_selectedItem = _explorerItems.end();
 	//_selectedVisibleItem = _explorerVisibleItems.end();
-	finding = false;
+	//finding = false;
 }
 
 sf::FloatRect Explorer::getItemsBounds(const sf::FloatRect& explorerBounds)
@@ -60,31 +60,7 @@ sf::FloatRect Explorer::getItemsBounds(const sf::FloatRect& explorerBounds)
 
 void Explorer::loadFiles()
 {
-	fs::path folderPath = VID_DIR;
-
-	unsigned int id{};
-
-	try {
-		// Check if the folder exists
-		if (fs::exists(folderPath) && fs::is_directory(folderPath)) {
-
-			// Iterate through the directory and create items
-			for (const auto& entry : fs::directory_iterator(folderPath)) {
-
-				auto filename = entry.path().filename();
-
-				_explorerAllItems.emplace_back( ExplorerItem(filename.string(), id));
-
-				++id;
-			}
-		}
-		else {
-			std::cout << "Folder does not exist or is not a directory." << std::endl;
-		}
-	}
-	catch (const std::filesystem::filesystem_error& ex) {
-		std::cerr << "Filesystem error: " << ex.what() << std::endl;
-	}
+	search(START_SEARCH_WORD);
 }
 
 void Explorer::Draw(sf::RenderWindow& window)
@@ -95,25 +71,12 @@ void Explorer::Draw(sf::RenderWindow& window)
 
 	window.setView(_itemsView);		// Применяем View конкретно для файлов (чтобы правильно работал скроллинг)
 
-	if (!finding)
-	{
-		if (_selectedItem != _explorerAllItems.end())
-			window.draw(_selectRect);
+	if (_selectedItem != _explorerItems.end())
+		window.draw(_selectRect);
 
-		for (auto& item : _explorerAllItems)
-		{
-			window.draw(item.getText());
-		}
-	}
-	else
+	for (auto& item : _explorerItems)
 	{
-		//if (_selectedItem != _explorerVisibleItems.end())
-			window.draw(_selectRect);
-
-		for (auto& item : _explorerVisibleItems)
-		{
-			window.draw(item.getText());
-		}
+		window.draw(item.getText());
 	}
 }
 
@@ -141,7 +104,7 @@ void Explorer::toggleMaximize()
 
 void Explorer::scrollView(float scrollDelta, float dt)
 {
-	float itemsBounds = _explorerAllItems.size() * EXPLORER_ITEM_SIZE_Y;
+	float itemsBounds = _explorerItems.size() * EXPLORER_ITEM_SIZE_Y;
 
 	if (itemsBounds <= HEIGHT)
 	{
@@ -152,7 +115,7 @@ void Explorer::scrollView(float scrollDelta, float dt)
 
 	float newScrollPos = _scrollPos - scrollDist;
 
-	float maxScrollPos = _explorerAllItems.size() * EXPLORER_ITEM_SIZE_Y - HEIGHT / 2;
+	float maxScrollPos = _explorerItems.size() * EXPLORER_ITEM_SIZE_Y - HEIGHT / 2;
 	float minScrollPos = HEIGHT / 2;
 
 	if (newScrollPos > maxScrollPos)
@@ -173,15 +136,7 @@ void Explorer::scrollView(float scrollDelta, float dt)
 
 void Explorer::selectItem(sf::RenderWindow& window)
 {
-	bool selected { false };
-	auto& items = _explorerAllItems;
-
-	if (finding)
-	{
-		items = _explorerVisibleItems;
-	}
-
-	for (auto it{ items.begin() }; it != items.end(); ++it)
+	for (auto it{ _explorerItems.begin() }; it != _explorerItems.end(); ++it)
 	{
 		if (isColliding(window, _itemsView, *it))
 		{
@@ -189,18 +144,16 @@ void Explorer::selectItem(sf::RenderWindow& window)
 
 			_selectRect.setPosition(_selectedItem->getItemBounds().left, _selectedItem->getItemBounds().top);
 
-			selected = true;
-
 			return;
 		}
 	}
 
-	_selectedItem = items.end();
+	_selectedItem = _explorerItems.end();
 }
 
 std::string Explorer::getCurrentVideo() const
 { 
-	if (_selectedItem == _explorerAllItems.end())
+	if (_selectedItem == _explorerItems.end())
 		return "";
 	else
 		return _selectedItem->getText().getString();
@@ -208,6 +161,8 @@ std::string Explorer::getCurrentVideo() const
 
 void Explorer::search(std::wstring wstr)
 {
+	_explorerItems.clear();
+
 	using json = nlohmann::json;
 
 	// Convert the wstring to lowercase
@@ -230,9 +185,7 @@ void Explorer::search(std::wstring wstr)
 				if(wstr == wstrToken)
 				{
 					found = true;
-					finding = true;
-					_selectedItem = _explorerVisibleItems.end();
-					//std::cout << "Found!" << "\n";
+					_selectedItem = _explorerItems.end();
 				}
 			}
 		}
@@ -243,14 +196,11 @@ void Explorer::search(std::wstring wstr)
 			{
 				std::string filename{ video["video"] };
 
-				for (auto& timestamp : video["timestamps"]) {
-
-					//std::cout << timestamp << " ";
-
-					_explorerVisibleItems.emplace_back(ExplorerItem(filename, id));
+				for (auto& timestamp : video["timestamps"]) 
+				{
+					_explorerItems.emplace_back(ExplorerItem(filename, id));
 					++id;
 				}
-				//std::cout << "\n";
 			}
 
 			return;

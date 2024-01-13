@@ -119,3 +119,4 @@
 #define TIME_POS					sf::Vector2f(WIDTH*0.99f,HEIGHT*0.96f)
 
 #define SEARCH_DIR					"rsc/search/search_data.json"
+#define START_SEARCH_WORD			L"alexandr"

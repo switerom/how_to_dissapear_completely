@@ -35,11 +35,8 @@ private:
 	sf::RectangleShape _selectRect;	// заменить это на текстуру из AssetManagera
 
 	std::list<ExplorerItem>::iterator _selectedItem;
-	std::list<ExplorerItem>& _currentItems;
-	//std::list<ExplorerItem>::iterator _selectedVisibleItem;
-	std::list<ExplorerItem> _explorerAllItems;
-	std::list<ExplorerItem> _explorerVisibleItems;
-	bool finding;
+	std::list<ExplorerItem> _explorerItems;
+	//bool finding;
 	sf::View _itemsView;
 	float _scrollPos;
 };
