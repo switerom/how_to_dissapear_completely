@@ -90,7 +90,7 @@ void AreaController::explorerEvents(sf::Event& event, sf::RenderWindow& window, 
                 }
                 else
                 {
-                    _videoplayer.toggleVideoPlayback(_explorer.getCurrentVideo());
+                    _videoplayer.toggleVideoPlayback(_explorer.getCurrentVideo(), _explorer.getVideoPlayback());
                 }
             }
         }

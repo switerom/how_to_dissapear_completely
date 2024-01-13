@@ -36,7 +36,7 @@ public:
 	void Init();
 	virtual void Draw(sf::RenderWindow& window) override;
 	virtual void Update(sf::RenderWindow& window, float dt) override;
-	void toggleVideoPlayback(const std::string& filename);
+	void toggleVideoPlayback(const std::string& filename, const sf::Time& playTime);
 	void toggleVideoPlayback();
 	void changePlayTime(sf::RenderWindow& window);
 	sf::FloatRect getBarBounds() const { return _interface.bar.getGlobalBounds(); };

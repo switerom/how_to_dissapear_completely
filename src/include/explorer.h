@@ -17,17 +17,13 @@ public:
 
 	// To count total number of videos
 	void loadFiles();
-
 	void scrollView(float scrollDelta, float dt);
-
 	sf::FloatRect getItemsBounds(const sf::FloatRect& explorerBounds);
 	const sf::View& getItemsView() const { return _itemsView; };
-
 	void selectItem(sf::RenderWindow& window);
-
 	std::string getCurrentVideo() const;
-
 	void search(std::wstring wstr);
+	const sf::Time& getVideoPlayback() const { return _selectedItem->getPlayTime(); };
 
 private:
 
@@ -36,7 +32,6 @@ private:
 
 	std::list<ExplorerItem>::iterator _selectedItem;
 	std::list<ExplorerItem> _explorerItems;
-	//bool finding;
 	sf::View _itemsView;
 	float _scrollPos;
 };

@@ -2,12 +2,12 @@
 #include "settings.h"
 #include "stdafx.h"
 
-ExplorerItem::ExplorerItem(const std::string& str, unsigned int id)
+ExplorerItem::ExplorerItem(const std::string& str, unsigned int id, float playTime)
 {
-    Init(str, id);
+    Init(str, id, playTime);
 }
 
-void ExplorerItem::Init(const std::string& str, unsigned int id)
+void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime)
 {
     _id = id;
 
@@ -28,6 +28,7 @@ void ExplorerItem::Init(const std::string& str, unsigned int id)
     _text.setFillColor(EXPLORER_ITEM_TEXT_COLOR);
 
     bool _selected = false;
+    _playTime = sf::seconds(playTime);
 }
 
 void ExplorerItem::setSelect(bool select)

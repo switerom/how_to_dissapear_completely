@@ -190,7 +190,9 @@ void Explorer::search(std::wstring wstr)
 
 						for (auto& timestamp : video["timestamps"])
 						{
-							_explorerItems.emplace_back(ExplorerItem(filename, id));
+							float playtime{ timestamp };
+
+							_explorerItems.emplace_back(ExplorerItem(filename, id, playtime));
 							++id;
 						}
 					}

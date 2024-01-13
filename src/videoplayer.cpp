@@ -92,7 +92,7 @@ void VideoPlayer::fitVideo()
 	_videoView.setViewport(sf::FloatRect(rect.left, rect.top, rect.width, rect.height));
 }
 
-void VideoPlayer::toggleVideoPlayback(const std::string& filename)
+void VideoPlayer::toggleVideoPlayback(const std::string& filename, const sf::Time& playTime)
 {
 
 	if (_currentVideo)
@@ -119,6 +119,7 @@ void VideoPlayer::toggleVideoPlayback(const std::string& filename)
 	{
 		//toggleMaximize();
 		_currentVideo->play();
+		_currentVideo->setPlayingOffset(playTime);
 	}
 }
 
