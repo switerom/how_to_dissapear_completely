@@ -162,6 +162,7 @@ std::string Explorer::getCurrentVideo() const
 void Explorer::search(std::wstring wstr)
 {
 	_explorerItems.clear();
+	_selectedItem = _explorerItems.end();
 
 	using json = nlohmann::json;
 
@@ -170,7 +171,6 @@ void Explorer::search(std::wstring wstr)
 
 	std::ifstream f(SEARCH_DIR);
 	json data = json::parse(f);
-	bool found{ false };
 	int id{ 0 };
 	// Loop over the JSON array
 	for (auto& element : data) {
@@ -184,26 +184,20 @@ void Explorer::search(std::wstring wstr)
 
 				if(wstr == wstrToken)
 				{
-					found = true;
-					_selectedItem = _explorerItems.end();
+					for (auto& video : element["videos"])
+					{
+						std::string filename{ video["video"] };
+
+						for (auto& timestamp : video["timestamps"])
+						{
+							_explorerItems.emplace_back(ExplorerItem(filename, id));
+							++id;
+						}
+					}
+
+					return;
 				}
 			}
-		}
-
-		if (found)
-		{
-			for (auto& video : element["videos"])
-			{
-				std::string filename{ video["video"] };
-
-				for (auto& timestamp : video["timestamps"]) 
-				{
-					_explorerItems.emplace_back(ExplorerItem(filename, id));
-					++id;
-				}
-			}
-
-			return;
 		}
 	}
 }
