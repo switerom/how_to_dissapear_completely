@@ -17,3 +17,10 @@ Dependencies:
 - sfeMovie (extension for SFML to play video with sound): http://sfemovie.yalir.org/latest/
     in order to work, instructions must be followed:
         http://sfemovie.yalir.org/latest/start.php
+- simple-yet-powerful-srt-subtitle-parser-cpp (srt parser): https://github.com/saurabhshri/simple-yet-powerful-srt-subtitle-parser-cpp
+        Nothing should be done. It already included in source code. It depends only on a header file, that was modified in order to work with wide string characters.
+- json/JSON for modern c++ (json parser): https://github.com/nlohmann/json
+     in order to work, instructions must be followed:
+        https://github.com/nlohmann/json?tab=readme-ov-file#integration
+
+Video files not included in this repository (later link will be created). In order to work video files must be placed in "rsc/vid" folder.
