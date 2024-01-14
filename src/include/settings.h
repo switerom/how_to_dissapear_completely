@@ -120,3 +120,12 @@
 
 #define SEARCH_DIR					"rsc/search/search_data.json"
 #define START_SEARCH_WORD			L"alexandr"
+
+#define SEARCHBOX_CHAR_SIZE			50
+#define SEARCHBOX_CHAR_LIMIT		40
+#define SEARCHBOX_CHAR_COLOR		sf::Color::White
+#define SEARCHBOX_CHAR_FONT			"No Limits.ttf"
+#define SEARCH_RECT_COLOR			sf::Color::Black
+#define SEARCH_RECT_HEIGHT			SEARCHBOX_CHAR_SIZE * 1.5f
+#define SEARCHBOX_RECT_POS			sf::Vector2f(0.f, WINDOW_TOP_RECT)
+#define SEARCHBOX_CHAR_POS			sf::Vector2f(SEARCHBOX_CHAR_SIZE, WINDOW_TOP_RECT) //  + SEARCH_RECT_HEIGHT * 0.25f

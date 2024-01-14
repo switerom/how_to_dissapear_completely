@@ -26,4 +26,6 @@
 #include <locale>
 #include <Windows.h>
 #include <cwctype>
+#include <sstream>
+
 //#include <codecvt>

@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "area.h"
 #include "exploreritem.h"
+#include "searchbox.h"
 
 class Explorer: public Area
 {
@@ -24,11 +25,14 @@ public:
 	std::string getCurrentVideo() const;
 	void search(std::wstring wstr);
 	const sf::Time& getVideoPlayback() const { return _selectedItem->getPlayTime(); };
+	bool isSearchBoxSelected() const {	return _searchBox.isSelected(); };
+	void typeInSearchBox(sf::Event& event);
 
 private:
 
 	sf::RectangleShape _bigRect;	// заменить это на текстуру из AssetManagera
 	sf::RectangleShape _selectRect;	// заменить это на текстуру из AssetManagera
+	SearchBox _searchBox;
 
 	std::list<ExplorerItem>::iterator _selectedItem;
 	std::list<ExplorerItem> _explorerItems;

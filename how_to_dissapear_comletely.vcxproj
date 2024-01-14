@@ -122,6 +122,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,6 +142,7 @@
     <ClInclude Include="src\include\exploreritem.h" />
     <ClInclude Include="src\include\keygen.h" />
     <ClInclude Include="src\include\node.h" />
+    <ClInclude Include="src\include\searchbox.h" />
     <ClInclude Include="src\include\settings.h" />
     <ClInclude Include="src\include\srtparser.h" />
     <ClInclude Include="src\include\stdafx.h" />
@@ -162,6 +164,7 @@
     <ClCompile Include="src\how_to_dissapear_comletely.cpp" />
     <ClCompile Include="src\keygen.cpp" />
     <ClCompile Include="src\node.cpp" />
+    <ClCompile Include="src\searchbox.cpp" />
     <ClCompile Include="src\subtitles.cpp" />
     <ClCompile Include="src\timecontroller.cpp" />
     <ClCompile Include="src\utility.cpp" />

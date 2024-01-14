@@ -65,6 +65,12 @@ void AreaController::EventControl(sf::Event& event, sf::RenderWindow& window, Ti
         boardEvents(event, window, timecontroller);
     else
     {
+        
+        if (event.type == sf::Event::TextEntered && _explorer.isSearchBoxSelected())
+        {
+            _explorer.typeInSearchBox(event);
+        }
+
         if(isColliding(window, _explorer.getAreaView()))
             explorerEvents(event, window, timecontroller);
         else if (isColliding(window, _videoplayer.getAreaView()))

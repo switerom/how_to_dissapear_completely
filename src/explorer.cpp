@@ -46,14 +46,14 @@ void Explorer::Init()
 
 	_selectedItem = _explorerItems.end();
 	//_selectedVisibleItem = _explorerVisibleItems.end();
-	//finding = false;
 }
 
+// это нужно переписать, чтобы было в settings.h
 sf::FloatRect Explorer::getItemsBounds(const sf::FloatRect& explorerBounds)
 {
 	auto itemsBounds = explorerBounds;
-	itemsBounds.top = itemsBounds.top + WINDOW_TOP_RECT / HEIGHT * itemsBounds.height;
-	itemsBounds.height = itemsBounds.height - (WINDOW_TOP_RECT / HEIGHT * itemsBounds.height);
+	itemsBounds.top = itemsBounds.top + (WINDOW_TOP_RECT + SEARCH_RECT_HEIGHT) / HEIGHT * itemsBounds.height;
+	itemsBounds.height = itemsBounds.height - ((WINDOW_TOP_RECT + SEARCH_RECT_HEIGHT) / HEIGHT * itemsBounds.height);
 
 	return itemsBounds;
 }
@@ -68,6 +68,7 @@ void Explorer::Draw(sf::RenderWindow& window)
 	window.setView(_areaView);	// применяем View, иначе будет на весь экран
 	window.draw(_bigRect);
 	window.draw(_topRect);
+	_searchBox.Draw(window);
 
 	window.setView(_itemsView);		// Применяем View конкретно для файлов (чтобы правильно работал скроллинг)
 
@@ -202,5 +203,10 @@ void Explorer::search(std::wstring wstr)
 			}
 		}
 	}
+}
+
+void Explorer::typeInSearchBox(sf::Event& event)
+{
+	_searchBox.typedOn(event);
 }
 
