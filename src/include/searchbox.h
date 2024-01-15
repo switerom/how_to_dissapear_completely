@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "settings.h"
 #include "assetmanager.h"
+#include "utility.h"
 
 #define DELETE_KEY 8
 #define ENTER_KEY 13
@@ -15,7 +16,7 @@ public:
 
 	void setSelected(bool isSelected);
 
-	std::wstring getText() { return _textBox.getString();};		//возможно заменить на convertToWideString(_textBox.getString()); 
+	std::wstring getText() const;		//возможно заменить на convertToWideString(_textBox.getString()); 
 
 	void typedOn(sf::Event& input);
 

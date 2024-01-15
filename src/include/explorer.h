@@ -27,9 +27,9 @@ public:
 	const sf::Time& getVideoPlayback() const { return _selectedItem->getPlayTime(); };
 	bool isSearchBoxSelected() const {	return _searchBox.isSelected(); };
 	void typeInSearchBox(sf::Event& event);
+	std::wstring getSearchBoxText() const;
 
 private:
-
 	sf::RectangleShape _bigRect;	// заменить это на текстуру из AssetManagera
 	sf::RectangleShape _selectRect;	// заменить это на текстуру из AssetManagera
 	SearchBox _searchBox;

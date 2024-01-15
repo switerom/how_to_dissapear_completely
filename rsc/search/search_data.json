@@ -1,7 +1,7 @@
 [
     {
         "word": "Roman",
-        "tokens": ["roma", "romchik", "romuald", "здравствуйте"],
+        "tokens": ["roma", "romchik", "romuald", "здравствуйте", "mirror"],
         "videos":[
             {
                 "video": "vid_1.mp4",

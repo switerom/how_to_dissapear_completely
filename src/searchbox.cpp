@@ -96,3 +96,10 @@ void SearchBox::deleteLastChar()
 
 	_textBox.setString(_text.str());
 }
+
+std::wstring SearchBox::getText() const
+{ 
+	std::wstring wstr = _textBox.getString();
+
+	return wstr.substr(0, wstr.size() - 1);
+};		

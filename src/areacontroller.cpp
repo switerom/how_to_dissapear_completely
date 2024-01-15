@@ -70,6 +70,10 @@ void AreaController::EventControl(sf::Event& event, sf::RenderWindow& window, Ti
         {
             _explorer.typeInSearchBox(event);
         }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && _explorer.isSearchBoxSelected())
+        {
+            _explorer.search(_explorer.getSearchBoxText());
+        }
 
         if(isColliding(window, _explorer.getAreaView()))
             explorerEvents(event, window, timecontroller);

@@ -210,3 +210,7 @@ void Explorer::typeInSearchBox(sf::Event& event)
 	_searchBox.typedOn(event);
 }
 
+std::wstring Explorer::getSearchBoxText() const
+{
+	return _searchBox.getText();
+}
