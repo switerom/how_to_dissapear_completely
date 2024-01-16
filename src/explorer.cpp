@@ -152,12 +152,26 @@ void Explorer::selectItem(sf::RenderWindow& window)
 	_selectedItem = _explorerItems.end();
 }
 
-std::string Explorer::getCurrentVideo() const
+std::string Explorer::getCurrentVideo()
 { 
 	if (_selectedItem == _explorerItems.end())
 		return "";
-	else
-		return _selectedItem->getText().getString();
+
+	std::string vid_name = _selectedItem->getText().getString();
+
+	for (auto& i : _watchedVids)
+	{
+		std::string watched_vid = i.getText().getString();
+
+		if (watched_vid == vid_name)
+		{
+			return vid_name;
+		}
+	}
+
+	_watchedVids.emplace_back(ExplorerItem(vid_name, _watchedVids.size(), 0.f));
+
+	return vid_name;
 }
 
 void Explorer::search(std::wstring wstr)

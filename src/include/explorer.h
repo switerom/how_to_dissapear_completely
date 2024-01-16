@@ -22,7 +22,7 @@ public:
 	sf::FloatRect getItemsBounds(const sf::FloatRect& explorerBounds);
 	const sf::View& getItemsView() const { return _itemsView; };
 	void selectItem(sf::RenderWindow& window);
-	std::string getCurrentVideo() const;
+	std::string getCurrentVideo();
 	void search(std::wstring wstr);
 	const sf::Time& getVideoPlayback() const { return _selectedItem->getPlayTime(); };
 	bool isSearchBoxSelected() const {	return _searchBox.isSelected(); };
@@ -36,6 +36,7 @@ private:
 
 	std::list<ExplorerItem>::iterator _selectedItem;
 	std::list<ExplorerItem> _explorerItems;
+	std::list<ExplorerItem> _watchedVids;
 	sf::View _itemsView;
 	float _scrollPos;
 };
