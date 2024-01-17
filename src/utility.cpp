@@ -26,12 +26,7 @@ void fitImage(sf::Sprite& spr, const sf::FloatRect& frame_size)
 	shift.x = (frame_size.width - img_size.x * crop_factor) * 0.5f;
 	shift.y = (frame_size.height - img_size.y * crop_factor) * 0.5f;
 
-	sf::Vector2f newPos{};
-
-	newPos.x = frame_size.left + shift.x / frame_size.width * 0.5f;
-	newPos.y = frame_size.top + shift.y / frame_size.height * 0.5f;
-
-	spr.setPosition(newPos.x, newPos.y);
+	spr.setPosition(frame_size.left + shift.x, frame_size.top + shift.y);
 	spr.setScale(crop_factor, crop_factor);
 }
 
