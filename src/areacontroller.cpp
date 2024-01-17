@@ -98,7 +98,7 @@ void AreaController::explorerEvents(sf::Event& event, sf::RenderWindow& window, 
                 {
                     //_explorer.toggleMaximize();
                 }
-                else
+                else if(_explorer.isItemSelected())
                 {
                     _videoplayer.toggleVideoPlayback(_explorer.getCurrentVideo(), _explorer.getVideoPlayback());
                 }

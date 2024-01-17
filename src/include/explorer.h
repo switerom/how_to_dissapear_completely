@@ -28,6 +28,7 @@ public:
 	bool isSearchBoxSelected() const {	return _searchBox.isSelected(); };
 	void typeInSearchBox(sf::Event& event);
 	std::wstring getSearchBoxText() const;
+	bool isItemSelected() const;
 
 private:
 	sf::RectangleShape _bigRect;	// заменить это на текстуру из AssetManagera
@@ -38,7 +39,6 @@ private:
 	std::list<ExplorerItem> _explorerItems;
 	std::list<ExplorerItem> _watchedVids;
 	sf::View _itemsView;
-
 
 	float _scrollPos;
 	float maxScrollPos;

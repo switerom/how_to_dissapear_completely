@@ -219,3 +219,8 @@ std::wstring Explorer::getSearchBoxText() const
 {
 	return _searchBox.getText();
 }
+
+bool Explorer::isItemSelected() const
+{
+	return (_selectedItem == _explorerItems.end()) ? false : true;
+}
