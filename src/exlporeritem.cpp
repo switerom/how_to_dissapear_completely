@@ -35,7 +35,6 @@ void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime)
     bool _selected = false;
     _playTime = sf::seconds(playTime);
 
-
     // Set preview texture to a sprite
     // Preview name contains video name + timing
     std::string previewFileName{ str };
@@ -46,11 +45,14 @@ void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime)
         previewFileName = str.substr(0, pos) + "_" + std::to_string(static_cast<int>(playTime)) + PREVIEW_FORMAT;
         previewFileName = PREVIEW_DIR + previewFileName;
 
-        //_spr.setColor(sf::Color::Blue);
         _spr.setTexture(AssetManager::getTexture(previewFileName));
-        fitImage(_spr, sf::FloatRect(_bounds.left, _bounds.top, EXPLORER_ITEM_WIDTH, EXPLORER_ITEM_HEIGHT));
-        //_spr.setScale(sf::Vector2f(0.5f, 0.5f));
-        //_spr.setPosition(_bounds.left + PREVIEW_POS_X, _bounds.top + PREVIEW_POS_Y);
+
+        sf::Vector2f img_size{ sf::Vector2f(_spr.getTextureRect().width, _spr.getTextureRect().height) };
+        sf::Vector2f frame_size{ EXPLORER_ITEM_WIDTH, EXPLORER_ITEM_HEIGHT };
+        float crop_factor = findCropFactor(img_size, frame_size);
+        _spr.setScale(crop_factor, crop_factor);
+
+        shiftImagePos(_spr, sf::FloatRect(_bounds.left, _bounds.top, EXPLORER_ITEM_WIDTH, EXPLORER_ITEM_HEIGHT));
     }
 }
 

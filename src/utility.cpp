@@ -14,20 +14,17 @@ std::wstring convertToWideString(const std::string& str)
 }
 
 // Fit image in frame
-void fitImage(sf::Sprite& spr, const sf::FloatRect& frame_size)
+void shiftImagePos(sf::Sprite& spr, const sf::FloatRect& frame_size)
 {
-	sf::Vector2f img_size{ sf::Vector2f(spr.getTextureRect().width, spr.getTextureRect().height) };
-
-	float crop_factor = findCropFactor(img_size, sf::Vector2f(frame_size.width, frame_size.height)) ;
+	sf::Vector2f img_size{ sf::Vector2f(spr.getGlobalBounds().width, spr.getGlobalBounds().height) };
 
 	sf::Vector2f shift;
 
 	// Calculate indentation (black bars)
-	shift.x = (frame_size.width - img_size.x * crop_factor) * 0.5f;
-	shift.y = (frame_size.height - img_size.y * crop_factor) * 0.5f;
+	shift.x = (frame_size.width - img_size.x) * 0.5f;
+	shift.y = (frame_size.height - img_size.y) * 0.5f;
 
 	spr.setPosition(frame_size.left + shift.x, frame_size.top + shift.y);
-	spr.setScale(crop_factor, crop_factor);
 }
 
 float findCropFactor(const sf::Vector2f& img_size, const sf::Vector2f& frame_size)

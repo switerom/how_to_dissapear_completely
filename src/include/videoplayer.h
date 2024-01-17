@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "area.h"
 #include "subtitles.h"
+#include "utility.h"
 
 struct Screenshot
 {

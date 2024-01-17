@@ -63,12 +63,8 @@ void VideoPlayer::loadVideo(const std::string& filename)
 void VideoPlayer::fitVideo()
 {
 	sf::Vector2f old_size(_currentVideo->getSize().x, _currentVideo->getSize().y);
-	float crop_factor, crop_factor1, crop_factor2;
 
-	// Find crop factor to scale video
-	crop_factor1 = WIDTH / old_size.x;
-	crop_factor2 = HEIGHT / old_size.y;
-	crop_factor = std::min(crop_factor1, crop_factor2);
+	float crop_factor = findCropFactor(sf::Vector2f(old_size.x, old_size.y), sf::Vector2f(WIDTH, HEIGHT));
 
 	// (Fix)(Thickness shouldn't change)(Rect should be drawn in area view, not video view)
 	_screenshot.rect_thk = SCREENSHOT_RECT_THICKNESS / crop_factor;
