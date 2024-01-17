@@ -58,7 +58,7 @@ void SearchBox::typedOn(sf::Event& input)
 	}
 }
 
-void SearchBox::Draw(sf::RenderWindow& window)const
+void SearchBox::Draw(sf::RenderWindow& window) const
 {
 	window.draw(_searchRect);
 	window.draw(_textBox);

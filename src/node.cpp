@@ -65,7 +65,7 @@ void Node::Update(float dt)
 {
 }
 
-void Node::Draw(sf::RenderWindow& window)
+void Node::Draw(sf::RenderWindow& window) const
 {
 	window.draw(_select_frame);
 	window.draw(_spr);

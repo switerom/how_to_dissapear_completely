@@ -6,6 +6,9 @@
 #define HEIGHT				1080
 #define TOTAL_VIDS			6
 
+#define PREVIEW_FORMAT		".jpg"
+#define PREVIEW_DIR			"rsc/img/prev/"
+
 #define EXITEM_X_POS		WIDTH*0.1f
 #define EXITEM_Y_POS		WIDTH*0.1f
 #define EXITEM_Y_DIST		WIDTH*0.05f
@@ -50,6 +53,8 @@
 #define EXPLORER_SCROLL_SPEED		2500.f
 #define EXPLORER_MIN_BOUNDS			sf::FloatRect(0.f, 0.5f, 0.5f, 0.5f)
 #define EXPLORER_VIEWPORT			sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT)
+#define PREVIEW_POS_X				EXPLORER_ITEM_WIDTH*0.1f
+#define PREVIEW_POS_Y				EXPLORER_ITEM_HEIGHT*0.1f
 
 // Настройки всего окна видеоплеера
 #define VIDEOPLAYER_MIN_BOUNDS		sf::FloatRect(0.f, 0.f, 0.5f, 0.5f)

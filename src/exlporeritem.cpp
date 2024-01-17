@@ -1,6 +1,4 @@
 #include "exploreritem.h"
-#include "settings.h"
-#include "stdafx.h"
 
 ExplorerItem::ExplorerItem(const std::string& str, unsigned int id, float playTime)
 {
@@ -36,9 +34,35 @@ void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime)
 
     bool _selected = false;
     _playTime = sf::seconds(playTime);
+
+
+    // Set preview texture to a sprite
+    // Preview name contains video name + timing
+    std::string previewFileName{ str };
+    size_t pos = str.find('.');  
+
+    if (pos != std::string::npos) 
+    {
+        previewFileName = str.substr(0, pos) + "_" + std::to_string(static_cast<int>(playTime)) + PREVIEW_FORMAT;
+        previewFileName = PREVIEW_DIR + previewFileName;
+
+        //_spr.setColor(sf::Color::Blue);
+        _spr.setScale(sf::Vector2f(0.5f, 0.5f));
+        _spr.setTexture(AssetManager::getTexture(previewFileName));
+        _spr.setPosition(_bounds.left + PREVIEW_POS_X, _bounds.top + PREVIEW_POS_Y);
+    }
 }
 
 void ExplorerItem::setSelect(bool select)
 {
     _selected = select;
 }
+
+void ExplorerItem::Draw(sf::RenderWindow& window) const const
+{
+    window.draw(_text);
+
+    if (_spr.getTexture() != NULL)
+        window.draw(_spr);
+}
+

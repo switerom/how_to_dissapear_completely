@@ -76,7 +76,7 @@ void Explorer::Draw(sf::RenderWindow& window)
 
 	for (auto& item : _explorerItems)
 	{
-		window.draw(item.getText());
+		item.Draw(window);
 	}
 }
 

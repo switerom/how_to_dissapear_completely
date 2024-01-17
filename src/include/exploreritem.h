@@ -1,6 +1,8 @@
 #pragma once
 
 #include "stdafx.h"
+#include "settings.h"
+#include "assetmanager.h"
 
 class ExplorerItem
 {
@@ -13,8 +15,11 @@ public:
 	bool _isSelected() const { return _selected; };
 	const sf::FloatRect& getItemBounds() const { return _bounds; };
 	const sf::Time& getPlayTime() { return _playTime; };
+	void Draw(sf::RenderWindow& window) const const;
 
 private:
+	sf::Texture _tex;
+	sf::Sprite _spr;
 	sf::Text _text;
 	unsigned int _id;
 	bool _selected;

@@ -8,7 +8,7 @@ class Node
 public:
 	Node(const Screenshot& screenshot, const sf::Vector2f& pos);
 	void Update(float dt);
-	void Draw(sf::RenderWindow& window);
+	void Draw(sf::RenderWindow& window) const;
 	void setPosition(const sf::Vector2f& pos);
 	void setTexture(const Screenshot& screenshot);
 	void setSpriteScale();
