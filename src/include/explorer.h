@@ -5,6 +5,13 @@
 #include "exploreritem.h"
 #include "searchbox.h"
 
+struct Scroll
+{
+	float scrollPos{};
+	float maxScrollPos{};
+	float minScrollPos{ HEIGHT / 2 };
+};
+
 class Explorer: public Area
 {
 public:
@@ -40,7 +47,5 @@ private:
 	std::list<ExplorerItem> _watchedVids;
 	sf::View _itemsView;
 
-	float _scrollPos;
-	float maxScrollPos;
-	float minScrollPos;
+	Scroll _scroll;
 };

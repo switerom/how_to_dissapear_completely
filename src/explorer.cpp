@@ -39,16 +39,12 @@ void Explorer::Init()
 	//_itemsView.setCenter(WIDTH / 2, HEIGHT / 2);
 	
 	_isMaximized = false;
-	_scrollPos = HEIGHT/2;	// ставим позицию скроллинга в центр экрана, чтобы правильно работала функция setCenter()
+
 	_id = ID::Explorer;
 
 	loadFiles();
 
 	_selectedItem = _explorerItems.end();
-
-	_scrollPos = 0.f;
-	maxScrollPos = 0.f;
-	minScrollPos = HEIGHT / 2;
 }
 
 // это нужно переписать, чтобы было в settings.h
@@ -108,20 +104,20 @@ void Explorer::toggleMaximize()
 
 void Explorer::scrollView(float scrollDelta, float dt)
 {
-	if ((maxScrollPos + HEIGHT * 0.5f) <= HEIGHT)
+	if ((_scroll.maxScrollPos + HEIGHT * 0.5f) <= HEIGHT)
 		return;
 
 	float scrollDist = scrollDelta * EXPLORER_SCROLL_SPEED * dt;
-	float newScrollPos = _scrollPos - scrollDist;
+	float newScrollPos = _scroll.scrollPos - scrollDist;
 
-	if (newScrollPos > maxScrollPos)
-		_scrollPos = maxScrollPos;
-	else if (newScrollPos < minScrollPos)
-		_scrollPos = minScrollPos;
+	if (newScrollPos > _scroll.maxScrollPos)
+		_scroll.scrollPos = _scroll.maxScrollPos;
+	else if (newScrollPos < _scroll.minScrollPos)
+		_scroll.scrollPos = _scroll.minScrollPos;
 	else 
-		_scrollPos = newScrollPos;
+		_scroll.scrollPos = newScrollPos;
 
-	_itemsView.setCenter(WIDTH * 0.5f, _scrollPos);
+	_itemsView.setCenter(WIDTH * 0.5f, _scroll.scrollPos);
 }
 
 void Explorer::selectItem(sf::RenderWindow& window)
@@ -201,7 +197,7 @@ void Explorer::search(std::wstring wstr)
 						}
 					}
 
-					maxScrollPos = static_cast<int>(_explorerItems.size()) / EXPLORER_ITEM_RAWS * EXPLORER_ITEM_HEIGHT - HEIGHT * 0.5f;
+					_scroll.maxScrollPos = static_cast<int>(_explorerItems.size()) / EXPLORER_ITEM_RAWS * EXPLORER_ITEM_HEIGHT - HEIGHT * 0.5f;
 
 					return;
 				}
