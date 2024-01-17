@@ -45,8 +45,10 @@ void Explorer::Init()
 	loadFiles();
 
 	_selectedItem = _explorerItems.end();
-	_itemsBounds = 0.f;
-	//_selectedVisibleItem = _explorerVisibleItems.end();
+
+	_scrollPos = 0.f;
+	maxScrollPos = 0.f;
+	minScrollPos = HEIGHT / 2;
 }
 
 // это нужно переписать, чтобы было в settings.h
@@ -106,33 +108,20 @@ void Explorer::toggleMaximize()
 
 void Explorer::scrollView(float scrollDelta, float dt)
 {
-
-	if (_itemsBounds <= HEIGHT)
-	{
+	if ((maxScrollPos + HEIGHT * 0.5f) <= HEIGHT)
 		return;
-	}
 
 	float scrollDist = scrollDelta * EXPLORER_SCROLL_SPEED * dt;
-
 	float newScrollPos = _scrollPos - scrollDist;
 
-	float maxScrollPos = _explorerItems.size() * EXPLORER_ITEM_HEIGHT - HEIGHT / 2;
-	float minScrollPos = HEIGHT / 2;
-
 	if (newScrollPos > maxScrollPos)
-	{
 		_scrollPos = maxScrollPos;
-	}
 	else if (newScrollPos < minScrollPos)
-	{
 		_scrollPos = minScrollPos;
-	}
 	else 
-	{
 		_scrollPos = newScrollPos;
-	}
 
-	_itemsView.setCenter(WIDTH/2, _scrollPos);
+	_itemsView.setCenter(WIDTH * 0.5f, _scrollPos);
 }
 
 void Explorer::selectItem(sf::RenderWindow& window)
@@ -212,7 +201,7 @@ void Explorer::search(std::wstring wstr)
 						}
 					}
 
-					_itemsBounds = static_cast<int>(_explorerItems.size()) / EXPLORER_ITEM_RAWS * EXPLORER_ITEM_HEIGHT;
+					maxScrollPos = static_cast<int>(_explorerItems.size()) / EXPLORER_ITEM_RAWS * EXPLORER_ITEM_HEIGHT - HEIGHT * 0.5f;
 
 					return;
 				}

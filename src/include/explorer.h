@@ -38,6 +38,9 @@ private:
 	std::list<ExplorerItem> _explorerItems;
 	std::list<ExplorerItem> _watchedVids;
 	sf::View _itemsView;
+
+
 	float _scrollPos;
-	float _itemsBounds;
+	float maxScrollPos;
+	float minScrollPos;
 };
