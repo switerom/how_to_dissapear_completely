@@ -13,12 +13,19 @@ void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime)
 
     _text.setString(str);
 
-    _bounds.top = _id * EXPLORER_ITEM_SIZE_Y;
-    _bounds.left = 0.f;
-    _bounds.width = WIDTH;
-    _bounds.height = EXPLORER_ITEM_SIZE_Y;
+    _bounds.top = _id / EXPLORER_ITEM_RAWS * EXPLORER_ITEM_HEIGHT;
 
-    _text.setPosition(0.f, _bounds.top);
+    auto var = (_id + 1) % EXPLORER_ITEM_RAWS;
+
+    if(_id != 0)
+        _bounds.left = (_id % EXPLORER_ITEM_RAWS) * EXPLORER_ITEM_WIDTH;
+    else
+        _bounds.left = 0.f;
+
+    _bounds.width = EXPLORER_ITEM_WIDTH;
+    _bounds.height = EXPLORER_ITEM_HEIGHT;
+
+    _text.setPosition(_bounds.left, _bounds.top);
 
     static sf::Font font;
     font.loadFromFile(EXPLORER_ITEM_FONT);

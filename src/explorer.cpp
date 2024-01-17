@@ -26,7 +26,7 @@ void Explorer::Init()
 
 	// Выделенный файл
 	_selectRect.setFillColor(EXPLORER_SELECT_COLOR);
-	_selectRect.setSize(sf::Vector2f(WIDTH, EXPLORER_ITEM_SIZE_Y));
+	_selectRect.setSize(sf::Vector2f(EXPLORER_ITEM_WIDTH, EXPLORER_ITEM_HEIGHT));
 
 	// Размер окна
 	//_windowView.reset(sf::FloatRect(0.f, 0.f, WIDTH, HEIGHT));	// так мы указываем, что вся область explorera будет отображаться
@@ -45,6 +45,7 @@ void Explorer::Init()
 	loadFiles();
 
 	_selectedItem = _explorerItems.end();
+	_itemsBounds = 0.f;
 	//_selectedVisibleItem = _explorerVisibleItems.end();
 }
 
@@ -105,9 +106,8 @@ void Explorer::toggleMaximize()
 
 void Explorer::scrollView(float scrollDelta, float dt)
 {
-	float itemsBounds = _explorerItems.size() * EXPLORER_ITEM_SIZE_Y;
 
-	if (itemsBounds <= HEIGHT)
+	if (_itemsBounds <= HEIGHT)
 	{
 		return;
 	}
@@ -116,7 +116,7 @@ void Explorer::scrollView(float scrollDelta, float dt)
 
 	float newScrollPos = _scrollPos - scrollDist;
 
-	float maxScrollPos = _explorerItems.size() * EXPLORER_ITEM_SIZE_Y - HEIGHT / 2;
+	float maxScrollPos = _explorerItems.size() * EXPLORER_ITEM_HEIGHT - HEIGHT / 2;
 	float minScrollPos = HEIGHT / 2;
 
 	if (newScrollPos > maxScrollPos)
@@ -211,6 +211,8 @@ void Explorer::search(std::wstring wstr)
 							++id;
 						}
 					}
+
+					_itemsBounds = static_cast<int>(_explorerItems.size()) / EXPLORER_ITEM_RAWS * EXPLORER_ITEM_HEIGHT;
 
 					return;
 				}

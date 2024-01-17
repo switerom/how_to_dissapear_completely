@@ -18,6 +18,38 @@
                     10.0,
                     15.3
                 ]
+            },
+            {
+                "video": "vid_1.mp4",
+                "timestamps": [
+                    1.0,
+                    10.0,
+                    15.3
+                ]
+            }, 
+            {
+                "video": "vid_2.mp4",
+                "timestamps": [
+                    1.0,
+                    10.0,
+                    15.3
+                ]
+            },
+            {
+                "video": "vid_1.mp4",
+                "timestamps": [
+                    1.0,
+                    10.0,
+                    15.3
+                ]
+            }, 
+            {
+                "video": "vid_2.mp4",
+                "timestamps": [
+                    1.0,
+                    10.0,
+                    15.3
+                ]
             }
         ]
     },
