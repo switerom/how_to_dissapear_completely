@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "settings.h"
 #include "assetmanager.h"
+#include "utility.h"
 
 class ExplorerItem
 {

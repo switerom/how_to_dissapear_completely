@@ -47,9 +47,10 @@ void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime)
         previewFileName = PREVIEW_DIR + previewFileName;
 
         //_spr.setColor(sf::Color::Blue);
-        _spr.setScale(sf::Vector2f(0.5f, 0.5f));
         _spr.setTexture(AssetManager::getTexture(previewFileName));
-        _spr.setPosition(_bounds.left + PREVIEW_POS_X, _bounds.top + PREVIEW_POS_Y);
+        fitImage(_spr, sf::FloatRect(_bounds.left, _bounds.top, EXPLORER_ITEM_WIDTH, EXPLORER_ITEM_HEIGHT));
+        //_spr.setScale(sf::Vector2f(0.5f, 0.5f));
+        //_spr.setPosition(_bounds.left + PREVIEW_POS_X, _bounds.top + PREVIEW_POS_Y);
     }
 }
 
