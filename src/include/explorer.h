@@ -7,9 +7,9 @@
 
 struct Scroll
 {
-	float scrollPos{};
-	float maxScrollPos{};
-	float minScrollPos{ HEIGHT / 2 };
+	float pos{};
+	float maxpos{};
+	float minpos{ HEIGHT / 2 };
 };
 
 class Explorer: public Area
@@ -38,6 +38,8 @@ public:
 	bool isItemSelected() const;
 
 private:
+	void resetScroll();
+
 	sf::RectangleShape _bigRect;	// заменить это на текстуру из AssetManagera
 	sf::RectangleShape _selectRect;	// заменить это на текстуру из AssetManagera
 	SearchBox _searchBox;

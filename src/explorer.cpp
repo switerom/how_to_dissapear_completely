@@ -104,20 +104,20 @@ void Explorer::toggleMaximize()
 
 void Explorer::scrollView(float scrollDelta, float dt)
 {
-	if ((_scroll.maxScrollPos + HEIGHT * 0.5f) <= HEIGHT)
+	if ((_scroll.maxpos + HEIGHT * 0.5f) <= HEIGHT)
 		return;
 
 	float scrollDist = scrollDelta * EXPLORER_SCROLL_SPEED * dt;
-	float newScrollPos = _scroll.scrollPos - scrollDist;
+	float newpos = _scroll.pos - scrollDist;
 
-	if (newScrollPos > _scroll.maxScrollPos)
-		_scroll.scrollPos = _scroll.maxScrollPos;
-	else if (newScrollPos < _scroll.minScrollPos)
-		_scroll.scrollPos = _scroll.minScrollPos;
+	if (newpos > _scroll.maxpos)
+		_scroll.pos = _scroll.maxpos;
+	else if (newpos < _scroll.minpos)
+		_scroll.pos = _scroll.minpos;
 	else 
-		_scroll.scrollPos = newScrollPos;
+		_scroll.pos = newpos;
 
-	_itemsView.setCenter(WIDTH * 0.5f, _scroll.scrollPos);
+	_itemsView.setCenter(WIDTH * 0.5f, _scroll.pos);
 }
 
 void Explorer::selectItem(sf::RenderWindow& window)
@@ -161,10 +161,17 @@ std::string Explorer::getCurrentVideo()
 	return vid_name;
 }
 
+void Explorer::resetScroll()
+{
+	_scroll.pos = 0.f;
+	_itemsView.setCenter(WIDTH * 0.5f, HEIGHT * 0.5f);
+}
+
 void Explorer::search(std::wstring wstr)
 {
 	_explorerItems.clear();
 	_selectedItem = _explorerItems.end();
+	resetScroll();
 
 	using json = nlohmann::json;
 
@@ -199,7 +206,7 @@ void Explorer::search(std::wstring wstr)
 						}
 					}
 
-					_scroll.maxScrollPos = static_cast<int>(_explorerItems.size()) / EXPLORER_ITEM_RAWS * EXPLORER_ITEM_HEIGHT - HEIGHT * 0.5f;
+					_scroll.maxpos = static_cast<int>(_explorerItems.size()) / EXPLORER_ITEM_RAWS * EXPLORER_ITEM_HEIGHT - HEIGHT * 0.5f;
 
 					return;
 				}
