@@ -47,7 +47,7 @@ sf::Font& AssetManager::getFont(const std::string& filename)
 	}
 }
 
-sf::Texture& AssetManager::getTexture(const std::string& filename)
+const sf::Texture* AssetManager::getTexture(const std::string& filename)
 {
 	auto& texMap = sInstance->_texs;
 
@@ -59,14 +59,17 @@ sf::Texture& AssetManager::getTexture(const std::string& filename)
 	}
 	else
 	{
-		auto& tex = texMap[filename];
+		sf::Texture* tex = new sf::Texture();
 
-		if (!tex.loadFromFile(filename))
+		if (!tex->loadFromFile(filename))
 		{
-			// Handle texture loading error here
+			tex = nullptr;
+			// Handle font loading error here
 			// For example, throw an exception or log an error message
 			// You can also return a default font or an empty font object
 		}
+
+		texMap[filename] = tex;
 
 		return tex;
 	}

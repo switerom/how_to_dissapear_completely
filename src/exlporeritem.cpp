@@ -1,11 +1,11 @@
 #include "exploreritem.h"
 
-ExplorerItem::ExplorerItem(const std::string& str, unsigned int id, float playTime)
+ExplorerItem::ExplorerItem(const std::string& str, unsigned int id, float playTime, bool exists)
 {
-    Init(str, id, playTime);
+    Init(str, id, playTime, exists);
 }
 
-void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime)
+void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime, bool exists)
 {
     _id = id;
 
@@ -39,7 +39,11 @@ void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime)
     _timeText.setPosition(_bounds.left + EXPLORER_ITEM_TIME_POS_X, _bounds.top + EXPLORER_ITEM_TIME_POS_Y);
 
     bool _selected = false;
-    _playTime = sf::seconds(playTime);
+
+    if(exists)
+        _playTime = sf::seconds(0.f);
+    else
+        _playTime = sf::seconds(playTime);
 
     std::string fileName = getPreviewFullPath(str, playTime);
     fitPreview(fileName);
@@ -63,7 +67,12 @@ void ExplorerItem::fitPreview(const std::string& filename)
     if (filename == "")
         return;
 
-    _spr.setTexture(AssetManager::getTexture(filename));
+    const sf::Texture* tex = AssetManager::getTexture(filename);
+
+    if (tex == nullptr)
+        return;
+
+    _spr.setTexture(*tex);
 
     sf::Vector2f img_size{ sf::Vector2f(_spr.getTextureRect().width, _spr.getTextureRect().height) };
     sf::Vector2f frame_size{ PREVIEW_WIDTH, PREVIEW_HEIGHT };

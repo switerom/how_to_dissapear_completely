@@ -154,7 +154,9 @@ std::string Explorer::getCurrentVideo()
 		}
 	}
 
-	_watchedVids.emplace_back(ExplorerItem(vid_name, _watchedVids.size(), 0.f));
+	auto playTime = _selectedItem->getPlayTime();
+
+	_watchedVids.emplace_back(ExplorerItem(vid_name, _watchedVids.size(), playTime.asSeconds(), true));
 
 	return vid_name;
 }

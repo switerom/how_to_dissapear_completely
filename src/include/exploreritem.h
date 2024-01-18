@@ -8,8 +8,8 @@
 class ExplorerItem
 {
 public:
-	ExplorerItem(const std::string& str, unsigned int id, float playTime);
-	void Init(const std::string& str, unsigned int id, float playTime);
+	ExplorerItem(const std::string& str, unsigned int id, float playTime, bool exists = false);
+	void Init(const std::string& str, unsigned int id, float playTime, bool exists);
 	const sf::Text& getText() const { return _text; };
 
 	void setSelect(bool select);
