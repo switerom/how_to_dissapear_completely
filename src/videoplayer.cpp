@@ -218,6 +218,8 @@ void VideoPlayer::changePlayTime(sf::RenderWindow& window)
 	auto playTime = mousePosView.x * duration / WIDTH;
 	_currentVideo->setPlayingOffset(sf::seconds(playTime));
 	_interface.nextTimeSec = static_cast<int>(playTime) + 1;
+
+	_interface.nextTimeSec = static_cast<int>(_currentVideo->getPlayingOffset().asSeconds());
 	changeTiming();
 
 	_subs.changeSubPlayback(sf::seconds(playTime));
