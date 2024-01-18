@@ -32,6 +32,12 @@ void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime)
     _text.setCharacterSize(EXPLORER_ITEM_TEXT_SIZE);
     _text.setFillColor(EXPLORER_ITEM_TEXT_COLOR);
 
+    _timeText.setFont(font);
+    _timeText.setCharacterSize(EXPLORER_ITEM_TEXT_SIZE);
+    _timeText.setFillColor(EXPLORER_ITEM_TEXT_COLOR);
+    _timeText.setString(convertToTime(playTime));
+    _timeText.setPosition(_bounds.left + EXPLORER_ITEM_TIME_POS_X, _bounds.top + EXPLORER_ITEM_TIME_POS_Y);
+
     bool _selected = false;
     _playTime = sf::seconds(playTime);
 
@@ -76,6 +82,7 @@ void ExplorerItem::setSelect(bool select)
 void ExplorerItem::Draw(sf::RenderWindow& window) const const
 {
     window.draw(_text);
+    window.draw(_timeText);
 
     if (_spr.getTexture() != NULL)
         window.draw(_spr);

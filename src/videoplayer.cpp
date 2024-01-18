@@ -202,21 +202,6 @@ void VideoPlayer::changeTiming()
 	_interface.timing.setString(playTimeStr + " / " + durationStr);
 }
 
-std::string VideoPlayer::convertToTime(float number) const
-{
-	// Convert the number to minutes and seconds
-	int minutes = static_cast<int>(number) / 60;
-	int seconds = static_cast<int>(number) % 60;
-
-	// Create a stringstream to format the output
-	std::stringstream ss;
-	ss << std::setw(2) << std::setfill('0') << minutes << ":"
-		<< std::setw(2) << std::setfill('0') << seconds;
-
-	// Return the formatted string
-	return ss.str();
-}
-
 void VideoPlayer::changePlayTime(sf::RenderWindow& window)
 {
 	if (!_currentVideo)

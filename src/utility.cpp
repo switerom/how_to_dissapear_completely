@@ -35,3 +35,18 @@ float findCropFactor(const sf::Vector2f& img_size, const sf::Vector2f& frame_siz
 
 	return std::min(crop_factor1, crop_factor2);
 }
+
+std::string convertToTime(float number)
+{
+	// Convert the number to minutes and seconds
+	int minutes = static_cast<int>(number) / 60;
+	int seconds = static_cast<int>(number) % 60;
+
+	// Create a stringstream to format the output
+	std::stringstream ss;
+	ss << std::setw(2) << std::setfill('0') << minutes << ":"
+		<< std::setw(2) << std::setfill('0') << seconds;
+
+	// Return the formatted string
+	return ss.str();
+}

@@ -29,4 +29,5 @@ private:
 	bool _selected;
 	sf::FloatRect _bounds;
 	sf::Time _playTime;
+	sf::Text _timeText;
 };

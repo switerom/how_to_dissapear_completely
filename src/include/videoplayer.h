@@ -60,7 +60,6 @@ private:
 	void loadVideo(const std::string& filename);
 	void fitVideo();
 	void changeTiming();
-	std::string convertToTime(float number) const;
 
 	sf::View _videoView;
 	sfe::Movie* _currentVideo;
