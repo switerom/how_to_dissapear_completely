@@ -35,25 +35,37 @@ void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime)
     bool _selected = false;
     _playTime = sf::seconds(playTime);
 
-    // Set preview texture to a sprite
-    // Preview name contains video name + timing
-    std::string previewFileName{ str };
-    size_t pos = str.find('.');  
+    std::string fileName = getPreviewFullPath(str, playTime);
+    fitPreview(fileName);
+}
 
-    if (pos != std::string::npos) 
-    {
-        previewFileName = str.substr(0, pos) + "_" + std::to_string(static_cast<int>(playTime)) + PREVIEW_FORMAT;
-        previewFileName = PREVIEW_DIR + previewFileName;
+std::string ExplorerItem::getPreviewFullPath(std::string filename, float playTime)
+{
+    size_t pos = filename.find('.');
 
-        _spr.setTexture(AssetManager::getTexture(previewFileName));
+    if (pos == std::string::npos)
+        return "";
 
-        sf::Vector2f img_size{ sf::Vector2f(_spr.getTextureRect().width, _spr.getTextureRect().height) };
-        sf::Vector2f frame_size{ PREVIEW_WIDTH, PREVIEW_HEIGHT };
-        float crop_factor = findCropFactor(img_size, frame_size);
-        _spr.setScale(crop_factor, crop_factor);
+    filename = filename.substr(0, pos) + "_" + std::to_string(static_cast<int>(playTime)) + PREVIEW_FORMAT;
+    filename = PREVIEW_DIR + filename;
+    return filename;
+}
 
-        shiftImagePos(_spr, sf::FloatRect(_bounds.left + PREVIEW_POS_X, _bounds.top + PREVIEW_POS_Y, PREVIEW_WIDTH, PREVIEW_HEIGHT));
-    }
+
+void ExplorerItem::fitPreview(const std::string& filename)
+{
+    if (filename == "")
+        return;
+
+    _spr.setTexture(AssetManager::getTexture(filename));
+
+    sf::Vector2f img_size{ sf::Vector2f(_spr.getTextureRect().width, _spr.getTextureRect().height) };
+    sf::Vector2f frame_size{ PREVIEW_WIDTH, PREVIEW_HEIGHT };
+
+    float crop_factor = findCropFactor(img_size, frame_size);
+
+    _spr.setScale(crop_factor, crop_factor);
+    shiftImagePos(_spr, sf::FloatRect(_bounds.left + PREVIEW_POS_X, _bounds.top + PREVIEW_POS_Y, PREVIEW_WIDTH, PREVIEW_HEIGHT));
 }
 
 void ExplorerItem::setSelect(bool select)

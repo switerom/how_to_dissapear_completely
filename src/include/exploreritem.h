@@ -19,6 +19,9 @@ public:
 	void Draw(sf::RenderWindow& window) const const;
 
 private:
+	void fitPreview(const std::string& filename);
+	std::string getPreviewFullPath(std::string filename, float playTime);
+
 	sf::Texture _tex;
 	sf::Sprite _spr;
 	sf::Text _text;
