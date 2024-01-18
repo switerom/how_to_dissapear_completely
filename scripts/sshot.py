@@ -18,8 +18,10 @@ for item in data:
         video_file = os.path.join("..", "rsc/vid", video['video'])
         clip = VideoFileClip(video_file)
         for timestamp in video['timestamps']:
+            # Get the base name of the video file without extension
+            video_base_name = os.path.splitext(os.path.basename(video_file))[0]
             # Save a screenshot as a .jpg file in the "prev" folder
-            output_filename = f"{word}_{os.path.basename(video_file)}_{int(timestamp)}.jpg"
+            output_filename = f"{video_base_name}_{int(timestamp)}.jpg"
             output_path = os.path.join("../rsc/img/prev", output_filename)
             clip.save_frame(output_path, t=timestamp)
         clip.close()  # Close the VideoFileClip object after use

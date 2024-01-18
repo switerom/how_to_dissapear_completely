@@ -1,4 +1,4 @@
-# how_to_dissapear_completely
+# how_to_disappear_completely
 
 Project desription:
 
@@ -22,5 +22,10 @@ Dependencies:
 - json/JSON for modern c++ (json parser): https://github.com/nlohmann/json
      in order to work, instructions must be followed:
         https://github.com/nlohmann/json?tab=readme-ov-file#integration
+
+Scripts dependencies:
+
+- moviepy: pip install moviepy
+        Needed for "sshot.py" to make screenshots
 
 Video files not included in this repository (later link will be created). In order to work video files must be placed in "rsc/vid" folder.
