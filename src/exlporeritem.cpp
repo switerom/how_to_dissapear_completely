@@ -23,7 +23,7 @@ void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime)
     _bounds.width = EXPLORER_ITEM_WIDTH;
     _bounds.height = EXPLORER_ITEM_HEIGHT;
 
-    _text.setPosition(_bounds.left, _bounds.top);
+    _text.setPosition(_bounds.left + EXPLORER_ITEM_TEXT_POS_X, _bounds.top + EXPLORER_ITEM_TEXT_POS_Y);
 
     static sf::Font font;
     font.loadFromFile(EXPLORER_ITEM_FONT);
@@ -48,11 +48,11 @@ void ExplorerItem::Init(const std::string& str, unsigned int id, float playTime)
         _spr.setTexture(AssetManager::getTexture(previewFileName));
 
         sf::Vector2f img_size{ sf::Vector2f(_spr.getTextureRect().width, _spr.getTextureRect().height) };
-        sf::Vector2f frame_size{ EXPLORER_ITEM_WIDTH, EXPLORER_ITEM_HEIGHT };
+        sf::Vector2f frame_size{ PREVIEW_WIDTH, PREVIEW_HEIGHT };
         float crop_factor = findCropFactor(img_size, frame_size);
         _spr.setScale(crop_factor, crop_factor);
 
-        shiftImagePos(_spr, sf::FloatRect(_bounds.left, _bounds.top, EXPLORER_ITEM_WIDTH, EXPLORER_ITEM_HEIGHT));
+        shiftImagePos(_spr, sf::FloatRect(_bounds.left + PREVIEW_POS_X, _bounds.top + PREVIEW_POS_Y, PREVIEW_WIDTH, PREVIEW_HEIGHT));
     }
 }
 
