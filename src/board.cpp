@@ -11,11 +11,6 @@ Board::Board(): Area ( BOARD_MIN_BOUNDS, BOARD_VIEWPORT)
 
 Board::~Board()
 {
-	if (_carcasses.empty())
-		return;
-
-	for (auto& i : _carcasses)
-		delete i.second;
 }
 
 void Board::Init()
@@ -25,10 +20,7 @@ void Board::Init()
 	_bigRect.setSize(sf::Vector2f(WIDTH, HEIGHT));
 
 	_viewControl.isMoving = false;
-
-	_movecontrol.isCarcassMoving = false;
-	_movecontrol.selectedCarcass = NOT_SELECTED;
-	_movecontrol.selectPosShift = sf::Vector2f(0.f, 0.f);
+	_selectedNodeID = NOT_SELECTED;
 }
 
 void Board::Draw(sf::RenderWindow& window)
@@ -38,7 +30,7 @@ void Board::Draw(sf::RenderWindow& window)
 	window.draw(_bigRect);
 
 	for (auto& i : _layers)
-		_carcasses.at(i)->Draw(window);
+		_nodes.at(i)->Draw(window);
 }
 
 void Board::Update(sf::RenderWindow& window, float dt)
@@ -47,10 +39,6 @@ void Board::Update(sf::RenderWindow& window, float dt)
 
 	if (_viewControl.isMoving)
 		moveView(window, dt);
-	else if (_movecontrol.isCarcassMoving)
-	{
-		moveCarcass(window);
-	}
 }
 
 void Board::moveView(sf::RenderWindow& window, float dt)
@@ -89,95 +77,50 @@ void Board::zoomView(sf::RenderWindow& window, float dt_zoom, float dt)
 	_areaView.zoom(zoom_factor);
 }
 
-void Board::createCarcass(const sfe::Movie* video, const std::string& vid_name)
+void Board::selectNode(sf::RenderWindow& window)
 {
-	if (!video)
+	if (_nodes.empty())
 		return;
 
-	Carcass* carcass = new Carcass(video, vid_name);
+	if(_selectedNodeID != NOT_SELECTED)
+		_nodes.at(_selectedNodeID)->select(false);
 
-	_carcasses.emplace(video, carcass);
-	_layers.push_back(video);
-}
-
-void Board::moveCarcass(sf::RenderWindow& window)
-{
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
 
-	if (_movecontrol.selectedCarcass != NOT_SELECTED)
-	{
-		sf::Vector2f pos;
-		pos.x = worldPos.x - _movecontrol.selectPosShift.x + CARCASS_OUTLINE_THICKNESS;
-		pos.y = worldPos.y - _movecontrol.selectPosShift.y + CARCASS_OUTLINE_THICKNESS;
-		_carcasses.at(_movecontrol.selectedCarcass)->setPosition(pos);
-	}
-}
-
-void Board::selectCarcass(sf::RenderWindow& window)
-{
-	if (_carcasses.empty())
-		return;
-
-	// Координаты мыши нужны здесь, а не в isColliding, потому, что это еще нужно для _movecontrol.selectPosShift
-	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
-	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
-
-	auto it = std::make_reverse_iterator(_layers.end());  // reverse итератор потому, что мы в конце находится слой, который выше отображается
+	auto it = std::make_reverse_iterator(_layers.end());  // get reverse iterator to last element in vector
 
 	while (it != std::make_reverse_iterator(_layers.begin()))
 	{
-		sf::FloatRect bounds = _carcasses.at(*it)->getBounds();
+		auto rect = _nodes.at(*it)->getRect();
 
-		if (isColliding(worldPos, bounds))
+		if (isColliding(worldPos, rect))
 		{
-			if (_movecontrol.selectedCarcass)
-				_carcasses.at(_movecontrol.selectedCarcass)->select(false);
+			_nodes.at(*it)->select(true);
 
-			_movecontrol.selectedCarcass = *it;
-
-			// нужно для того, чтобы каркасс перемещался ровно из того места, где его взяли
-			_movecontrol.selectPosShift.x = worldPos.x - bounds.left;
-			_movecontrol.selectPosShift.y = worldPos.y - bounds.top;
-
-			// Если выделяется нода, то каркас не выделяется
-			if (_carcasses.at(*it)->selectNode(worldPos))
-				return;
-
-			//визуальное выделение
-			if (_movecontrol.selectedCarcass)
-				_carcasses.at(_movecontrol.selectedCarcass)->select(true);
-
-			// меняем порядок слоев
-			auto it = std::find(_layers.begin(), _layers.end(), _movecontrol.selectedCarcass);
+			_selectedNodeID = *it;
+			// Change layers order
+			auto it = std::find(_layers.begin(), _layers.end(), _selectedNodeID);
 			_layers.erase(it);
-			_layers.push_back(_movecontrol.selectedCarcass);
+			_layers.push_back(_selectedNodeID);
 
 			return;
 		}
 		++it;
 	}
 
-	if (_movecontrol.selectedCarcass)
-		_carcasses.at(_movecontrol.selectedCarcass)->select(false);
-
-	_movecontrol.selectedCarcass = NOT_SELECTED;
+	_selectedNodeID = NOT_SELECTED;
 }
 
-void Board::addScreenshot(const Screenshot& screenshot)
+void Board::createStill(const Screenshot& screenshot)
 {
-	if (!screenshot.video)
-		return;
+	std::unique_ptr<Node> node = std::make_unique<Still>(screenshot);
 
-	auto carcass = _carcasses.find(screenshot.video);
-		
-	if (carcass != _carcasses.end())
-	{
-		carcass->second->addScreenshot(screenshot);
-	}
-	else
-	{
-		createCarcass(screenshot.video, screenshot.vid_name);
-		_carcasses.at(screenshot.video)->addScreenshot(screenshot);
-	}
+	int id{ KeyGen::getKey() };
+
+	while (_nodes.find(id) != _nodes.end())
+		id = KeyGen::getKey();
+
+	_nodes.emplace(id, std::move(node));
+	_layers.push_back(id);
 }

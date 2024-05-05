@@ -175,14 +175,14 @@ void VideoPlayer::Update(sf::RenderWindow& window, float dt)
 	if (_currentVideo->getStatus() != sfe::Status::Playing)
 		return;
 
-	_currentVideo->update();	// dt не передается параметром потому, что sfeMovie сам внутри это контролирует
+_currentVideo->update();	// dt не передается параметром потому, что sfeMovie сам внутри это контролирует
 
-	_subs.setText(_currentVideo->getPlayingOffset().asMilliseconds());
+_subs.setText(_currentVideo->getPlayingOffset().asMilliseconds());
 
-	changeTiming();
+changeTiming();
 
-	float progressWidth = WIDTH * _currentVideo->getPlayingOffset().asSeconds() / _currentVideo->getDuration().asSeconds();
-	_interface.seeker.setSize(sf::Vector2f(progressWidth, VIDEOPLAYER_BAR_HEIGHT));
+float progressWidth = WIDTH * _currentVideo->getPlayingOffset().asSeconds() / _currentVideo->getDuration().asSeconds();
+_interface.seeker.setSize(sf::Vector2f(progressWidth, VIDEOPLAYER_BAR_HEIGHT));
 }
 
 void VideoPlayer::changeTiming()
@@ -196,8 +196,8 @@ void VideoPlayer::changeTiming()
 
 	float durationNum = _currentVideo->getDuration().asSeconds();
 
-	std::string durationStr{convertToTime(durationNum)};
-	std::string playTimeStr{convertToTime(playTimeNum)};
+	std::string durationStr{ convertToTime(durationNum) };
+	std::string playTimeStr{ convertToTime(playTimeNum) };
 
 	_interface.timing.setString(playTimeStr + " / " + durationStr);
 }
@@ -226,11 +226,11 @@ void VideoPlayer::changePlayTime(sf::RenderWindow& window)
 }
 
 void VideoPlayer::startScreenshot(sf::RenderWindow& window)
-{ 
+{
 	if (!_currentVideo)
 		return;
 
-	_screenshot.inProcess = true; 
+	_screenshot.inProcess = true;
 
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, _videoView);
@@ -274,6 +274,20 @@ void VideoPlayer::endScreenshot()
 	}
 
 	_screenshot.vid_name = _vid_name;
+
+	// Swap values if scrennshot reversed
+	auto& rect = _screenshot.frame;
+
+	if (rect.width < 0)
+	{
+		rect.left += rect.width;
+		rect.width = -rect.width;
+	}
+	if (rect.height < 0)
+	{
+		rect.top += rect.height;
+		rect.height = -rect.height;
+	}
 }
 
 void VideoPlayer::setScreenshotRect(sf::RenderWindow& window)

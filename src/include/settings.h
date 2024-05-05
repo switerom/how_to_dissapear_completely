@@ -76,44 +76,21 @@
 #define BOARD_MOVE_SPEED			50.f
 #define BOARD_ZOOM_SPEED			6.f
 
-// Настройки каркаса
-#define CARCASS_COLOR				sf::Color::Blue
-#define CARCASS_HEIGHT				100.f
-#define CARCASS_OUTLINE_THICKNESS	10.f
-#define CARCASS_COLOR_SELECT		sf::Color::Yellow
-#define CARCASS_COLOR_UNSELECT		sf::Color::Transparent
-#define TIMELINE_WIDTH_FACTOR		5
-#define TIMELINE_HEIGHT				5.f
-#define TIMELINE_COLOR				sf::Color::White
-#define TIMELINE_LEFT_INDENTATION	10.f
-#define TIMELINE_TOP_INDENTATION	10.f
-
-#define DELIMITER_COLOR				sf::Color::White
-#define DELIMITER_WIDTH				5.f
-#define DELIMITER_HEIGHT			10.f
-#define DELIMITER_FREQUENCY			5
-#define DELIMITER_LEFT_INDENTATION	TIMELINE_LEFT_INDENTATION
-#define DELIMITER_TOP_INDENTATION	TIMELINE_TOP_INDENTATION
-#define CARCASS_VID_NAME_FONT		"No Limits.ttf"
-#define CARCASS_VID_NAME_COLOR		sf::Color::White
-#define CARCASS_VID_NAME_SIZE		25
-#define CARCASS_VID_NAME_POS_Y		50.f
-
 // Настройки скриншота
 #define SCREENSHOT_RECT_COLOR_A		sf::Color::White
 #define SCREENSHOT_RECT_COLOR_B		sf::Color::Green
 #define SCREENSHOT_RECT_COLOR_C		sf::Color::Yellow
 #define SCREENSHOT_RECT_THICKNESS	3.f
 #define SCREENSHOT_SIZE				1000.f
-#define SCREENSHOT_POS_Y			CARCASS_HEIGHT * 0.15f
 
 // Настройки ассет менеджера
 #define FONTS_DIR					"rsc/fonts/"
 
 // Настройки нод
-#define NODE_COLOR_SELECT			sf::Color::Yellow
-#define NODE_COLOR_UNSELECT			sf::Color::Transparent
+#define NODE_SELECT_COLOR			sf::Color::Yellow
+#define NODE_UNSELECT_COLOR			sf::Color::Blue
 #define NODE_OUTLINE_THK			2.f
+#define NODE_SIZE					sf::Vector2f(100.f, 100.f)
 
 // Настроки субтитров
 #define SUBS_DIR					"rsc/subs/"

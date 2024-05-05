@@ -138,7 +138,6 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
         {
             if (timecontroller.isDoubleClick(window))
             {
-                //_board.createCarcass(_videoplayer.getCurrentVideo(), _videoplayer.getVideoName());
                 _explorer.search(_videoplayer.getSelectedString());
             }
             else
@@ -161,7 +160,7 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
         if (event.mouseButton.button == sf::Mouse::Right)
         {
             _videoplayer.endScreenshot();
-            _board.addScreenshot(_videoplayer.getScreenshot());
+            _board.createStill(_videoplayer.getScreenshot());
         }
     }
 }
@@ -176,8 +175,8 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         }
         else if (event.mouseButton.button == sf::Mouse::Left)
         {
-            _board.selectCarcass(window);
-            _board.setCarcassMoving(true);
+            _board.selectNode(window);
+            //_board.setNodeMoving(true);
         }
     }
     else if (event.type == sf::Event::MouseButtonReleased)
@@ -188,7 +187,7 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         }
         else if (event.mouseButton.button == sf::Mouse::Left)
         {
-            _board.setCarcassMoving(false);
+            //_board.setNodeMoving(false);
         }
     }
     else if (event.type == sf::Event::MouseWheelScrolled)

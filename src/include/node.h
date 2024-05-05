@@ -6,22 +6,15 @@
 class Node
 {
 public:
-	Node(const Screenshot& screenshot, const sf::Vector2f& pos);
-	void Update(float dt);
-	void Draw(sf::RenderWindow& window) const;
+	Node();
+	virtual ~Node() {};
+	virtual void Update(float dt) = 0;
+	virtual void Draw(sf::RenderWindow& window) const = 0;
 	void setPosition(const sf::Vector2f& pos);
-	void setTexture(const Screenshot& screenshot);
-	void setSpriteScale();
-	void setSpriteScale(const sf::IntRect& rect);
-	sf::FloatRect getBounds() const { return _spr.getGlobalBounds(); };
 	void select(bool s);
+	const sf::FloatRect& getRect() const;
 
-private:
-	sf::Texture _tex;
-	sf::Sprite _spr;
-	sf::Text _text;
+protected:
 	sf::Vector2f _pos;
-	sf::Time _timestamp;
-
 	sf::RectangleShape _select_frame;
 };

@@ -51,9 +51,6 @@
     <ClInclude Include="src\include\board.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\carcass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\include\keygen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -70,6 +67,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\include\searchbox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\sample.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\still.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\fragment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\note.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -107,9 +116,6 @@
     <ClCompile Include="src\board.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\carcass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\keygen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -123,6 +129,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\searchbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sample.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\still.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fragment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\note.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
