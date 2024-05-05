@@ -23,6 +23,13 @@ void Still::Update(float dt)
 {
 	//_spr.setPosition(_pos);
 }
+void Still::setPosition(const sf::Vector2f& pos)
+{
+	_pos = pos;
+	_spr.setPosition(_pos);
+	_select_frame.setPosition(_pos);
+}
+
 
 /*
 void Node::setTexture(const Screenshot& screenshot)

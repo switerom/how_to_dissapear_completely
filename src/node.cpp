@@ -11,12 +11,6 @@ Node::Node()
 	_select_frame.setOutlineThickness(NODE_OUTLINE_THK);
 }
 
-void Node::setPosition(const sf::Vector2f& pos)
-{
-	_pos = pos;
-	_select_frame.setPosition(_pos);
-}
-
 void Node::select(bool s) 
 { 
 	if(s)

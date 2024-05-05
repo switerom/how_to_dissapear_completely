@@ -21,6 +21,7 @@ void Board::Init()
 
 	_viewControl.isMoving = false;
 	_selectedNodeID = NOT_SELECTED;
+	_isNodeMoving = false;
 }
 
 void Board::Draw(sf::RenderWindow& window)
@@ -39,6 +40,8 @@ void Board::Update(sf::RenderWindow& window, float dt)
 
 	if (_viewControl.isMoving)
 		moveView(window, dt);
+	else if (_isNodeMoving)
+		moveNode(window);
 }
 
 void Board::moveView(sf::RenderWindow& window, float dt)
@@ -123,4 +126,18 @@ void Board::createStill(const Screenshot& screenshot)
 
 	_nodes.emplace(id, std::move(node));
 	_layers.push_back(id);
+}
+
+void Board::moveNode(sf::RenderWindow& window)
+{
+	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
+
+	if (_selectedNodeID != NOT_SELECTED)
+	{
+		sf::Vector2f pos;
+		pos.x = worldPos.x;// - _movecontrol.selectPosShift.x + CARCASS_OUTLINE_THICKNESS;
+		pos.y = worldPos.y;// -_movecontrol.selectPosShift.y + CARCASS_OUTLINE_THICKNESS;
+		_nodes.at(_selectedNodeID)->setPosition(pos);
+	}
 }

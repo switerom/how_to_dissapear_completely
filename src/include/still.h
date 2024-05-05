@@ -12,6 +12,7 @@ public:
 
 	void Draw(sf::RenderWindow& window) const override;
 	void Update(float dt) override;
+	void setPosition(const sf::Vector2f& pos);
 
 private:
 	sf::Texture _tex;

@@ -32,15 +32,16 @@ public:
 	//void createNode(//для заметок);
 
 	void selectNode(sf::RenderWindow& window);
-	//void setNodeMoving(bool isMoving);
-
 	void moveNode(bool is_move, sf::RenderWindow& window);
 	void deleteNode();
+	void setNodeMoving(bool isNodeMoving) { _isNodeMoving = isNodeMoving; };
+	void moveNode(sf::RenderWindow& window);
 
 private:
 	sf::View _boardView;
 	sf::RectangleShape _bigRect;
 	ViewCnotrol _viewControl;
+	bool _isNodeMoving;
 
 	std::map<int, std::unique_ptr<Node>> _nodes;
 	std::list<int> _layers;

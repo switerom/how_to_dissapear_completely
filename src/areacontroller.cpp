@@ -176,7 +176,7 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         else if (event.mouseButton.button == sf::Mouse::Left)
         {
             _board.selectNode(window);
-            //_board.setNodeMoving(true);
+            _board.setNodeMoving(true);
         }
     }
     else if (event.type == sf::Event::MouseButtonReleased)
@@ -187,7 +187,7 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         }
         else if (event.mouseButton.button == sf::Mouse::Left)
         {
-            //_board.setNodeMoving(false);
+            _board.setNodeMoving(false);
         }
     }
     else if (event.type == sf::Event::MouseWheelScrolled)
