@@ -138,7 +138,7 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
         {
             if (timecontroller.isDoubleClick(window))
             {
-                //_board.createAudio(_videoplayer.getAudio());
+                _board.createNode<Sample>(_videoplayer.getAudio());
             }
             else
             {

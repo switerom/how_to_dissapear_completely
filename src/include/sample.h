@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "settings.h"
 #include "fragment.h"
+#include "assetmanager.h"
 
 class Sample : public Fragment
 {
@@ -17,4 +18,5 @@ public:
 private:
 	sf::Texture _tex;
 	sf::Sprite _spr;
+	sf::Text _text;
 };

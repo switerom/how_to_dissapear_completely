@@ -6,6 +6,7 @@
 #include "explorer.h"
 #include "timecontroller.h"
 #include "board.h"
+#include "sample.h"
 
 struct MouseController
 {

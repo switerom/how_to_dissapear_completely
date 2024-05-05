@@ -343,4 +343,5 @@ void VideoPlayer::setSelectSubs(sf::RenderWindow& window)
 void VideoPlayer::endSelectSubs()
 {
 	_subs.endSelect();
+	_audio.wstr = _subs.getSelectedString();
 }

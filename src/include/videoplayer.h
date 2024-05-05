@@ -27,7 +27,7 @@ struct Audio
 	//sf::Texture tex;
 	//sf::Sprite spr;			
 	//std::string vid_name{};
-	sf::Text text;
+	std::wstring wstr;
 };
 
 

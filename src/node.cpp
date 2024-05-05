@@ -9,6 +9,7 @@ Node::Node()
 	_select_frame.setSize(sf::Vector2f(0.f, 0.f));
 	_select_frame.setOutlineColor(NODE_UNSELECT_COLOR);
 	_select_frame.setOutlineThickness(NODE_OUTLINE_THK);
+	_select_frame.setFillColor(NODE_FILL_COLOR);
 }
 
 void Node::select(bool s) 

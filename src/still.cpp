@@ -21,7 +21,7 @@ void Still::Draw(sf::RenderWindow& window) const
 
 void Still::Update(float dt)
 {
-	//_spr.setPosition(_pos);
+
 }
 void Still::setPosition(const sf::Vector2f& pos)
 {
@@ -29,28 +29,3 @@ void Still::setPosition(const sf::Vector2f& pos)
 	_spr.setPosition(_pos);
 	_select_frame.setPosition(_pos);
 }
-
-/*
-void Node::setTexture(const Screenshot& screenshot)
-{
-	auto rect = screenshot.frame;
-	int temp;
-
-	if (rect.width < 0)
-	{
-		temp = rect.width;
-		rect.width = -rect.width;
-		rect.left = temp + rect.left;;
-	}
-	if (rect.height < 0)
-	{
-		temp = rect.height;
-		rect.height = -rect.height;
-		rect.top = temp + rect.top;
-	}
-
-	_spr.setTextureRect(rect);
-
-	setSpriteScale(rect);
-}
-*/

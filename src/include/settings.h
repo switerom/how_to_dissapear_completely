@@ -89,8 +89,10 @@
 // Настройки нод
 #define NODE_SELECT_COLOR			sf::Color::Yellow
 #define NODE_UNSELECT_COLOR			sf::Color::Blue
+#define NODE_FILL_COLOR				sf::Color::Black
 #define NODE_OUTLINE_THK			2.f
 #define NODE_SIZE					sf::Vector2f(100.f, 100.f)
+#define NODE_TEXT_SIZE				sf::Vector2f(250.f, 250.f)
 
 // Настроки субтитров
 #define SUBS_DIR					"rsc/subs/"
