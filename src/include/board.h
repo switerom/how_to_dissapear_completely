@@ -17,6 +17,12 @@ public:
 		bool isMoving;
 	};
 
+	struct MoveControl
+	{
+		bool isNodeMoving;
+		sf::Vector2f selectShift;
+	};
+
 	Board();
 	~Board();
 	void Init();
@@ -34,14 +40,14 @@ public:
 	void selectNode(sf::RenderWindow& window);
 	void moveNode(bool is_move, sf::RenderWindow& window);
 	void deleteNode();
-	void setNodeMoving(bool isNodeMoving) { _isNodeMoving = isNodeMoving; };
+	void setNodeMoving(bool isNodeMoving) { _movecontrol.isNodeMoving = isNodeMoving; };
 	void moveNode(sf::RenderWindow& window);
 
 private:
 	sf::View _boardView;
 	sf::RectangleShape _bigRect;
 	ViewCnotrol _viewControl;
-	bool _isNodeMoving;
+	MoveControl _movecontrol;
 
 	std::map<int, std::unique_ptr<Node>> _nodes;
 	std::list<int> _layers;

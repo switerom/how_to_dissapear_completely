@@ -30,7 +30,6 @@ void Still::setPosition(const sf::Vector2f& pos)
 	_select_frame.setPosition(_pos);
 }
 
-
 /*
 void Node::setTexture(const Screenshot& screenshot)
 {

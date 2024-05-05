@@ -21,7 +21,8 @@ void Board::Init()
 
 	_viewControl.isMoving = false;
 	_selectedNodeID = NOT_SELECTED;
-	_isNodeMoving = false;
+	_movecontrol.isNodeMoving = false;
+	_movecontrol.selectShift = sf::Vector2f(0.f, 0.f);
 }
 
 void Board::Draw(sf::RenderWindow& window)
@@ -40,7 +41,7 @@ void Board::Update(sf::RenderWindow& window, float dt)
 
 	if (_viewControl.isMoving)
 		moveView(window, dt);
-	else if (_isNodeMoving)
+	else if (_movecontrol.isNodeMoving)
 		moveNode(window);
 }
 
@@ -101,6 +102,10 @@ void Board::selectNode(sf::RenderWindow& window)
 		{
 			_nodes.at(*it)->select(true);
 
+			// нужно для того, чтобы каркасс перемещался ровно из того места, где его взяли
+			_movecontrol.selectShift.x = worldPos.x - rect.left;
+			_movecontrol.selectShift.y = worldPos.y - rect.top;
+
 			_selectedNodeID = *it;
 			// Change layers order
 			auto it = std::find(_layers.begin(), _layers.end(), _selectedNodeID);
@@ -136,8 +141,8 @@ void Board::moveNode(sf::RenderWindow& window)
 	if (_selectedNodeID != NOT_SELECTED)
 	{
 		sf::Vector2f pos;
-		pos.x = worldPos.x;// - _movecontrol.selectPosShift.x + CARCASS_OUTLINE_THICKNESS;
-		pos.y = worldPos.y;// -_movecontrol.selectPosShift.y + CARCASS_OUTLINE_THICKNESS;
+		pos.x = worldPos.x -_movecontrol.selectShift.x + NODE_OUTLINE_THK;
+		pos.y = worldPos.y -_movecontrol.selectShift.y + NODE_OUTLINE_THK;
 		_nodes.at(_selectedNodeID)->setPosition(pos);
 	}
 }
