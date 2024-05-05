@@ -131,6 +131,13 @@ void Board::createStill(const Screenshot& screenshot)
 
 	_nodes.emplace(id, std::move(node));
 	_layers.push_back(id);
+
+	// Just created node will be selected
+	if (_selectedNodeID != NOT_SELECTED)
+		_nodes.at(_selectedNodeID)->select(false);
+
+	_selectedNodeID = id;
+	_nodes.at(id)->select(true);
 }
 
 void Board::moveNode(sf::RenderWindow& window)
