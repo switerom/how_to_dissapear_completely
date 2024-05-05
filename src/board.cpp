@@ -1,8 +1,4 @@
 ﻿#include "board.h"
-#include "settings.h"
-#include "keygen.h"
-#include "collisiondetection.h"
-#include "assetmanager.h"
 
 Board::Board(): Area ( BOARD_MIN_BOUNDS, BOARD_VIEWPORT)
 {
@@ -120,25 +116,27 @@ void Board::selectNode(sf::RenderWindow& window)
 	_selectedNodeID = NOT_SELECTED;
 }
 
-void Board::createStill(const Screenshot& screenshot)
-{
-	std::unique_ptr<Node> node = std::make_unique<Still>(screenshot);
 
-	int id{ KeyGen::getKey() };
 
-	while (_nodes.find(id) != _nodes.end())
-		id = KeyGen::getKey();
-
-	_nodes.emplace(id, std::move(node));
-	_layers.push_back(id);
-
-	// Just created node will be selected
-	if (_selectedNodeID != NOT_SELECTED)
-		_nodes.at(_selectedNodeID)->select(false);
-
-	_selectedNodeID = id;
-	_nodes.at(id)->select(true);
-}
+//void Board::createAudio(const Audio& audio)
+//{
+//	std::unique_ptr<Node> node = std::make_unique<Audio>(audio);
+//
+//	int id{ KeyGen::getKey() };
+//
+//	while (_nodes.find(id) != _nodes.end())
+//		id = KeyGen::getKey();
+//
+//	_nodes.emplace(id, std::move(node));
+//	_layers.push_back(id);
+//
+//	// Just created node will be selected
+//	if (_selectedNodeID != NOT_SELECTED)
+//		_nodes.at(_selectedNodeID)->select(false);
+//
+//	_selectedNodeID = id;
+//	_nodes.at(id)->select(true);
+//}
 
 void Board::moveNode(sf::RenderWindow& window)
 {

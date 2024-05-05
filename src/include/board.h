@@ -7,6 +7,9 @@
 #include "timecontroller.h"
 #include "collisiondetection.h"
 #include "videoplayer.h"
+#include "settings.h"
+#include "keygen.h"
+#include "assetmanager.h"
 
 class Board: public Area
 {
@@ -33,7 +36,10 @@ public:
 	void setViewMoving(sf::RenderWindow& window, bool isMoving);
 	void zoomView(sf::RenderWindow& window, float dt_zoom, float dt);
 
-	void createStill(const Screenshot& screenshot);
+	//void createStill(const Screenshot& screenshot);
+	//void createAudio(const Audio& audio);
+	template <typename T, typename... Args>
+	void createNode(Args&&... args);
 	//void createNode(//для текста);
 	//void createNode(//для заметок);
 
@@ -54,3 +60,23 @@ private:
 	//std::map<Edge, Line*> _lines;
 	int _selectedNodeID;
 };
+
+template <typename T, typename... Args>
+void Board::createNode(Args&&... args)
+{
+	std::unique_ptr<Node> node = std::make_unique<T>(std::forward<Args>(args)...);
+	int id{ KeyGen::getKey() };
+
+	while (_nodes.find(id) != _nodes.end())
+		id = KeyGen::getKey();
+
+	_nodes.emplace(id, std::move(node));
+	_layers.push_back(id);
+
+	// Just created node will be selected
+	if (_selectedNodeID != NOT_SELECTED)
+		_nodes.at(_selectedNodeID)->select(false);
+
+	_selectedNodeID = id;
+	_nodes.at(id)->select(true);
+}

@@ -138,7 +138,7 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
         {
             if (timecontroller.isDoubleClick(window))
             {
-                _explorer.search(_videoplayer.getSelectedString());
+                //_board.createAudio(_videoplayer.getAudio());
             }
             else
             {
@@ -160,7 +160,7 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
         if (event.mouseButton.button == sf::Mouse::Right)
         {
             _videoplayer.endScreenshot();
-            _board.createStill(_videoplayer.getScreenshot());
+            _board.createNode<Still>(_videoplayer.getScreenshot());
         }
     }
 }
