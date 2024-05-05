@@ -9,10 +9,8 @@ Still::Still(const Screenshot& screenshot)
 
 	float crop_factor = findCropFactor(sf::Vector2f(screenshot.frame.width, screenshot.frame.height), NODE_SIZE);
 	_spr.setScale(crop_factor, crop_factor);
-	//_spr.getGlobalBounds();
-	_select_frame.setSize(sf::Vector2f(screenshot.frame.width, screenshot.frame.height));
-	_select_frame.setScale(crop_factor, crop_factor);
 	_select_frame.setPosition(_pos);
+	_select_frame.setSize(sf::Vector2f(_spr.getGlobalBounds().width, _spr.getGlobalBounds().height));
 }
 
 void Still::Draw(sf::RenderWindow& window) const
