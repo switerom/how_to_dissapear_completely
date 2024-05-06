@@ -197,4 +197,11 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
             _board.zoomView(window, event.mouseWheelScroll.delta, timecontroller.getDt());
         }
     }
+    else if (event.type == sf::Event::KeyPressed)
+    {
+        if (event.key.code == sf::Keyboard::Delete)
+        {
+            _board.deleteNode();
+        }
+    }
 }

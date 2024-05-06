@@ -45,7 +45,7 @@ public:
 
 	void selectNode(sf::RenderWindow& window);
 	void moveNode(bool is_move, sf::RenderWindow& window);
-	void deleteNode();
+	void deleteNode(); 
 	void setNodeMoving(bool isNodeMoving) { _movecontrol.isNodeMoving = isNodeMoving; };
 	void moveNode(sf::RenderWindow& window);
 

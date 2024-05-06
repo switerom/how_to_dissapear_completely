@@ -151,3 +151,29 @@ void Board::moveNode(sf::RenderWindow& window)
 		_nodes.at(_selectedNodeID)->setPosition(pos);
 	}
 }
+
+void Board::deleteNode()
+{
+	if (_selectedNodeID == NOT_SELECTED)
+		return;
+
+	_nodes.erase(_selectedNodeID);
+
+	// Remove edges
+	//for (auto it = _lines.begin(); it != _lines.end();)
+	//{
+	//	if (it->first.src == _selectedNodeID || it->first.dest == _selectedNodeID)
+	//	{
+	//		delete it->second;
+	//		it = _lines.erase(it);
+	//	}
+	//	else
+	//		++it;
+	//}
+
+	// Remove from layers
+	auto it = std::find(_layers.begin(), _layers.end(), _selectedNodeID);
+	_layers.erase(it);
+
+	_selectedNodeID = NOT_SELECTED;
+}
