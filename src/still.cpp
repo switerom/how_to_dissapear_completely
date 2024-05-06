@@ -1,7 +1,8 @@
 #include "still.h"
 
-Still::Still(const Screenshot& screenshot)
+Still::Still(const sf::Vector2f& pos, const Screenshot& screenshot)
 {
+	_pos = pos;
 	_tex = screenshot.tex;
 	_spr.setTexture(_tex);
 	_spr.setPosition(_pos);

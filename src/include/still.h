@@ -7,7 +7,7 @@
 class Still: public Fragment
 {
 public:
-	Still(const Screenshot& screenshot);
+	Still(const sf::Vector2f& pos, const Screenshot& screenshot);
 	~Still() {};
 
 	void Draw(sf::RenderWindow& window) const override;

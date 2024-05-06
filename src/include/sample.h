@@ -8,7 +8,7 @@
 class Sample : public Fragment
 {
 public:
-	Sample(const Audio& audio);
+	Sample(const sf::Vector2f& pos, const Audio& audio);
 	~Sample() {};
 
 	void Draw(sf::RenderWindow& window) const override;

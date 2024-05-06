@@ -1,8 +1,9 @@
 #include "sample.h"
 
 
-Sample::Sample(const Audio& audio)
+Sample::Sample(const sf::Vector2f& pos, const Audio& audio)
 {
+	_pos = pos;
 	_text.setString(audio.wstr);
 	_text.setCharacterSize(SUBS_SIZE);
 	_text.setFillColor(SUBS_COLOR);

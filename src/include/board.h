@@ -36,12 +36,8 @@ public:
 	void setViewMoving(sf::RenderWindow& window, bool isMoving);
 	void zoomView(sf::RenderWindow& window, float dt_zoom, float dt);
 
-	//void createStill(const Screenshot& screenshot);
-	//void createAudio(const Audio& audio);
 	template <typename T, typename... Args>
 	void createNode(Args&&... args);
-	//void createNode(//для текста);
-	//void createNode(//для заметок);
 
 	void selectNode(sf::RenderWindow& window);
 	void moveNode(bool is_move, sf::RenderWindow& window);
@@ -49,7 +45,9 @@ public:
 	void setNodeMoving(bool isNodeMoving) { _movecontrol.isNodeMoving = isNodeMoving; };
 	void moveNode(sf::RenderWindow& window);
 
+
 private:
+
 	sf::View _boardView;
 	sf::RectangleShape _bigRect;
 	ViewCnotrol _viewControl;
@@ -64,7 +62,7 @@ private:
 template <typename T, typename... Args>
 void Board::createNode(Args&&... args)
 {
-	std::unique_ptr<Node> node = std::make_unique<T>(std::forward<Args>(args)...);
+	std::unique_ptr<Node> node = std::make_unique<T>(_areaView.getCenter(), std::forward<Args>(args)...);
 	int id{ KeyGen::getKey() };
 
 	while (_nodes.find(id) != _nodes.end())
