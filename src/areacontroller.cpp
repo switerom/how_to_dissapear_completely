@@ -1,7 +1,7 @@
 ﻿#include "areacontroller.h"
 #include "collisiondetection.h"
 
-AreaController::AreaController(Explorer& explorer, VideoPlayer& videoplayer, Board& board): _explorer(explorer), _videoplayer(videoplayer), _board(board)
+AreaController::AreaController(Explorer& explorer, VideoPlayer& videoplayer, Board& board) : _explorer(explorer), _videoplayer(videoplayer), _board(board)
 {
     _areas.push_back(&explorer);
     _areas.push_back(&videoplayer);
@@ -12,35 +12,35 @@ AreaController::AreaController(Explorer& explorer, VideoPlayer& videoplayer, Boa
 
 void AreaController::Draw(sf::RenderWindow& window)
 {
-	for (auto& area : _areas)
-	{
-		if (area->isMaximized())
-		{
-			_maximized = area->getAreaID();
-			area->Draw(window);
+    for (auto& area : _areas)
+    {
+        if (area->isMaximized())
+        {
+            _maximized = area->getAreaID();
+            area->Draw(window);
             return;
-		}
-	}
+        }
+    }
 
     _maximized = Area::None;
 
-	for (auto& area : _areas)
-	{
-		area->Draw(window);
-	}
+    for (auto& area : _areas)
+    {
+        area->Draw(window);
+    }
 }
 
 void AreaController::Update(sf::RenderWindow& window, float dt)
 {
-	for (auto& area : _areas)
-	{
-		if (area->isMaximized())
-		{
-			_maximized = area->getAreaID();
-			area->Update(window, dt);
+    for (auto& area : _areas)
+    {
+        if (area->isMaximized())
+        {
+            _maximized = area->getAreaID();
+            area->Update(window, dt);
             return;
-		}
-	}
+        }
+    }
 
     _maximized = Area::None;
 
@@ -52,20 +52,20 @@ void AreaController::Update(sf::RenderWindow& window, float dt)
 
 void AreaController::setAreaID(Area::ID area)
 {
-	_maximized = area;
+    _maximized = area;
 }
 
 void AreaController::EventControl(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller)
-{ 
+{
     if (_explorer.isMaximized())
         explorerEvents(event, window, timecontroller);
-    else if(_videoplayer.isMaximized())
+    else if (_videoplayer.isMaximized())
         videoplayerEvents(event, window, timecontroller);
     else if (_videoplayer.isMaximized())
         boardEvents(event, window, timecontroller);
     else
     {
-        
+
         if (event.type == sf::Event::TextEntered && _explorer.isSearchBoxSelected())
         {
             _explorer.typeInSearchBox(event);
@@ -75,7 +75,7 @@ void AreaController::EventControl(sf::Event& event, sf::RenderWindow& window, Ti
             _explorer.search(_explorer.getSearchBoxText());
         }
 
-        if(isColliding(window, _explorer.getAreaView()))
+        if (isColliding(window, _explorer.getAreaView()))
             explorerEvents(event, window, timecontroller);
         else if (isColliding(window, _videoplayer.getAreaView()))
             videoplayerEvents(event, window, timecontroller);
@@ -98,7 +98,7 @@ void AreaController::explorerEvents(sf::Event& event, sf::RenderWindow& window, 
                 {
                     //_explorer.toggleMaximize();
                 }
-                else if(_explorer.isItemSelected())
+                else if (_explorer.isItemSelected())
                 {
                     _videoplayer.toggleVideoPlayback(_explorer.getCurrentVideo(), _explorer.getVideoPlayback());
                 }
@@ -178,6 +178,10 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
             _board.selectNode(window);
             _board.setNodeMoving(true);
         }
+        else if (event.mouseButton.button == sf::Mouse::Right)
+        {
+            _board.pullLine(window);
+        }
     }
     else if (event.type == sf::Event::MouseButtonReleased)
     {
@@ -188,6 +192,10 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         else if (event.mouseButton.button == sf::Mouse::Left)
         {
             _board.setNodeMoving(false);
+        }
+        else if (event.mouseButton.button == sf::Mouse::Right)
+        {
+            _board.releaseLine();
         }
     }
     else if (event.type == sf::Event::MouseWheelScrolled)

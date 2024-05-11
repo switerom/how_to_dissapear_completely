@@ -10,6 +10,7 @@
 #include "settings.h"
 #include "keygen.h"
 #include "assetmanager.h"
+#include "line.h"
 
 class Board: public Area
 {
@@ -20,10 +21,34 @@ public:
 		bool isMoving;
 	};
 
-	struct MoveControl
+	struct Control
 	{
 		bool isNodeMoving;
 		sf::Vector2f selectShift;
+		bool isLinePulled;
+		bool isCutting;
+		sf::Vector2f mousePos;
+		sf::Vector2f pulledLineNodePos;
+	};
+
+	struct Edge
+	{
+		int src;
+		int dest;
+
+		// чтобы могло быть ключом во второй мапе(отвечающей за линии)
+		bool operator<(const Edge& other) const
+		{
+			if (src < other.src) {
+				return true;
+			}
+			else if (src == other.src) {
+				return dest < other.dest;
+			}
+			else {
+				return false;
+			}
+		}
 	};
 
 	Board();
@@ -42,21 +67,25 @@ public:
 	void selectNode(sf::RenderWindow& window);
 	void moveNode(bool is_move, sf::RenderWindow& window);
 	void deleteNode(); 
-	void setNodeMoving(bool isNodeMoving) { _movecontrol.isNodeMoving = isNodeMoving; };
+	void setNodeMoving(bool isNodeMoving) { _control.isNodeMoving = isNodeMoving; };
 	void moveNode(sf::RenderWindow& window);
 
+	//void createLine(const sf::Vector2f& point1, const sf::Vector2f& point2);
+	void pullLine(sf::RenderWindow& window);
+	void releaseLine();
 
 private:
-
 	sf::View _boardView;
 	sf::RectangleShape _bigRect;
 	ViewCnotrol _viewControl;
-	MoveControl _movecontrol;
+	Control _control;
 
 	std::map<int, std::unique_ptr<Node>> _nodes;
 	std::list<int> _layers;
-	//std::map<Edge, Line*> _lines;
+	std::vector<Edge> _edge;
 	int _selectedNodeID;
+	std::map<Edge, std::unique_ptr<Edge>> _lines;
+	Line _pulledLine;
 };
 
 template <typename T, typename... Args>

@@ -17,8 +17,11 @@ void Board::Init()
 
 	_viewControl.isMoving = false;
 	_selectedNodeID = NOT_SELECTED;
-	_movecontrol.isNodeMoving = false;
-	_movecontrol.selectShift = sf::Vector2f(0.f, 0.f);
+	_control.isNodeMoving = false;
+	_control.selectShift = sf::Vector2f(0.f, 0.f);
+	_control.isCutting = false;
+	_control.isLinePulled = false;
+	_control.mousePos = sf::Vector2f(0.f, 0.f);
 }
 
 void Board::Draw(sf::RenderWindow& window)
@@ -29,6 +32,9 @@ void Board::Draw(sf::RenderWindow& window)
 
 	for (auto& i : _layers)
 		_nodes.at(i)->Draw(window);
+
+	if (_control.isLinePulled)
+		window.draw(_pulledLine.v, 4, sf::Quads);
 }
 
 void Board::Update(sf::RenderWindow& window, float dt)
@@ -37,8 +43,15 @@ void Board::Update(sf::RenderWindow& window, float dt)
 
 	if (_viewControl.isMoving)
 		moveView(window, dt);
-	else if (_movecontrol.isNodeMoving)
+	else if (_control.isNodeMoving)
 		moveNode(window);
+	else if (_control.isLinePulled)
+	{
+		sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
+		_control.mousePos = window.mapPixelToCoords(currentMousePos, _areaView);
+
+		_pulledLine.moveLine(_control.pulledLineNodePos, _control.mousePos);
+	}
 }
 
 void Board::moveView(sf::RenderWindow& window, float dt)
@@ -99,8 +112,8 @@ void Board::selectNode(sf::RenderWindow& window)
 			_nodes.at(*it)->select(true);
 
 			// нужно для того, чтобы каркасс перемещался ровно из того места, где его взяли
-			_movecontrol.selectShift.x = worldPos.x - rect.left;
-			_movecontrol.selectShift.y = worldPos.y - rect.top;
+			_control.selectShift.x = worldPos.x - rect.left;
+			_control.selectShift.y = worldPos.y - rect.top;
 
 			_selectedNodeID = *it;
 			// Change layers order
@@ -116,28 +129,6 @@ void Board::selectNode(sf::RenderWindow& window)
 	_selectedNodeID = NOT_SELECTED;
 }
 
-
-
-//void Board::createAudio(const Audio& audio)
-//{
-//	std::unique_ptr<Node> node = std::make_unique<Audio>(audio);
-//
-//	int id{ KeyGen::getKey() };
-//
-//	while (_nodes.find(id) != _nodes.end())
-//		id = KeyGen::getKey();
-//
-//	_nodes.emplace(id, std::move(node));
-//	_layers.push_back(id);
-//
-//	// Just created node will be selected
-//	if (_selectedNodeID != NOT_SELECTED)
-//		_nodes.at(_selectedNodeID)->select(false);
-//
-//	_selectedNodeID = id;
-//	_nodes.at(id)->select(true);
-//}
-
 void Board::moveNode(sf::RenderWindow& window)
 {
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
@@ -146,8 +137,8 @@ void Board::moveNode(sf::RenderWindow& window)
 	if (_selectedNodeID != NOT_SELECTED)
 	{
 		sf::Vector2f pos;
-		pos.x = worldPos.x -_movecontrol.selectShift.x + NODE_OUTLINE_THK;
-		pos.y = worldPos.y -_movecontrol.selectShift.y + NODE_OUTLINE_THK;
+		pos.x = worldPos.x -_control.selectShift.x + NODE_OUTLINE_THK;
+		pos.y = worldPos.y -_control.selectShift.y + NODE_OUTLINE_THK;
 		_nodes.at(_selectedNodeID)->setPosition(pos);
 	}
 }
@@ -176,4 +167,39 @@ void Board::deleteNode()
 	_layers.erase(it);
 
 	_selectedNodeID = NOT_SELECTED;
+}
+
+void Board::releaseLine()
+{
+	_control.isLinePulled = false;
+}
+
+void Board::pullLine(sf::RenderWindow& window)
+{
+	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
+
+	auto it = std::make_reverse_iterator(_layers.end());  // get reverse iterator to last element in vector
+
+	while (it != std::make_reverse_iterator(_layers.begin()))
+	{
+		auto rect = _nodes.at(*it)->getRect();
+
+		if (isColliding(worldPos, rect))
+		{
+			_control.isLinePulled = true;
+
+			int pulledLineNode = *it;
+			
+			_control.pulledLineNodePos.x = _nodes.at(pulledLineNode)->getRect().left;
+			_control.pulledLineNodePos.y = _nodes.at(pulledLineNode)->getRect().top;
+
+			//if (_selectedNodeID != 0 && _selectedNodeID != nodeToConnect)
+			//	addConnection(_selectedNodeID, nodeToConnect);
+			//_selectedNodeID = NOT_SELECTED;
+			return;
+		}
+
+		++it;
+	}
 }

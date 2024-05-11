@@ -141,6 +141,7 @@
     <ClInclude Include="src\include\exploreritem.h" />
     <ClInclude Include="src\include\fragment.h" />
     <ClInclude Include="src\include\keygen.h" />
+    <ClInclude Include="src\include\line.h" />
     <ClInclude Include="src\include\node.h" />
     <ClInclude Include="src\include\note.h" />
     <ClInclude Include="src\include\sample.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="src\fragment.cpp" />
     <ClCompile Include="src\how_to_dissapear_comletely.cpp" />
     <ClCompile Include="src\keygen.cpp" />
+    <ClCompile Include="src\line.cpp" />
     <ClCompile Include="src\node.cpp" />
     <ClCompile Include="src\note.cpp" />
     <ClCompile Include="src\sample.cpp" />

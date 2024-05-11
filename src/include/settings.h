@@ -18,7 +18,6 @@
 
 #define NOT_SELECTED		0
 
-#define LINE_THICKNESS		7.f
 #define EPSILON				0.0001f
 
 #define FONT				"rsc/fonts/CascadiaCode.ttf"
@@ -75,6 +74,9 @@
 #define BOARD_VIEWPORT				sf::FloatRect(0.f, 0.f, WIDTH*0.5f, HEIGHT)
 #define BOARD_MOVE_SPEED			50.f
 #define BOARD_ZOOM_SPEED			6.f
+#define LINE_THICKNESS				3.f
+#define LINE_COLOR					sf::Color::Red
+
 
 // Настройки скриншота
 #define SCREENSHOT_RECT_COLOR_A		sf::Color::White

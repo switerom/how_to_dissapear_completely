@@ -81,6 +81,9 @@
     <ClInclude Include="src\include\note.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\include\line.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\how_to_dissapear_comletely.cpp">
@@ -141,6 +144,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\note.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\line.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
