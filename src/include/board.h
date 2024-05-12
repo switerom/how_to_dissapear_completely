@@ -29,6 +29,7 @@ public:
 		bool isCutting;
 		sf::Vector2f mousePos;
 		sf::Vector2f pulledLineNodePos;
+		int pulledLineNode;
 	};
 
 	struct Edge
@@ -39,6 +40,7 @@ public:
 		// чтобы могло быть ключом во второй мапе(отвечающей за линии)
 		bool operator<(const Edge& other) const
 		{
+
 			if (src < other.src) {
 				return true;
 			}
@@ -72,7 +74,8 @@ public:
 
 	//void createLine(const sf::Vector2f& point1, const sf::Vector2f& point2);
 	void pullLine(sf::RenderWindow& window);
-	void releaseLine();
+	void releaseLine(const sf::RenderWindow& window);
+	void addConnection(int src, int dest);
 
 private:
 	sf::View _boardView;
@@ -84,7 +87,7 @@ private:
 	std::list<int> _layers;
 	std::vector<Edge> _edge;
 	int _selectedNodeID;
-	std::map<Edge, std::unique_ptr<Edge>> _lines;
+	std::map<Edge, std::unique_ptr<Line>> _lines;
 	Line _pulledLine;
 };
 

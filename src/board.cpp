@@ -33,6 +33,9 @@ void Board::Draw(sf::RenderWindow& window)
 	for (auto& i : _layers)
 		_nodes.at(i)->Draw(window);
 
+	for (auto& i : _lines)
+		window.draw(i.second->v, 4, sf::Quads);
+
 	if (_control.isLinePulled)
 		window.draw(_pulledLine.v, 4, sf::Quads);
 }
@@ -44,7 +47,9 @@ void Board::Update(sf::RenderWindow& window, float dt)
 	if (_viewControl.isMoving)
 		moveView(window, dt);
 	else if (_control.isNodeMoving)
+	{
 		moveNode(window);
+	}
 	else if (_control.isLinePulled)
 	{
 		sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
@@ -141,6 +146,18 @@ void Board::moveNode(sf::RenderWindow& window)
 		pos.y = worldPos.y -_control.selectShift.y + NODE_OUTLINE_THK;
 		_nodes.at(_selectedNodeID)->setPosition(pos);
 	}
+
+	// Move all lines connected to moved node
+	for (auto& line : _lines)
+	{
+		if (line.first.src == _selectedNodeID || line.first.dest == _selectedNodeID)
+		{
+			sf::Vector2f point1 = sf::Vector2f(_nodes.at(line.first.src)->getRect().left, _nodes.at(line.first.src)->getRect().top);
+			sf::Vector2f point2 = sf::Vector2f(_nodes.at(line.first.dest)->getRect().left, _nodes.at(line.first.dest)->getRect().top);
+
+			line.second->moveLine(point1, point2);
+		}
+	}
 }
 
 void Board::deleteNode()
@@ -150,28 +167,22 @@ void Board::deleteNode()
 
 	_nodes.erase(_selectedNodeID);
 
-	// Remove edges
-	//for (auto it = _lines.begin(); it != _lines.end();)
-	//{
-	//	if (it->first.src == _selectedNodeID || it->first.dest == _selectedNodeID)
-	//	{
-	//		delete it->second;
-	//		it = _lines.erase(it);
-	//	}
-	//	else
-	//		++it;
-	//}
+	//Remove edges
+	for (auto it = _lines.begin(); it != _lines.end();)
+	{
+		if (it->first.src == _selectedNodeID || it->first.dest == _selectedNodeID)
+		{
+			it = _lines.erase(it);
+		}
+		else
+			++it;
+	}
 
 	// Remove from layers
 	auto it = std::find(_layers.begin(), _layers.end(), _selectedNodeID);
 	_layers.erase(it);
 
 	_selectedNodeID = NOT_SELECTED;
-}
-
-void Board::releaseLine()
-{
-	_control.isLinePulled = false;
 }
 
 void Board::pullLine(sf::RenderWindow& window)
@@ -189,10 +200,10 @@ void Board::pullLine(sf::RenderWindow& window)
 		{
 			_control.isLinePulled = true;
 
-			int pulledLineNode = *it;
+			_control.pulledLineNode = *it;
 			
-			_control.pulledLineNodePos.x = _nodes.at(pulledLineNode)->getRect().left;
-			_control.pulledLineNodePos.y = _nodes.at(pulledLineNode)->getRect().top;
+			_control.pulledLineNodePos.x = _nodes.at(_control.pulledLineNode)->getRect().left;
+			_control.pulledLineNodePos.y = _nodes.at(_control.pulledLineNode)->getRect().top;
 
 			//if (_selectedNodeID != 0 && _selectedNodeID != nodeToConnect)
 			//	addConnection(_selectedNodeID, nodeToConnect);
@@ -202,4 +213,50 @@ void Board::pullLine(sf::RenderWindow& window)
 
 		++it;
 	}
+}
+
+void Board::releaseLine(const sf::RenderWindow& window)
+{
+	if (!_control.isLinePulled)
+		return;
+
+	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
+
+	auto it = std::make_reverse_iterator(_layers.end());  // get reverse iterator to last element in vector
+
+	while (it != std::make_reverse_iterator(_layers.begin()))
+	{
+		auto rect = _nodes.at(*it)->getRect();
+
+		if (isColliding(worldPos, rect))
+		{
+			int nodeToConnect = *it;
+
+			if (_control.pulledLineNode != nodeToConnect)
+				addConnection(_control.pulledLineNode, nodeToConnect);
+			//_selectedNodeID = NOT_SELECTED;
+			break;
+		}
+
+		++it;
+	}
+
+	_control.isLinePulled = false;
+}
+
+void Board::addConnection(int src, int dest)
+{
+	Edge edge{ src, dest };
+
+	auto it = _lines.find(edge);
+	if (it != _lines.end())
+		return;
+
+	sf::Vector2f point1 = sf::Vector2f(_nodes.at(edge.src)->getRect().left, _nodes.at(edge.src)->getRect().top);
+	sf::Vector2f point2 = sf::Vector2f(_nodes.at(edge.dest)->getRect().left, _nodes.at(edge.dest)->getRect().top);
+
+	auto line = std::make_unique<Line>();
+	line->moveLine(point1, point2);
+	_lines.emplace(edge, std::move(line));
 }

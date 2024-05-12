@@ -195,7 +195,7 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         }
         else if (event.mouseButton.button == sf::Mouse::Right)
         {
-            _board.releaseLine();
+            _board.releaseLine(window);
         }
     }
     else if (event.type == sf::Event::MouseWheelScrolled)
