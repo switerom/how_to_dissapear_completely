@@ -40,6 +40,11 @@ public:
 		// чтобы могло быть ключом во второй мапе(отвечающей за линии)
 		bool operator<(const Edge& other) const
 		{
+			// Check if the edges are equivalent regardless of order
+			if ((src == other.src && dest == other.dest) || (src == other.dest && dest == other.src))
+			{
+				return false; // Equivalent, so not less than
+			}
 
 			if (src < other.src) {
 				return true;
