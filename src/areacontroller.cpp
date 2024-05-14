@@ -96,6 +96,8 @@ void AreaController::EventControl(sf::Event& event, sf::RenderWindow& window, Ti
             videoplayerEvents(event, window, timecontroller);
         else if (isColliding(window, _board.getAreaView()))
             boardEvents(event, window, timecontroller);
+        else
+            _curArea = nullptr;
 
         if (_curArea != _prevArea)
         {
@@ -165,7 +167,8 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
         {
             if (timecontroller.isDoubleClick(window))
             {
-                _board.createNode<Sample>(_videoplayer.getAudio());
+                if (_videoplayer.isTextCorrect())
+                    _board.createNode<Sample>(_videoplayer.getAudio());
             }
             else
             {
@@ -186,8 +189,13 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
         }
         if (event.mouseButton.button == sf::Mouse::Right)
         {
-            _videoplayer.endScreenshot();
-            _board.createNode<Still>(_videoplayer.getScreenshot());
+            if (_videoplayer.isTakingScreenshot())
+            {
+                _videoplayer.endScreenshot();
+
+                if(_videoplayer.isScreenshotCorrect())
+                    _board.createNode<Still>(_videoplayer.getScreenshot());
+            }
         }
     }
 }

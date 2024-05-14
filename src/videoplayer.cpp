@@ -34,7 +34,7 @@ void VideoPlayer::Init()
 	_interface.timing.setPosition(TIME_POS);
 
 	_screenshot.rect.setFillColor(sf::Color::Transparent);
-	_screenshot.rect.setOutlineColor(SCREENSHOT_RECT_COLOR_A);
+	_screenshot.rect.setOutlineColor(SCREENSHOT_RECT_COLOR_B);
 	_screenshot.rect.setOutlineThickness(SCREENSHOT_RECT_THICKNESS);
 
 	_screenshot.video = nullptr;
@@ -172,17 +172,20 @@ void VideoPlayer::Update(sf::RenderWindow& window, float dt)
 	if (!_currentVideo)
 		return;
 
+	if (_screenshot.inProcess)
+		changeScreenshotLinesColor();
+
 	if (_currentVideo->getStatus() != sfe::Status::Playing)
 		return;
 
-_currentVideo->update();	// dt не передается параметром потому, что sfeMovie сам внутри это контролирует
+	_currentVideo->update();	// dt не передается параметром потому, что sfeMovie сам внутри это контролирует
 
-_subs.setText(_currentVideo->getPlayingOffset().asMilliseconds());
+	_subs.setText(_currentVideo->getPlayingOffset().asMilliseconds());
 
-changeTiming();
+	changeTiming();
 
-float progressWidth = WIDTH * _currentVideo->getPlayingOffset().asSeconds() / _currentVideo->getDuration().asSeconds();
-_interface.seeker.setSize(sf::Vector2f(progressWidth, VIDEOPLAYER_BAR_HEIGHT));
+	float progressWidth = WIDTH * _currentVideo->getPlayingOffset().asSeconds() / _currentVideo->getDuration().asSeconds();
+	_interface.seeker.setSize(sf::Vector2f(progressWidth, VIDEOPLAYER_BAR_HEIGHT));
 }
 
 void VideoPlayer::changeTiming()
@@ -240,6 +243,7 @@ void VideoPlayer::startScreenshot(sf::RenderWindow& window)
 	_screenshot.frame.width = 0;
 	_screenshot.frame.height = 0;
 
+
 	//	Restrict screenshot frame from black bars (on start)
 	if (_screenshot.frame.left < 0)
 	{
@@ -265,7 +269,13 @@ void VideoPlayer::startScreenshot(sf::RenderWindow& window)
 
 void VideoPlayer::endScreenshot()
 {
+	if (!_screenshot.inProcess)
+		return;
+
 	_screenshot.inProcess = false;
+
+	if (!isScreenshotCorrect())
+		return;
 
 	if (_currentVideo)
 	{
@@ -349,4 +359,24 @@ void VideoPlayer::endSelectSubs()
 void VideoPlayer::resetAction()
 {
 	_screenshot.inProcess = false;
+}
+
+void VideoPlayer::changeScreenshotLinesColor()
+{
+	if (isScreenshotCorrect())
+		_screenshot.rect.setOutlineColor(SCREENSHOT_RECT_COLOR_A);
+	else
+		_screenshot.rect.setOutlineColor(SCREENSHOT_RECT_COLOR_B);
+}
+
+bool VideoPlayer::isScreenshotCorrect() const
+{
+	auto& rect = _screenshot.frame;
+
+	return rect.width >= SCREENSHOT_MIN_SIZE && rect.height >= SCREENSHOT_MIN_SIZE;
+}
+
+bool VideoPlayer::isTextCorrect() const
+{
+	return !_audio.wstr.empty();
 }

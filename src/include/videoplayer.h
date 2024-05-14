@@ -70,7 +70,11 @@ public:
 	std::wstring getSelectedString() { return _subs.getSelectedString(); };
 
 	void resetAction() override;
-
+	bool isTakingScreenshot() const { return _screenshot.inProcess; };
+	
+	bool isTextCorrect() const;
+	bool isScreenshotCorrect() const;
+	void changeScreenshotLinesColor();
 private:
 	std::string getSubName(const std::string& filename) const;
 	void loadVideo(const std::string& filename);

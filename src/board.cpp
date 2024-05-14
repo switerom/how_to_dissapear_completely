@@ -385,5 +385,8 @@ void Board::loadBoard()
 
 void Board::resetAction()
 {
-
+	_control.isNodeMoving = false;
+	_control.isLinePulled = false;
+	_control.isCutting = false;
+	_viewControl.isMoving = false;
 }

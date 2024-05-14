@@ -81,11 +81,11 @@
 
 
 // Настройки скриншота
-#define SCREENSHOT_RECT_COLOR_A		sf::Color::White
-#define SCREENSHOT_RECT_COLOR_B		sf::Color::Green
-#define SCREENSHOT_RECT_COLOR_C		sf::Color::Yellow
+#define SCREENSHOT_RECT_COLOR_A		sf::Color::Green
+#define SCREENSHOT_RECT_COLOR_B		sf::Color::Red
 #define SCREENSHOT_RECT_THICKNESS	3.f
-#define SCREENSHOT_SIZE				1000.f
+#define SCREENSHOT_MIN_SIZE			50.f
+#define SCREENSHOT_MIN_FACTOR		2.f
 
 // Настройки ассет менеджера
 #define FONTS_DIR					"rsc/fonts/"
