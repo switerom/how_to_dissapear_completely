@@ -13,6 +13,7 @@ public:
 	virtual void setPosition(const sf::Vector2f& pos) = 0;
 	void select(bool s);
 	const sf::FloatRect& getRect() const;
+	virtual void saveNode(int id) = 0;
 
 protected:
 	sf::Vector2f _pos;

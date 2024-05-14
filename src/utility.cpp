@@ -50,3 +50,17 @@ std::string convertToTime(float number)
 	// Return the formatted string
 	return ss.str();
 }
+
+std::string getAbsolutePath(const std::string& path)
+{
+	std::string full_path = std::filesystem::current_path().string() + path;
+
+	// Replace backslashes with forward slashes
+	for (char& c : full_path) {
+		if (c == '\\') {
+			c = '/';
+		}
+	}
+
+	return full_path;
+}

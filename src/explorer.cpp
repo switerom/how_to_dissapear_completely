@@ -229,3 +229,8 @@ bool Explorer::isItemSelected() const
 {
 	return (_selectedItem == _explorerItems.end()) ? false : true;
 }
+
+void Explorer::resetAction()
+{
+
+}

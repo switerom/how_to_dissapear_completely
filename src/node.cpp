@@ -24,6 +24,3 @@ const sf::FloatRect& Node::getRect() const
 {
 	return _select_frame.getGlobalBounds();
 }
-
-
-

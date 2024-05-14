@@ -32,7 +32,9 @@
 #define TEXT_NOTE_SIZE		75
 #define DOUBLE_CLICK_RANGE	5
 
-#define SAVES_DIR			"C:/_FILES/CATEGORIES/MY_FILM-GAME/code/detective_film_game/game/saves"
+// Сохранения и загрузка
+#define SAVE_FILE			"/saves/save.bin"
+#define TEX_SAVE_DIR		"/saves/tex/"
 
 // Настройки всех окон
 #define WINDOW_TOP_RECT				HEIGHT*0.025f

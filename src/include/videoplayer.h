@@ -30,7 +30,6 @@ struct Audio
 	std::wstring wstr;
 };
 
-
 class VideoPlayer: public Area
 {
 public:
@@ -69,6 +68,8 @@ public:
 	void setSelectSubs(sf::RenderWindow& window);
 	std::vector<sf::FloatRect> getSubsBounds() const;
 	std::wstring getSelectedString() { return _subs.getSelectedString(); };
+
+	void resetAction() override;
 
 private:
 	std::string getSubName(const std::string& filename) const;

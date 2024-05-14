@@ -29,4 +29,7 @@ private:
 	Explorer& _explorer;
 	Board& _board;
 	VideoPlayer& _videoplayer;
+
+	Area* _prevArea;
+	Area* _curArea;
 };

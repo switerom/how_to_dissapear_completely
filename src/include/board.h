@@ -77,10 +77,14 @@ public:
 	void setNodeMoving(bool isNodeMoving) { _control.isNodeMoving = isNodeMoving; };
 	void moveNode(sf::RenderWindow& window);
 
-	//void createLine(const sf::Vector2f& point1, const sf::Vector2f& point2);
 	void pullLine(sf::RenderWindow& window);
 	void releaseLine(const sf::RenderWindow& window);
 	void addConnection(int src, int dest);
+
+	void saveBoard();
+	//void loadBoard();
+
+	void resetAction() override;
 
 private:
 	sf::View _boardView;
@@ -90,7 +94,7 @@ private:
 
 	std::map<int, std::unique_ptr<Node>> _nodes;
 	std::list<int> _layers;
-	std::vector<Edge> _edge;
+	//std::list<Edge> _edges;
 	int _selectedNodeID;
 	std::map<Edge, std::unique_ptr<Line>> _lines;
 	Line _pulledLine;

@@ -345,3 +345,8 @@ void VideoPlayer::endSelectSubs()
 	_subs.endSelect();
 	_audio.wstr = _subs.getSelectedString();
 }
+
+void VideoPlayer::resetAction()
+{
+	_screenshot.inProcess = false;
+}

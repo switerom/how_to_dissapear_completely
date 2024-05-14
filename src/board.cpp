@@ -168,14 +168,14 @@ void Board::deleteNode()
 	_nodes.erase(_selectedNodeID);
 
 	//Remove edges
-	for (auto it = _lines.begin(); it != _lines.end();)
+	for (auto line = _lines.begin(); line != _lines.end();)
 	{
-		if (it->first.src == _selectedNodeID || it->first.dest == _selectedNodeID)
+		if (line->first.src == _selectedNodeID || line->first.dest == _selectedNodeID)
 		{
-			it = _lines.erase(it);
+			line = _lines.erase(line);
 		}
 		else
-			++it;
+			++line;
 	}
 
 	// Remove from layers
@@ -259,4 +259,131 @@ void Board::addConnection(int src, int dest)
 	auto line = std::make_unique<Line>();
 	line->moveLine(point1, point2);
 	_lines.emplace(edge, std::move(line));
+}
+
+void Board::saveBoard()
+{
+	if (_nodes.empty())
+		return;
+
+	std::string tex_save_dir = getAbsolutePath(TEX_SAVE_DIR);
+	// Предварительно удаляем предыдущие сохранения
+	for (const auto& entry : std::filesystem::recursive_directory_iterator(tex_save_dir))
+	{
+		if (!std::filesystem::is_directory(entry))
+			std::filesystem::remove(entry.path());
+	}
+
+	std::string save_file_path = getAbsolutePath(SAVE_FILE);
+	std::ofstream save_file(save_file_path, std::ios::binary);
+
+	// Сохраняем количество слоев
+	auto layers_size = _layers.size();
+	save_file.write(reinterpret_cast<char*>(&layers_size), sizeof(layers_size));			
+	
+	// Сохраняем слои
+	for (auto it{ _layers.begin() }; it != _layers.end(); ++it)
+		save_file.write(reinterpret_cast<char*>(&*it), sizeof(*it));
+
+	save_file.open(save_file_path, std::ios::binary | std::ios::app);		
+
+	// Сохраняем количество эджей
+	auto lines_size = _lines.size();
+	save_file.write(reinterpret_cast<char*>(&lines_size), sizeof(lines_size));
+	
+	// Сохраняем эджи
+	for (auto it{ _lines.begin() }; it != _lines.end(); ++it)
+	{
+		Edge edge = it->first;
+		save_file.write(reinterpret_cast<char*>(&edge), sizeof(edge));
+	}
+
+	save_file.close();
+
+	// Сохраняем количество нод
+	auto nodes_size = _nodes.size();
+	save_file.write(reinterpret_cast<char*>(&nodes_size), sizeof(nodes_size));
+
+	// Сохраняем ноды
+	for (auto& i : _nodes)
+		i.second->saveNode(i.first);
+}
+
+/*
+void Board::loadBoard()
+{
+	_nodes.clear();
+	_lines.clear();
+	_layers.clear();
+
+	std::string save_file_path = getAbsolutePath(SAVE_FILE);
+	// Загружаем слои
+	std::ifstream save_file(save_file_path, std::ios::binary);
+
+	std::ifstream in_layers(path_to_dir + "/layers/layersSave.bin", std::ios::binary);
+
+	int layer;
+
+	for ()
+	{
+		save_file.read(reinterpret_cast<char*>(&layer), sizeof(layer));
+		_layers.push_back(layer);
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	int count{ 0 };			// попробовать как-то убрать счетчик
+
+	// Проходимся по всем сохранениям нод и загружаем в мапу с ключом ID
+	for (const auto& entry : std::filesystem::directory_iterator(path_to_dir + "/nodes"))
+	{
+		if (entry.is_regular_file())
+		{
+			std::ifstream in_node(path_to_dir + "/nodes/nodeSave" + std::to_string(count) + ".bin", std::ios::binary);	// исправить путь
+			//std::ifstream infile(entry.path().filename().string(), std::ios::binary);	// возможно этот вариант лучше
+
+			sf::Texture tex;
+			tex.loadFromFile(path_to_dir + "/tex/textureSave" + std::to_string(count) + ".jpg");
+
+			int id;
+			in_node.read(reinterpret_cast<char*>(&id), sizeof(id));
+
+			sf::IntRect texRect;
+			in_node.read(reinterpret_cast<char*>(&texRect), sizeof(texRect));
+
+			sf::Vector2f pos;
+			in_node.read(reinterpret_cast<char*>(&pos), sizeof(pos));
+
+			std::string str;
+			in_node.read(reinterpret_cast<char*>(&str), sizeof(str));
+
+			auto node = std::make_unique<Still> (tex, texRect, pos, "str");
+
+			_nodes.emplace(id, std::move(node)); // или _nodes.insert(std::make_pair(id, ptr));
+
+			in_node.close();
+			++count;
+		}
+	}
+
+	// Загружаем эджи
+	std::ifstream in_edges(path_to_dir + "/edges/edgesSave.bin", std::ios::binary);
+
+	Edge edge;
+
+	while (in_edges.read(reinterpret_cast<char*>(&edge), sizeof(edge)))
+	{
+		sf::Vector2f point1 = sf::Vector2f(_nodes.at(edge.src)->getRect().left, _nodes.at(edge.src)->getRect().top);
+		sf::Vector2f point2 = sf::Vector2f(_nodes.at(edge.dest)->getRect().left, _nodes.at(edge.dest)->getRect().top);
+
+		_lines.emplace(edge, std::make_unique<Line>(point1, point2));
+	}
+
+	in_edges.close();
+}
+*/
+
+void Board::resetAction()
+{
+
 }

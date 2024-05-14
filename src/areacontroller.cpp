@@ -8,6 +8,9 @@ AreaController::AreaController(Explorer& explorer, VideoPlayer& videoplayer, Boa
     _areas.push_back(&board);
 
     _maximized = Area::None;
+
+    _curArea = nullptr;
+    _prevArea = nullptr;
 }
 
 void AreaController::Draw(sf::RenderWindow& window)
@@ -75,17 +78,39 @@ void AreaController::EventControl(sf::Event& event, sf::RenderWindow& window, Ti
             _explorer.search(_explorer.getSearchBoxText());
         }
 
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+        {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            {
+                _board.saveBoard();
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            {
+                //_board.loadBoard();
+            }
+        }
+
         if (isColliding(window, _explorer.getAreaView()))
             explorerEvents(event, window, timecontroller);
         else if (isColliding(window, _videoplayer.getAreaView()))
             videoplayerEvents(event, window, timecontroller);
         else if (isColliding(window, _board.getAreaView()))
             boardEvents(event, window, timecontroller);
+
+        if (_curArea != _prevArea)
+        {
+            if(_prevArea != nullptr)
+                _prevArea->resetAction();
+
+            _prevArea = _curArea;
+        }
     }
 }
 
 void AreaController::explorerEvents(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller)
 {
+    _curArea = &_explorer;
+
     if (event.type == sf::Event::MouseButtonPressed)
     {
         if (event.mouseButton.button == sf::Mouse::Left)
@@ -113,6 +138,8 @@ void AreaController::explorerEvents(sf::Event& event, sf::RenderWindow& window, 
 
 void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller)
 {
+    _curArea = &_videoplayer;
+
     if (event.type == sf::Event::MouseButtonPressed)
     {
         if (event.mouseButton.button == sf::Mouse::Left)
@@ -167,6 +194,8 @@ void AreaController::videoplayerEvents(sf::Event& event, sf::RenderWindow& windo
 
 void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, TimeController& timecontroller)
 {
+    _curArea = &_board;
+
     if (event.type == sf::Event::MouseButtonPressed)
     {
         if (event.mouseButton.button == sf::Mouse::Middle)

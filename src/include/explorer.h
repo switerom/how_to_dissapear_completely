@@ -36,6 +36,7 @@ public:
 	void typeInSearchBox(sf::Event& event);
 	std::wstring getSearchBoxText() const;
 	bool isItemSelected() const;
+	void resetAction() override;
 
 private:
 	void resetScroll();
