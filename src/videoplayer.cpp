@@ -373,7 +373,18 @@ bool VideoPlayer::isScreenshotCorrect() const
 {
 	auto& rect = _screenshot.frame;
 
-	return rect.width >= SCREENSHOT_MIN_SIZE && rect.height >= SCREENSHOT_MIN_SIZE;
+	int width = rect.width;
+	int height = rect.height;
+
+
+	std::cout << width << '\t' << height << '\n';
+	if (width < height)
+		std::swap(width, height);
+
+	float factor = static_cast<float>(width) / height;
+
+	return (std::abs(width) >= SCREENSHOT_MIN_SIZE && std::abs(height) >= SCREENSHOT_MIN_SIZE)
+				&& factor < SCREENSHOT_MIN_FACTOR;
 }
 
 bool VideoPlayer::isTextCorrect() const
