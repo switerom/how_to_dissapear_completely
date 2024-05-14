@@ -33,6 +33,7 @@
 #define DOUBLE_CLICK_RANGE	5
 
 // Сохранения и загрузка
+#define SAVE_DIR			"/saves/"
 #define SAVE_FILE			"/saves/save.bin"
 #define TEX_SAVE_DIR		"/saves/tex/"
 

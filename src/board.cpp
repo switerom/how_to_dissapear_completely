@@ -266,7 +266,17 @@ void Board::saveBoard()
 	if (_nodes.empty())
 		return;
 
+	std::string save_dir_path = getAbsolutePath(SAVE_DIR);
+	std::string save_file_path = getAbsolutePath(SAVE_FILE);
 	std::string tex_save_dir = getAbsolutePath(TEX_SAVE_DIR);
+
+	// Create directories if they don't exist
+	if (!std::filesystem::exists(save_dir_path))
+		std::filesystem::create_directory(save_dir_path);
+
+	if (!std::filesystem::exists(tex_save_dir))
+		std::filesystem::create_directory(tex_save_dir);
+
 	// Предварительно удаляем предыдущие сохранения
 	for (const auto& entry : std::filesystem::recursive_directory_iterator(tex_save_dir))
 	{
@@ -274,7 +284,6 @@ void Board::saveBoard()
 			std::filesystem::remove(entry.path());
 	}
 
-	std::string save_file_path = getAbsolutePath(SAVE_FILE);
 	std::ofstream save_file(save_file_path, std::ios::binary);
 
 	// Сохраняем количество слоев

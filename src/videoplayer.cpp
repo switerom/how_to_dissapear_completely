@@ -376,8 +376,6 @@ bool VideoPlayer::isScreenshotCorrect() const
 	int width = rect.width;
 	int height = rect.height;
 
-
-	std::cout << width << '\t' << height << '\n';
 	if (width < height)
 		std::swap(width, height);
 
