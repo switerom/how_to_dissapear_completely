@@ -79,7 +79,8 @@
 #define BOARD_ZOOM_SPEED			6.f
 #define LINE_THICKNESS				3.f
 #define LINE_COLOR					sf::Color::Red
-
+#define STILL						0
+#define SAMPLE						1
 
 // Настройки скриншота
 #define SCREENSHOT_RECT_COLOR_A		sf::Color::Green

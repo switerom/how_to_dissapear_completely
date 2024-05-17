@@ -86,7 +86,7 @@ void AreaController::EventControl(sf::Event& event, sf::RenderWindow& window, Ti
             }
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
             {
-                //_board.loadBoard();
+                _board.loadBoard();
             }
         }
 

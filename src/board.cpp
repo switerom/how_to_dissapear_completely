@@ -285,16 +285,22 @@ void Board::saveBoard()
 	}
 
 	std::ofstream save_file(save_file_path, std::ios::binary);
-
+///////////////////////////////////////////////////////////////////////////////////////
 	// Сохраняем количество слоев
 	auto layers_size = _layers.size();
 	save_file.write(reinterpret_cast<char*>(&layers_size), sizeof(layers_size));			
 	
 	// Сохраняем слои
-	for (auto it{ _layers.begin() }; it != _layers.end(); ++it)
-		save_file.write(reinterpret_cast<char*>(&*it), sizeof(*it));
+	for(auto& layer:_layers)
+		save_file.write(reinterpret_cast<char*>(&layer), sizeof(layer));
 
-	save_file.open(save_file_path, std::ios::binary | std::ios::app);		
+	// Сохраняем количество нод
+	auto nodes_size = _nodes.size();
+	save_file.write(reinterpret_cast<char*>(&nodes_size), sizeof(nodes_size));
+
+	// Сохраняем ноды
+	for (auto& i : _nodes)
+		i.second->saveNode(i.first, save_file);
 
 	// Сохраняем количество эджей
 	auto lines_size = _lines.size();
@@ -308,89 +314,110 @@ void Board::saveBoard()
 	}
 
 	save_file.close();
-
-	// Сохраняем количество нод
-	auto nodes_size = _nodes.size();
-	save_file.write(reinterpret_cast<char*>(&nodes_size), sizeof(nodes_size));
-
-	// Сохраняем ноды
-	for (auto& i : _nodes)
-		i.second->saveNode(i.first);
 }
 
-/*
 void Board::loadBoard()
 {
+	std::string save_file_path = getAbsolutePath(SAVE_FILE);
+	std::string save_dir_path = getAbsolutePath(SAVE_DIR);
+
+	// Create directories if they don't exist
+	if (!std::filesystem::exists(save_dir_path))
+		return;
+
 	_nodes.clear();
 	_lines.clear();
 	_layers.clear();
 
-	std::string save_file_path = getAbsolutePath(SAVE_FILE);
-	// Загружаем слои
 	std::ifstream save_file(save_file_path, std::ios::binary);
 
-	std::ifstream in_layers(path_to_dir + "/layers/layersSave.bin", std::ios::binary);
+	/////////////////////////////////////////////////////////////////////
+	// Загружаем слои
+
+	size_t layers_size;
+	save_file.read(reinterpret_cast<char*>(&layers_size), sizeof(layers_size));
 
 	int layer;
 
-	for ()
+	for (size_t i{0}; i < layers_size; ++i)
 	{
 		save_file.read(reinterpret_cast<char*>(&layer), sizeof(layer));
 		_layers.push_back(layer);
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// Загружаем ноды
 
-	int count{ 0 };			// попробовать как-то убрать счетчик
+	size_t nodes_size;
+	save_file.read(reinterpret_cast<char*>(&nodes_size), sizeof(nodes_size));
 
-	// Проходимся по всем сохранениям нод и загружаем в мапу с ключом ID
-	for (const auto& entry : std::filesystem::directory_iterator(path_to_dir + "/nodes"))
+	for (size_t i{ 0 }; i < nodes_size; ++i)
 	{
-		if (entry.is_regular_file())
+		int nodes_type;
+		save_file.read(reinterpret_cast<char*>(&nodes_type), sizeof(nodes_type));
+
+		if (nodes_type == SAMPLE)
 		{
-			std::ifstream in_node(path_to_dir + "/nodes/nodeSave" + std::to_string(count) + ".bin", std::ios::binary);	// исправить путь
-			//std::ifstream infile(entry.path().filename().string(), std::ios::binary);	// возможно этот вариант лучше
-
-			sf::Texture tex;
-			tex.loadFromFile(path_to_dir + "/tex/textureSave" + std::to_string(count) + ".jpg");
-
 			int id;
-			in_node.read(reinterpret_cast<char*>(&id), sizeof(id));
-
-			sf::IntRect texRect;
-			in_node.read(reinterpret_cast<char*>(&texRect), sizeof(texRect));
+			save_file.read(reinterpret_cast<char*>(&id), sizeof(id));
 
 			sf::Vector2f pos;
-			in_node.read(reinterpret_cast<char*>(&pos), sizeof(pos));
+			save_file.read(reinterpret_cast<char*>(&pos), sizeof(pos));
 
-			std::string str;
-			in_node.read(reinterpret_cast<char*>(&str), sizeof(str));
+			size_t wstr_size;
+			save_file.read(reinterpret_cast<char*>(&wstr_size), sizeof(wstr_size));
+			std::wstring wstr(wstr_size, L'\0');
+			save_file.read(reinterpret_cast<char*>(wstr.data()), wstr_size * sizeof(wchar_t));
 
-			auto node = std::make_unique<Still> (tex, texRect, pos, "str");
+			Audio aud;
+			aud.wstr = wstr;
 
-			_nodes.emplace(id, std::move(node)); // или _nodes.insert(std::make_pair(id, ptr));
+			std::unique_ptr<Sample> sample = std::make_unique<Sample>(pos, aud);
 
-			in_node.close();
-			++count;
+			_nodes.emplace(std::make_pair(id, std::move(sample)));
+		}
+		else if (nodes_type == STILL)
+		{
+			int id;
+			save_file.read(reinterpret_cast<char*>(&id), sizeof(id));
+
+			sf::Vector2f pos;
+			save_file.read(reinterpret_cast<char*>(&pos), sizeof(pos));
+
+			sf::IntRect texRect;
+			save_file.read(reinterpret_cast<char*>(&texRect), sizeof(texRect));
+
+			std::unique_ptr<Still> still = std::make_unique<Still>(id, pos, texRect);
+
+			_nodes.emplace(std::make_pair(id, std::move(still)));
 		}
 	}
 
+	/////////////////////////////////////////////////////////////////////
 	// Загружаем эджи
-	std::ifstream in_edges(path_to_dir + "/edges/edgesSave.bin", std::ios::binary);
+
+	size_t edges_size;
+	save_file.read(reinterpret_cast<char*>(&edges_size), sizeof(edges_size));
 
 	Edge edge;
 
-	while (in_edges.read(reinterpret_cast<char*>(&edge), sizeof(edge)))
+	for (size_t i{ 0 }; i < edges_size; ++i)
 	{
-		sf::Vector2f point1 = sf::Vector2f(_nodes.at(edge.src)->getRect().left, _nodes.at(edge.src)->getRect().top);
-		sf::Vector2f point2 = sf::Vector2f(_nodes.at(edge.dest)->getRect().left, _nodes.at(edge.dest)->getRect().top);
+		save_file.read(reinterpret_cast<char*>(&edge), sizeof(edge));
 
-		_lines.emplace(edge, std::make_unique<Line>(point1, point2));
+		sf::Vector2f pos1, pos2;
+
+		pos1 = sf::Vector2f(_nodes.at(edge.src)->getRect().left, _nodes.at(edge.src)->getRect().top);
+		pos2 = sf::Vector2f(_nodes.at(edge.dest)->getRect().left, _nodes.at(edge.dest)->getRect().top);
+
+		std::unique_ptr<Line> line = std::make_unique<Line>();
+		line->moveLine(pos1, pos2);
+
+		_lines.emplace(edge, std::move(line));
 	}
 
-	in_edges.close();
+	save_file.close();
 }
-*/
 
 void Board::resetAction()
 {

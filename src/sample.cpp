@@ -32,19 +32,20 @@ void Sample::setPosition(const sf::Vector2f& pos)
 	_select_frame.setPosition(_pos);
 }
 
-void Sample::saveNode(int id)
+void Sample::saveNode(int id, std::ofstream& save_file)
 {
 	std::string save_file_path = getAbsolutePath(SAVE_FILE);
 
-	std::ofstream save_file(save_file_path, std::ios::binary | std::ios::app);
+	int node_type = SAMPLE;
+	save_file.write(reinterpret_cast<char*>(&node_type), sizeof(node_type));
 
 	save_file.write(reinterpret_cast<char*>(&id), sizeof(id));							// ID ноды в .bin
 
-	sf::Vector2f pos = _spr.getPosition();
+	sf::Vector2f pos = _text.getPosition();
 	save_file.write(reinterpret_cast<char*>(&pos), sizeof(pos));						// Vector2f объект в .bin
 
-	std::string str = _text.getString();
-	save_file.write(reinterpret_cast<char*>(&str), sizeof(str));						// написанный текст
-
-	save_file.close();
+	std::wstring wstr = _text.getString();												// написанный текст
+	size_t wstr_size = wstr.size();
+	save_file.write(reinterpret_cast<char*>(&wstr_size), sizeof(wstr_size));
+	save_file.write(reinterpret_cast<char*>(wstr.data()), wstr_size * sizeof(wchar_t));	
 }

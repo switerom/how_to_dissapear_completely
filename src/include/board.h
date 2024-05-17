@@ -4,6 +4,7 @@
 #include "area.h"
 #include "node.h"
 #include "still.h"
+#include "sample.h"
 #include "timecontroller.h"
 #include "collisiondetection.h"
 #include "videoplayer.h"
@@ -82,7 +83,8 @@ public:
 	void addConnection(int src, int dest);
 
 	void saveBoard();
-	//void loadBoard();
+	void loadBoard();
+	void loadNode(std::ifstream& save_file);
 
 	void resetAction() override;
 
