@@ -78,7 +78,9 @@
 #define BOARD_MOVE_SPEED			50.f
 #define BOARD_ZOOM_SPEED			6.f
 #define LINE_THICKNESS				3.f
-#define LINE_COLOR					sf::Color::Red
+#define LINE_COLLISION_THK			6.f
+#define LINE_COLOR_A				sf::Color::Red
+#define LINE_COLOR_B				sf::Color::Yellow
 #define STILL						0
 #define SAMPLE						1
 

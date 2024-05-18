@@ -72,6 +72,7 @@ public:
 	template <typename T, typename... Args>
 	void createNode(Args&&... args);
 
+	void selectLine(sf::RenderWindow& window);
 	void selectNode(sf::RenderWindow& window);
 	void moveNode(bool is_move, sf::RenderWindow& window);
 	void deleteNode(); 

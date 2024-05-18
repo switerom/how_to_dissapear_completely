@@ -213,6 +213,7 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         else if (event.mouseButton.button == sf::Mouse::Left)
         {
             _board.selectNode(window);
+            _board.selectLine(window);
             _board.setNodeMoving(true);
         }
         else if (event.mouseButton.button == sf::Mouse::Right)

@@ -16,10 +16,12 @@ sf::Vector2f Line::calculateOffset(const sf::Vector2f& point1, const sf::Vector2
 
 Line::Line()
 {
-	v[0].color = LINE_COLOR;
-	v[1].color = LINE_COLOR;
-	v[2].color = LINE_COLOR;
-	v[3].color = LINE_COLOR;
+	v[0].color = LINE_COLOR_A;
+	v[1].color = LINE_COLOR_A;
+	v[2].color = LINE_COLOR_A;
+	v[3].color = LINE_COLOR_A;
+
+	_isSelected = false;
 }
 
 void Line::moveLine(const sf::Vector2f& point1, const sf::Vector2f& point2)
@@ -30,4 +32,34 @@ void Line::moveLine(const sf::Vector2f& point1, const sf::Vector2f& point2)
 	v[1].position = sf::Vector2f(point2 + offset);
 	v[2].position = sf::Vector2f(point2 - offset);
 	v[3].position = sf::Vector2f(point1 - offset);
+
+	v_collision[0].position = sf::Vector2f(point1 + LINE_COLLISION_THK * offset);
+	v_collision[1].position = sf::Vector2f(point2 + LINE_COLLISION_THK * offset);
+	v_collision[2].position = sf::Vector2f(point2 - LINE_COLLISION_THK * offset);
+	v_collision[3].position = sf::Vector2f(point1 - LINE_COLLISION_THK * offset);
 }
+
+void Line::select(bool is_select)
+{
+	if (!is_select && !_isSelected
+		|| is_select && _isSelected)
+		return;
+
+	if (is_select)
+	{
+		v[0].color = LINE_COLOR_B;
+		v[1].color = LINE_COLOR_B;
+		v[2].color = LINE_COLOR_B;
+		v[3].color = LINE_COLOR_B;
+	}
+	else
+	{
+		v[0].color = LINE_COLOR_A;
+		v[1].color = LINE_COLOR_A;
+		v[2].color = LINE_COLOR_A;
+		v[3].color = LINE_COLOR_A;
+	}
+
+	_isSelected = is_select;
+}
+

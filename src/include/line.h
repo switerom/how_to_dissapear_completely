@@ -5,11 +5,15 @@
 
 struct Line
 {
+	bool _isSelected;
 	sf::Vertex v[4];
+	sf::Vertex v_collision[4];
 
 	Line();
 
 	void moveLine(const sf::Vector2f& point1, const sf::Vector2f& point2);
 
 	sf::Vector2f calculateOffset(const sf::Vector2f& point1, const sf::Vector2f& point2);
+
+	void select(bool is_select);
 };

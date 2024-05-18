@@ -426,3 +426,28 @@ void Board::resetAction()
 	_control.isCutting = false;
 	_viewControl.isMoving = false;
 }
+
+void Board::selectLine(sf::RenderWindow& window)
+{
+	if (_lines.empty())
+			return;
+
+	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
+
+	//auto it = std::make_reverse_iterator(_layers.end());  // Возможно добавить слои для линий?
+
+	for(auto& line: _lines)
+	{
+		if (isColliding(worldPos, line.second->v_collision))
+		{
+			line.second->select(true);
+
+			return;
+		}
+		else
+		{
+			line.second->select(false);
+		}
+	}
+}
