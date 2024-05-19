@@ -24,6 +24,7 @@ public:
 
 	struct Control
 	{
+		bool isMulptipleSelect;
 		bool isNodeMoving;
 		sf::Vector2f selectShift;
 		bool isLinePulled;
@@ -83,6 +84,9 @@ public:
 
 	bool selectLine(sf::RenderWindow& window);
 	bool selectNode(sf::RenderWindow& window);
+	
+	void multipleSelect(bool is_select) { _control.isMulptipleSelect = is_select; };
+
 	void moveNode(bool is_move, sf::RenderWindow& window);
 	void deleteNode(); 
 	void deleteLine();
@@ -110,8 +114,6 @@ private:
 
 	std::map<int, std::unique_ptr<Node>> _nodes;
 	std::list<int> _layers;
-	//std::list<Edge> _edges;
-	//int _selectedNodeID;
 	std::list<int> _selectedNodes;
 	std::list<Edge> _selectedLines;
 	std::map<Edge, std::unique_ptr<Line>> _lines;

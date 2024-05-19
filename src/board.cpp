@@ -103,6 +103,7 @@ void Board::Update(sf::RenderWindow& window, float dt)
 		_control.mousePos = window.mapPixelToCoords(currentMousePos, _areaView);
 
 		_pulledLine.moveLine(_control.pulledLineNodePos, _control.mousePos);
+		_pulledLine.select(true);
 	}
 	else if (_control.selectInProcess)
 	{
@@ -164,12 +165,16 @@ bool Board::selectNode(sf::RenderWindow& window)
 	if (_nodes.empty())
 		return false;
 
-	if (!_selectedNodes.empty())
+	if (!_control.isMulptipleSelect)
 	{
+		for (auto& i : _selectedLines)
+			_lines.at(i)->select(false);
+
 		for (auto& i : _selectedNodes)
 			_nodes.at(i)->select(false);
 
 		_selectedNodes.clear();
+		_selectedLines.clear();
 	}
 
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
@@ -183,13 +188,25 @@ bool Board::selectNode(sf::RenderWindow& window)
 
 		if (isColliding(worldPos, rect))
 		{
-			_nodes.at(*it)->select(true);
+			int nodeID = *it;
+
+			_nodes.at(nodeID)->select(true);
+			
+			// Выделяем часть линиии соединенную с нодой
+			for (auto& line : _lines)
+			{
+				if (line.first.src == nodeID || line.first.dest == nodeID)
+				{
+					line.second->select(true);
+					_selectedLines.push_back(line.first);
+					//line.second->selectPart();
+				}
+			}
 
 			// нужно для того, чтобы каркасс перемещался ровно из того места, где его взяли
 			_control.selectShift.x = worldPos.x - rect.left;
 			_control.selectShift.y = worldPos.y - rect.top;
 
-			int nodeID = *it;
 			_selectedNodes.push_back(nodeID);
 			// Change layers order
 			auto j = std::find(_layers.begin(), _layers.end(), nodeID);
@@ -277,6 +294,15 @@ void Board::deleteLine()
 
 void Board::pullLine(sf::RenderWindow& window)
 {
+	for (auto& i : _selectedLines)
+		_lines.at(i)->select(false);
+
+	for (auto& i : _selectedNodes)
+		_nodes.at(i)->select(false);
+
+	_selectedLines.clear();
+	_selectedNodes.clear();
+
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
 
@@ -295,9 +321,6 @@ void Board::pullLine(sf::RenderWindow& window)
 			_control.pulledLineNodePos.x = _nodes.at(_control.pulledLineNode)->getRect().left;
 			_control.pulledLineNodePos.y = _nodes.at(_control.pulledLineNode)->getRect().top;
 
-			//if (_selectedNodeID != 0 && _selectedNodeID != nodeToConnect)
-			//	addConnection(_selectedNodeID, nodeToConnect);
-			//_selectedNodeID = NOT_SELECTED;
 			return;
 		}
 
@@ -325,7 +348,7 @@ void Board::releaseLine(const sf::RenderWindow& window)
 
 			if (_control.pulledLineNode != nodeToConnect)
 				addConnection(_control.pulledLineNode, nodeToConnect);
-			//_selectedNodeID = NOT_SELECTED;
+
 			break;
 		}
 
@@ -348,6 +371,8 @@ void Board::addConnection(int src, int dest)
 
 	auto line = std::make_unique<Line>();
 	line->moveLine(point1, point2);
+	line->select(true);
+	_selectedLines.push_back(edge);
 	_lines.emplace(edge, std::move(line));
 }
 
@@ -522,14 +547,18 @@ bool Board::selectLine(sf::RenderWindow& window)
 	if (_lines.empty())
 			return false;
 
-	_selectedLines.clear();
+	if(!_control.isMulptipleSelect)
+		_selectedLines.clear();
 
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
 
 	for(auto& line: _lines)
 	{
-		line.second->select(false);
+		auto findIter = std::find(_selectedLines.begin(), _selectedLines.end(), line.first);
+
+		if(findIter == _selectedLines.end())
+			line.second->select(false);
 
 		if (isColliding(worldPos, line.second->v_collision))
 		{

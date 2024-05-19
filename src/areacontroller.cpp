@@ -204,6 +204,27 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
 {
     _curArea = &_board;
 
+    // не else if, чтобы одновременно с мышкой могло работать
+    if (event.type == sf::Event::KeyPressed)
+    {
+        if (event.key.code == sf::Keyboard::LShift)
+        {
+            _board.multipleSelect(true);
+        }
+        else if (event.key.code == sf::Keyboard::Delete)
+        {
+            _board.deleteNode();
+            _board.deleteLine();
+        }
+    }
+    else if (event.type == sf::Event::KeyReleased)
+    {
+        if (event.key.code == sf::Keyboard::LShift)
+        {
+            _board.multipleSelect(false);
+        }
+    }
+
     if (event.type == sf::Event::MouseButtonPressed)
     {
         if (event.mouseButton.button == sf::Mouse::Middle)
@@ -243,14 +264,6 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
         {
             _board.zoomView(window, event.mouseWheelScroll.delta, timecontroller.getDt());
-        }
-    }
-    else if (event.type == sf::Event::KeyPressed)
-    {
-        if (event.key.code == sf::Keyboard::Delete)
-        {
-            _board.deleteNode();
-            _board.deleteLine();
         }
     }
     else if (event.type == sf::Event::MouseMoved)
