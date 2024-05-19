@@ -26,7 +26,6 @@ public:
 	{
 		bool isMulptipleSelect;
 		bool isNodeMoving;
-		sf::Vector2f selectShift;
 		bool isLinePulled;
 		bool isCutting;
 		bool selectInProcess;
@@ -84,13 +83,15 @@ public:
 
 	bool selectLine(sf::RenderWindow& window);
 	bool selectNode(sf::RenderWindow& window);
-	
+	void unselectEverything();
+
 	void multipleSelect(bool is_select) { _control.isMulptipleSelect = is_select; };
 
 	void moveNode(bool is_move, sf::RenderWindow& window);
 	void deleteNode(); 
 	void deleteLine();
-	void setNodeMoving(bool isNodeMoving) { _control.isNodeMoving = isNodeMoving; };
+	
+	void setNodeMoving(bool isNodeMoving, const sf::RenderWindow& window);
 	void moveNode(sf::RenderWindow& window);
 
 	void pullLine(sf::RenderWindow& window);

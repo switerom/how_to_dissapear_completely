@@ -14,7 +14,7 @@ public:
 
 	void Draw(sf::RenderWindow& window) const override;
 	void Update(float dt) override;
-	void setPosition(const sf::Vector2f& pos) override;
+	void movePosition(const sf::Vector2f& vec) override;
 	void saveNode(int id, std::ofstream& save_file) override;
 
 private:

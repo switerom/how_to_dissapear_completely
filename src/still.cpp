@@ -47,9 +47,9 @@ void Still::Update(float dt)
 
 }
 
-void Still::setPosition(const sf::Vector2f& pos)
+void Still::movePosition(const sf::Vector2f& vec)
 {
-	_pos = pos;
+	_pos += vec;
 	_spr.setPosition(_pos);
 	_select_frame.setPosition(_pos);
 }

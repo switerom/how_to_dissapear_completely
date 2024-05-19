@@ -17,7 +17,6 @@ void Board::Init()
 
 	_viewControl.isMoving = false;
 	_control.isNodeMoving = false;
-	_control.selectShift = sf::Vector2f(0.f, 0.f);
 	_control.isCutting = false;
 	_control.isLinePulled = false;
 	_control.mousePos = sf::Vector2f(0.f, 0.f);
@@ -111,6 +110,18 @@ void Board::Update(sf::RenderWindow& window, float dt)
 	}
 }
 
+void Board::setNodeMoving(bool isNodeMoving, const sf::RenderWindow& window) 
+{ 
+	_control.isNodeMoving = isNodeMoving; 
+
+	if(_control.isNodeMoving)
+	{
+		sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
+		_control.prevMousePos = window.mapPixelToCoords(currentMousePos);
+	}
+};
+
+
 void Board::moveView(sf::RenderWindow& window, float dt)
 {
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
@@ -160,22 +171,22 @@ void Board::zoomView(sf::RenderWindow& window, float dt_zoom, float dt)
 	_selectRect.setOutlineThickness(BOARD_SELECT_RECT_THK * zoomFactorX);
 }
 
+void Board::unselectEverything()
+{
+	for (auto& i : _selectedLines)
+		_lines.at(i)->select(false);
+
+	for (auto& i : _selectedNodes)
+		_nodes.at(i)->select(false);
+
+	_selectedNodes.clear();
+	_selectedLines.clear();
+}
+
 bool Board::selectNode(sf::RenderWindow& window)
 {
 	if (_nodes.empty())
 		return false;
-
-	if (!_control.isMulptipleSelect)
-	{
-		for (auto& i : _selectedLines)
-			_lines.at(i)->select(false);
-
-		for (auto& i : _selectedNodes)
-			_nodes.at(i)->select(false);
-
-		_selectedNodes.clear();
-		_selectedLines.clear();
-	}
 
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
@@ -190,6 +201,13 @@ bool Board::selectNode(sf::RenderWindow& window)
 		{
 			int nodeID = *it;
 
+			if (std::find(_selectedNodes.begin(), _selectedNodes.end(), nodeID) != _selectedNodes.end())
+				return true;
+
+			if (!_control.isMulptipleSelect)
+				unselectEverything();
+
+
 			_nodes.at(nodeID)->select(true);
 			
 			// Выделяем часть линиии соединенную с нодой
@@ -203,10 +221,6 @@ bool Board::selectNode(sf::RenderWindow& window)
 				}
 			}
 
-			// нужно для того, чтобы каркасс перемещался ровно из того места, где его взяли
-			_control.selectShift.x = worldPos.x - rect.left;
-			_control.selectShift.y = worldPos.y - rect.top;
-
 			_selectedNodes.push_back(nodeID);
 			// Change layers order
 			auto j = std::find(_layers.begin(), _layers.end(), nodeID);
@@ -218,6 +232,9 @@ bool Board::selectNode(sf::RenderWindow& window)
 		++it;
 	}
 
+	if(!_selectedNodes.empty())
+		unselectEverything();
+
 	return false;
 }
 
@@ -228,12 +245,11 @@ void Board::moveNode(sf::RenderWindow& window)
 
 	if (!_selectedNodes.empty())
 	{
-		sf::Vector2f pos;
-		pos.x = worldPos.x -_control.selectShift.x + NODE_OUTLINE_THK;
-		pos.y = worldPos.y -_control.selectShift.y + NODE_OUTLINE_THK;
+		sf::Vector2f vec = worldPos - _control.prevMousePos;
+		_control.prevMousePos = worldPos;
 
 		for(auto& i: _selectedNodes)
-			_nodes.at(i)->setPosition(pos);
+			_nodes.at(i)->movePosition(vec);
 	}
 
 	// Move all lines connected to moved node

@@ -10,7 +10,7 @@ public:
 	virtual ~Node() {};
 	virtual void Update(float dt) = 0;
 	virtual void Draw(sf::RenderWindow& window) const = 0;
-	virtual void setPosition(const sf::Vector2f& pos) = 0;
+	virtual void movePosition(const sf::Vector2f& vec) = 0;
 	void select(bool s);
 	const sf::FloatRect& getRect() const;
 	virtual void saveNode(int id, std::ofstream& save_file) = 0;

@@ -236,7 +236,7 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
             if(!_board.selectNode(window) && !_board.selectLine(window))
                 _board.startSelectRect(true, window);
 
-            _board.setNodeMoving(true);
+            _board.setNodeMoving(true, window);
         }
         else if (event.mouseButton.button == sf::Mouse::Right)
         {
@@ -251,7 +251,7 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         }
         else if (event.mouseButton.button == sf::Mouse::Left)
         {
-            _board.setNodeMoving(false);
+            _board.setNodeMoving(false, window);
             _board.startSelectRect(false, window);
         }
         else if (event.mouseButton.button == sf::Mouse::Right)

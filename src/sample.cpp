@@ -25,9 +25,9 @@ void Sample::Update(float dt)
 
 }
 
-void Sample::setPosition(const sf::Vector2f& pos)
+void Sample::movePosition(const sf::Vector2f& vec)
 {
-	_pos = pos;
+	_pos += vec;
 	_text.setPosition(_pos);
 	_select_frame.setPosition(_pos);
 }
