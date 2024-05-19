@@ -250,6 +250,7 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         if (event.key.code == sf::Keyboard::Delete)
         {
             _board.deleteNode();
+            _board.deleteLine();
         }
     }
     else if (event.type == sf::Event::MouseMoved)

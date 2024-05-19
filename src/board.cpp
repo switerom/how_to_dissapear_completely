@@ -264,6 +264,17 @@ void Board::deleteNode()
 	_selectedNodes.clear();
 }
 
+void Board::deleteLine()
+{
+	if (_selectedLines.empty())
+		return;
+
+	for (auto& i : _selectedLines)
+		_lines.erase(i);
+
+	_selectedLines.clear();
+}
+
 void Board::pullLine(sf::RenderWindow& window)
 {
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
@@ -511,34 +522,19 @@ bool Board::selectLine(sf::RenderWindow& window)
 	if (_lines.empty())
 			return false;
 
+	_selectedLines.clear();
+
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
 
-	//auto it = std::make_reverse_iterator(_layers.end());  // Возможно добавить слои для линий?
-
 	for(auto& line: _lines)
 	{
+		line.second->select(false);
+
 		if (isColliding(worldPos, line.second->v_collision))
 		{
 			line.second->select(true);
 			_selectedLines.push_back(line.first);
-		}
-		else
-		{
-			line.second->select(false);
-
-			auto it = _selectedLines.begin();
-
-			while (it != _selectedLines.end())
-			{
-				if (*it == line.first)
-				{
-					_selectedLines.erase(it);
-					break;
-				}
-
-				++it;
-			}
 		}
 	}
 
