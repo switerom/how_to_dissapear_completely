@@ -22,6 +22,7 @@ Line::Line()
 	v[3].color = LINE_COLOR_A;
 
 	_isSelected = false;
+	_isPartSelected = false;
 }
 
 void Line::moveLine(const sf::Vector2f& point1, const sf::Vector2f& point2)
@@ -62,4 +63,24 @@ void Line::select(bool is_select)
 
 	_isSelected = is_select;
 }
+/*
+void Line::selectPart(bool is_select)
+{
+	if (!is_select && !_isPartSelected
+		|| is_select && _isPartSelected)
+		return;
 
+	if (is_select)
+	{
+		v[0].color = LINE_COLOR_B;
+		v[3].color = LINE_COLOR_B;
+	}
+	else
+	{
+		v[0].color = LINE_COLOR_A;
+		v[3].color = LINE_COLOR_A;
+	}
+
+	_isPartSelected = is_select;
+}
+*/

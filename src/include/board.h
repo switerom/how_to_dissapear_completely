@@ -84,6 +84,7 @@ public:
 	bool selectLine(sf::RenderWindow& window);
 	bool selectNode(sf::RenderWindow& window);
 	void unselectEverything();
+	bool unselectNode(int nodeID);
 
 	void multipleSelect(bool is_select) { _control.isMulptipleSelect = is_select; };
 

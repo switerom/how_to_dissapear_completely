@@ -183,6 +183,36 @@ void Board::unselectEverything()
 	_selectedLines.clear();
 }
 
+bool Board::unselectNode(int nodeID)
+{
+	if (!_control.isMulptipleSelect)
+		return false;
+
+	auto selectedNode = std::find(_selectedNodes.begin(), _selectedNodes.end(), nodeID);
+
+	if (selectedNode == _selectedNodes.end())
+		return false;
+
+	_nodes.at(nodeID)->select(false);
+	_selectedNodes.remove(*selectedNode);
+
+	std::vector<Edge> edgesToUnselect;
+
+	for (auto& k : _selectedLines)
+	{
+		if (k.src == nodeID || k.dest == nodeID)
+			edgesToUnselect.push_back(k);
+	}
+
+	for (auto& m : edgesToUnselect)
+	{
+		_selectedLines.remove(m);
+		_lines.at(m)->select(false);
+	}
+
+	return true;
+}
+
 bool Board::selectNode(sf::RenderWindow& window)
 {
 	if (_nodes.empty())
@@ -201,12 +231,16 @@ bool Board::selectNode(sf::RenderWindow& window)
 		{
 			int nodeID = *it;
 
-			if (std::find(_selectedNodes.begin(), _selectedNodes.end(), nodeID) != _selectedNodes.end())
+			auto selectedNode = std::find(_selectedNodes.begin(), _selectedNodes.end(), nodeID);
+
+			if (selectedNode != _selectedNodes.end() && !_control.isMulptipleSelect)
+				return true;
+
+			if (unselectNode(nodeID))
 				return true;
 
 			if (!_control.isMulptipleSelect)
 				unselectEverything();
-
 
 			_nodes.at(nodeID)->select(true);
 			
@@ -217,7 +251,7 @@ bool Board::selectNode(sf::RenderWindow& window)
 				{
 					line.second->select(true);
 					_selectedLines.push_back(line.first);
-					//line.second->selectPart();
+					//line.second->selectPart(true, nodeID);
 				}
 			}
 
