@@ -16,12 +16,16 @@ void Board::Init()
 	_bigRect.setSize(sf::Vector2f(WIDTH, HEIGHT));
 
 	_viewControl.isMoving = false;
-	_selectedNodeID = NOT_SELECTED;
 	_control.isNodeMoving = false;
 	_control.selectShift = sf::Vector2f(0.f, 0.f);
 	_control.isCutting = false;
 	_control.isLinePulled = false;
 	_control.mousePos = sf::Vector2f(0.f, 0.f);
+
+	_control.selectInProcess = false;
+	_selectRect.setFillColor(sf::Color::Transparent);
+	_selectRect.setOutlineColor(BOARD_SELECT_RECT_COLOR);
+	_selectRect.setOutlineThickness(BOARD_SELECT_RECT_THK);
 }
 
 void Board::Draw(sf::RenderWindow& window)
@@ -38,6 +42,49 @@ void Board::Draw(sf::RenderWindow& window)
 
 	if (_control.isLinePulled)
 		window.draw(_pulledLine.v, 4, sf::Quads);
+
+	if(_control.selectInProcess)
+		window.draw(_selectRect);
+}
+
+void Board::startSelectRect(bool is_select, const sf::RenderWindow& window)
+{
+	_control.selectInProcess = is_select;
+
+	if (_control.selectInProcess)
+	{
+		sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
+		_control.prevMousePos = window.mapPixelToCoords(currentMousePos, _areaView);
+
+		// Set drawable rectangle
+		_selectRect.setPosition(_control.mousePos);
+		_selectRect.setSize(sf::Vector2f(0.f, 0.f));
+	}
+}
+
+void Board::setSelectRect(const sf::RenderWindow& window)
+{
+	if (!_control.selectInProcess)
+		return;
+
+	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
+	_control.mousePos = window.mapPixelToCoords(currentMousePos, _areaView);
+
+	sf::Vector2f size = _control.mousePos - _control.prevMousePos;
+
+	// Adjust position and size to handle all directions
+	sf::Vector2f position = _control.prevMousePos;
+	if (size.x < 0) {
+		position.x += size.x; // Move the position to the left
+		size.x = -size.x;     // Make the width positive
+	}
+	if (size.y < 0) {
+		position.y += size.y; // Move the position up
+		size.y = -size.y;     // Make the height positive
+	}
+
+	_selectRect.setPosition(position);
+	_selectRect.setSize(size);
 }
 
 void Board::Update(sf::RenderWindow& window, float dt)
@@ -57,6 +104,10 @@ void Board::Update(sf::RenderWindow& window, float dt)
 
 		_pulledLine.moveLine(_control.pulledLineNodePos, _control.mousePos);
 	}
+	else if (_control.selectInProcess)
+	{
+		setSelectRect(window);
+	}
 }
 
 void Board::moveView(sf::RenderWindow& window, float dt)
@@ -73,7 +124,9 @@ void Board::setViewMoving(sf::RenderWindow& window, bool isMoving)
 	_viewControl.isMoving = isMoving; 
 
 	if (isMoving)
+	{
 		_viewControl.prevMousePos = sf::Mouse::getPosition(window);
+	}
 };
 
 void Board::zoomView(sf::RenderWindow& window, float dt_zoom, float dt)
@@ -93,15 +146,31 @@ void Board::zoomView(sf::RenderWindow& window, float dt_zoom, float dt)
 
 	_areaView.setCenter(view_center);
 	_areaView.zoom(zoom_factor);
+
+	//////////////////////////////////////////////////////////////////////////////
+
+	sf::View initial_view = window.getDefaultView();
+	sf::Vector2f _initialViewSize = _areaView.getSize();
+
+	_selectRect.setOutlineThickness(BOARD_SELECT_RECT_THK * zoom_factor);
+	sf::Vector2f currentSize = _boardView.getSize();
+	float zoomFactorX = _initialViewSize.x / currentSize.x;
+
+	_selectRect.setOutlineThickness(BOARD_SELECT_RECT_THK * zoomFactorX);
 }
 
-void Board::selectNode(sf::RenderWindow& window)
+bool Board::selectNode(sf::RenderWindow& window)
 {
 	if (_nodes.empty())
-		return;
+		return false;
 
-	if(_selectedNodeID != NOT_SELECTED)
-		_nodes.at(_selectedNodeID)->select(false);
+	if (!_selectedNodes.empty())
+	{
+		for (auto& i : _selectedNodes)
+			_nodes.at(i)->select(false);
+
+		_selectedNodes.clear();
+	}
 
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
@@ -120,18 +189,19 @@ void Board::selectNode(sf::RenderWindow& window)
 			_control.selectShift.x = worldPos.x - rect.left;
 			_control.selectShift.y = worldPos.y - rect.top;
 
-			_selectedNodeID = *it;
+			int nodeID = *it;
+			_selectedNodes.push_back(nodeID);
 			// Change layers order
-			auto it = std::find(_layers.begin(), _layers.end(), _selectedNodeID);
-			_layers.erase(it);
-			_layers.push_back(_selectedNodeID);
+			auto j = std::find(_layers.begin(), _layers.end(), nodeID);
+			_layers.erase(j);
+			_layers.push_back(nodeID);
 
-			return;
+			return true;
 		}
 		++it;
 	}
 
-	_selectedNodeID = NOT_SELECTED;
+	return false;
 }
 
 void Board::moveNode(sf::RenderWindow& window)
@@ -139,50 +209,59 @@ void Board::moveNode(sf::RenderWindow& window)
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
 
-	if (_selectedNodeID != NOT_SELECTED)
+	if (!_selectedNodes.empty())
 	{
 		sf::Vector2f pos;
 		pos.x = worldPos.x -_control.selectShift.x + NODE_OUTLINE_THK;
 		pos.y = worldPos.y -_control.selectShift.y + NODE_OUTLINE_THK;
-		_nodes.at(_selectedNodeID)->setPosition(pos);
+
+		for(auto& i: _selectedNodes)
+			_nodes.at(i)->setPosition(pos);
 	}
 
 	// Move all lines connected to moved node
 	for (auto& line : _lines)
 	{
-		if (line.first.src == _selectedNodeID || line.first.dest == _selectedNodeID)
+		for (auto& i : _selectedNodes)
 		{
-			sf::Vector2f point1 = sf::Vector2f(_nodes.at(line.first.src)->getRect().left, _nodes.at(line.first.src)->getRect().top);
-			sf::Vector2f point2 = sf::Vector2f(_nodes.at(line.first.dest)->getRect().left, _nodes.at(line.first.dest)->getRect().top);
+			if (line.first.src == i || line.first.dest == i)
+			{
+				sf::Vector2f point1 = sf::Vector2f(_nodes.at(line.first.src)->getRect().left, _nodes.at(line.first.src)->getRect().top);
+				sf::Vector2f point2 = sf::Vector2f(_nodes.at(line.first.dest)->getRect().left, _nodes.at(line.first.dest)->getRect().top);
 
-			line.second->moveLine(point1, point2);
+				line.second->moveLine(point1, point2);
+			}
 		}
 	}
 }
 
 void Board::deleteNode()
 {
-	if (_selectedNodeID == NOT_SELECTED)
+	if (_selectedNodes.empty())
 		return;
 
-	_nodes.erase(_selectedNodeID);
-
-	//Remove edges
-	for (auto line = _lines.begin(); line != _lines.end();)
+	for (auto& i : _selectedNodes)
 	{
-		if (line->first.src == _selectedNodeID || line->first.dest == _selectedNodeID)
+		//Remove edges
+		for (auto line = _lines.begin(); line != _lines.end();)
 		{
-			line = _lines.erase(line);
+			if (line->first.src == i || line->first.dest == i)
+			{
+				line = _lines.erase(line);
+			}
+			else
+				++line;
 		}
-		else
-			++line;
+
+		// Remove from layers
+		auto it = std::find(_layers.begin(), _layers.end(), i);
+		_layers.erase(it);
 	}
 
-	// Remove from layers
-	auto it = std::find(_layers.begin(), _layers.end(), _selectedNodeID);
-	_layers.erase(it);
+	for (auto& j : _selectedNodes)
+		_nodes.erase(j);
 
-	_selectedNodeID = NOT_SELECTED;
+	_selectedNodes.clear();
 }
 
 void Board::pullLine(sf::RenderWindow& window)
@@ -427,10 +506,10 @@ void Board::resetAction()
 	_viewControl.isMoving = false;
 }
 
-void Board::selectLine(sf::RenderWindow& window)
+bool Board::selectLine(sf::RenderWindow& window)
 {
 	if (_lines.empty())
-			return;
+			return false;
 
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
@@ -442,12 +521,26 @@ void Board::selectLine(sf::RenderWindow& window)
 		if (isColliding(worldPos, line.second->v_collision))
 		{
 			line.second->select(true);
-
-			return;
+			_selectedLines.push_back(line.first);
 		}
 		else
 		{
 			line.second->select(false);
+
+			auto it = _selectedLines.begin();
+
+			while (it != _selectedLines.end())
+			{
+				if (*it == line.first)
+				{
+					_selectedLines.erase(it);
+					break;
+				}
+
+				++it;
+			}
 		}
 	}
+
+	return !_selectedLines.empty();
 }

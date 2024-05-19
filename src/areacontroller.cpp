@@ -212,8 +212,9 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         }
         else if (event.mouseButton.button == sf::Mouse::Left)
         {
-            _board.selectNode(window);
-            _board.selectLine(window);
+            if(!_board.selectNode(window) && !_board.selectLine(window))
+                _board.startSelectRect(true, window);
+
             _board.setNodeMoving(true);
         }
         else if (event.mouseButton.button == sf::Mouse::Right)
@@ -230,6 +231,7 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         else if (event.mouseButton.button == sf::Mouse::Left)
         {
             _board.setNodeMoving(false);
+            _board.startSelectRect(false, window);
         }
         else if (event.mouseButton.button == sf::Mouse::Right)
         {
@@ -249,5 +251,9 @@ void AreaController::boardEvents(sf::Event& event, sf::RenderWindow& window, Tim
         {
             _board.deleteNode();
         }
+    }
+    else if (event.type == sf::Event::MouseMoved)
+    {
+        _board.setSelectRect(window);
     }
 }

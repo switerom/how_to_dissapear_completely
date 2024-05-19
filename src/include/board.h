@@ -28,7 +28,9 @@ public:
 		sf::Vector2f selectShift;
 		bool isLinePulled;
 		bool isCutting;
+		bool selectInProcess;
 		sf::Vector2f mousePos;
+		sf::Vector2f prevMousePos;
 		sf::Vector2f pulledLineNodePos;
 		int pulledLineNode;
 	};
@@ -57,6 +59,13 @@ public:
 				return false;
 			}
 		}
+
+		// Overload the == operator
+		bool operator==(const Edge& other) const
+		{
+			// Check if the edges are equivalent regardless of order
+			return (src == other.src && dest == other.dest) || (src == other.dest && dest == other.src);
+		}
 	};
 
 	Board();
@@ -72,8 +81,8 @@ public:
 	template <typename T, typename... Args>
 	void createNode(Args&&... args);
 
-	void selectLine(sf::RenderWindow& window);
-	void selectNode(sf::RenderWindow& window);
+	bool selectLine(sf::RenderWindow& window);
+	bool selectNode(sf::RenderWindow& window);
 	void moveNode(bool is_move, sf::RenderWindow& window);
 	void deleteNode(); 
 	void setNodeMoving(bool isNodeMoving) { _control.isNodeMoving = isNodeMoving; };
@@ -85,11 +94,14 @@ public:
 
 	void saveBoard();
 	void loadBoard();
-	void loadNode(std::ifstream& save_file);
 
 	void resetAction() override;
 
+	void startSelectRect(bool is_select, const sf::RenderWindow& window);
+	void setSelectRect(const sf::RenderWindow& window);
+
 private:
+	sf::RectangleShape _selectRect;
 	sf::View _boardView;
 	sf::RectangleShape _bigRect;
 	ViewCnotrol _viewControl;
@@ -98,7 +110,9 @@ private:
 	std::map<int, std::unique_ptr<Node>> _nodes;
 	std::list<int> _layers;
 	//std::list<Edge> _edges;
-	int _selectedNodeID;
+	//int _selectedNodeID;
+	std::list<int> _selectedNodes;
+	std::list<Edge> _selectedLines;
 	std::map<Edge, std::unique_ptr<Line>> _lines;
 	Line _pulledLine;
 };
@@ -115,10 +129,14 @@ void Board::createNode(Args&&... args)
 	_nodes.emplace(id, std::move(node));
 	_layers.push_back(id);
 
-	// Just created node will be selected
-	if (_selectedNodeID != NOT_SELECTED)
-		_nodes.at(_selectedNodeID)->select(false);
+	if(!_selectedNodes.empty())
+	{
+		for (auto& i : _selectedNodes)
+			_nodes.at(i)->select(false);
 
-	_selectedNodeID = id;
+		_selectedNodes.clear();
+	}
+
+	_selectedNodes.push_back(id);
 	_nodes.at(id)->select(true);
 }

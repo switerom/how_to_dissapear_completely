@@ -83,6 +83,8 @@
 #define LINE_COLOR_B				sf::Color::Yellow
 #define STILL						0
 #define SAMPLE						1
+#define BOARD_SELECT_RECT_COLOR		sf::Color::White
+#define BOARD_SELECT_RECT_THK		1.f
 
 // Настройки скриншота
 #define SCREENSHOT_RECT_COLOR_A		sf::Color::Green
