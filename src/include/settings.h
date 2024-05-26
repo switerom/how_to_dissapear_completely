@@ -16,7 +16,8 @@
 #define MIN_VIEW_SIZE 		700.f
 #define MAX_VIEW_SIZE		4000.f
 
-#define NOT_SELECTED		0
+#define NOT_SELECTED		INT_MIN
+#define SELECTED			INT_MAX
 
 #define EPSILON				0.0001f
 

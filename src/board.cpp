@@ -92,7 +92,7 @@ void Board::Update(sf::RenderWindow& window, float dt)
 
 	if (_viewControl.isMoving)
 		moveView(window, dt);
-	else if (_control.isNodeMoving)
+	else if (_control.isNodeMoving && !_control.isMulptipleSelect)
 	{
 		moveNode(window);
 	}
@@ -136,9 +136,7 @@ void Board::setViewMoving(sf::RenderWindow& window, bool isMoving)
 	_viewControl.isMoving = isMoving; 
 
 	if (isMoving)
-	{
 		_viewControl.prevMousePos = sf::Mouse::getPosition(window);
-	}
 };
 
 void Board::zoomView(sf::RenderWindow& window, float dt_zoom, float dt)
@@ -160,7 +158,7 @@ void Board::zoomView(sf::RenderWindow& window, float dt_zoom, float dt)
 	_areaView.zoom(zoom_factor);
 
 	//////////////////////////////////////////////////////////////////////////////
-
+	// Нужно для правильной толщины _selectRect
 	sf::View initial_view = window.getDefaultView();
 	sf::Vector2f _initialViewSize = _areaView.getSize();
 
@@ -178,9 +176,15 @@ void Board::unselectEverything()
 
 	for (auto& i : _selectedNodes)
 		_nodes.at(i)->select(false);
-
+	
+	for (auto& i : _partiallySelectedLines)
+	{
+		_lines.at(i)->select(false);
+	}
+	
 	_selectedNodes.clear();
 	_selectedLines.clear();
+	_partiallySelectedLines.clear();
 }
 
 bool Board::unselectNode(int nodeID)
@@ -196,19 +200,7 @@ bool Board::unselectNode(int nodeID)
 	_nodes.at(nodeID)->select(false);
 	_selectedNodes.remove(*selectedNode);
 
-	std::vector<Edge> edgesToUnselect;
-
-	for (auto& k : _selectedLines)
-	{
-		if (k.src == nodeID || k.dest == nodeID)
-			edgesToUnselect.push_back(k);
-	}
-
-	for (auto& m : edgesToUnselect)
-	{
-		_selectedLines.remove(m);
-		_lines.at(m)->select(false);
-	}
+	unselectLinePart(nodeID);
 
 	return true;
 }
@@ -243,17 +235,8 @@ bool Board::selectNode(sf::RenderWindow& window)
 				unselectEverything();
 
 			_nodes.at(nodeID)->select(true);
-			
-			// Выделяем часть линиии соединенную с нодой
-			for (auto& line : _lines)
-			{
-				if (line.first.src == nodeID || line.first.dest == nodeID)
-				{
-					line.second->select(true);
-					_selectedLines.push_back(line.first);
-					//line.second->selectPart(true, nodeID);
-				}
-			}
+
+			selectLinePart(nodeID);
 
 			_selectedNodes.push_back(nodeID);
 			// Change layers order
@@ -265,9 +248,6 @@ bool Board::selectNode(sf::RenderWindow& window)
 		}
 		++it;
 	}
-
-	if(!_selectedNodes.empty())
-		unselectEverything();
 
 	return false;
 }
@@ -309,7 +289,7 @@ void Board::deleteNode()
 
 	for (auto& i : _selectedNodes)
 	{
-		//Remove edges
+		//Remove edges from selected Lines
 		for (auto line = _lines.begin(); line != _lines.end();)
 		{
 			if (line->first.src == i || line->first.dest == i)
@@ -318,6 +298,18 @@ void Board::deleteNode()
 			}
 			else
 				++line;
+		}
+
+		//Remove edges from partially selected Lines
+		for (auto it = _partiallySelectedLines.begin(); it != _partiallySelectedLines.end();) 
+		{
+			if (it->src == i || it->dest == i) 
+			{
+				it = _partiallySelectedLines.erase(it); 
+			}
+			else {
+				++it; 
+			}
 		}
 
 		// Remove from layers
@@ -343,15 +335,8 @@ void Board::deleteLine()
 }
 
 void Board::pullLine(sf::RenderWindow& window)
-{
-	for (auto& i : _selectedLines)
-		_lines.at(i)->select(false);
-
-	for (auto& i : _selectedNodes)
-		_nodes.at(i)->select(false);
-
-	_selectedLines.clear();
-	_selectedNodes.clear();
+{	
+	unselectEverything();
 
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
@@ -483,6 +468,8 @@ void Board::saveBoard()
 
 void Board::loadBoard()
 {
+	unselectEverything();
+
 	std::string save_file_path = getAbsolutePath(SAVE_FILE);
 	std::string save_dir_path = getAbsolutePath(SAVE_DIR);
 
@@ -592,30 +579,140 @@ void Board::resetAction()
 	_viewControl.isMoving = false;
 }
 
+bool Board::unselectLine(Edge edge)
+{
+	if (!_control.isMulptipleSelect)
+		return false;
+
+	auto selectedLine = std::find(_selectedLines.begin(), _selectedLines.end(), edge);
+
+	if (selectedLine == _selectedLines.end())
+		return false;
+
+	_lines.at(edge)->select(false);
+	_selectedLines.remove(edge);
+
+	return true;
+}
+
 bool Board::selectLine(sf::RenderWindow& window)
 {
 	if (_lines.empty())
 			return false;
-
-	if(!_control.isMulptipleSelect)
-		_selectedLines.clear();
 
 	sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f worldPos = window.mapPixelToCoords(currentMousePos, _areaView);
 
 	for(auto& line: _lines)
 	{
-		auto findIter = std::find(_selectedLines.begin(), _selectedLines.end(), line.first);
-
-		if(findIter == _selectedLines.end())
-			line.second->select(false);
-
 		if (isColliding(worldPos, line.second->v_collision))
 		{
+			if (!_control.isMulptipleSelect)
+				unselectEverything();
+
+			if (unselectLine(line.first))
+				return true;
+
+			_partiallySelectedLines.remove(line.first);
+
 			line.second->select(true);
 			_selectedLines.push_back(line.first);
+
+			return true;
 		}
 	}
 
-	return !_selectedLines.empty();
+	return false;
+}
+
+void Board::selectLinePart(int nodeID)
+{
+	// Выделяем часть линиии соединенную с нодой
+	for (auto& line : _lines)
+	{
+		// Если линия выделена целиком, то ничего не делаем
+		if (std::find(_selectedLines.begin(), _selectedLines.end(), line.first) != _selectedLines.end())
+			continue;
+
+		// Выделяем половину
+		if (line.first.src == nodeID)
+		{
+			line.second->selectPartSrc(true);
+
+			if (line.second->_isSelectedDest)
+			{
+				_partiallySelectedLines.remove(line.first);
+
+				_selectedLines.push_back(line.first);
+				continue;
+			}
+
+			_partiallySelectedLines.push_back(line.first);
+		}
+		else if (line.first.dest == nodeID)
+		{
+			line.second->selectPartDest(true);
+
+			if (line.second->_isSelectedSrc)
+			{
+				_partiallySelectedLines.remove(line.first);
+
+				_selectedLines.push_back(line.first);
+				continue;
+			}
+
+			_partiallySelectedLines.push_back(line.first);
+		}
+	}
+}
+
+void Board::unselectLinePart(int nodeID)
+{
+	if (!_control.isMulptipleSelect)
+		return;
+
+	// Удаляем из partially selected lines
+	for (auto it = _partiallySelectedLines.begin(); it != _partiallySelectedLines.end();)
+	{
+		if (it->src == nodeID)
+		{
+			if(_lines.at(*it)->_isSelectedDest)
+				_lines.at(*it)->selectPartDest(false);
+			else
+				_lines.at(*it)->selectPartSrc(false);
+
+			it = _partiallySelectedLines.erase(it);
+		}
+		else if(it->dest == nodeID)
+		{
+			if (_lines.at(*it)->_isSelectedDest)
+				_lines.at(*it)->selectPartDest(false);
+			else
+				_lines.at(*it)->selectPartSrc(false);
+			_lines.at(*it)->selectPartDest(false);
+			it = _partiallySelectedLines.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+
+	// Удаляем из selected lines и доавляем в partially selected lines
+	for (auto it = _selectedLines.begin(); it != _selectedLines.end();)
+	{
+		if (it->src == nodeID)
+		{
+			_lines.at(*it)->selectPartSrc(false);
+			_partiallySelectedLines.push_back(*it);
+			it = _selectedLines.erase(it);
+		}
+		else if (it->dest == nodeID)
+		{
+			_lines.at(*it)->selectPartDest(false);
+			_partiallySelectedLines.push_back(*it);
+			it = _selectedLines.erase(it);
+		}
+		else
+			++it;
+	}
 }

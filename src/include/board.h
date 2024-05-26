@@ -82,9 +82,12 @@ public:
 	void createNode(Args&&... args);
 
 	bool selectLine(sf::RenderWindow& window);
+	void selectLinePart(int nodeID);
+	void unselectLinePart(int nodeID);
 	bool selectNode(sf::RenderWindow& window);
-	void unselectEverything();
 	bool unselectNode(int nodeID);
+	bool unselectLine(Edge edge);
+	void unselectEverything();
 
 	void multipleSelect(bool is_select) { _control.isMulptipleSelect = is_select; };
 
@@ -118,6 +121,7 @@ private:
 	std::list<int> _layers;
 	std::list<int> _selectedNodes;
 	std::list<Edge> _selectedLines;
+	std::list<Edge> _partiallySelectedLines;
 	std::map<Edge, std::unique_ptr<Line>> _lines;
 	Line _pulledLine;
 };

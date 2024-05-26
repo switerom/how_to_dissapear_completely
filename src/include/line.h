@@ -5,8 +5,8 @@
 
 struct Line
 {
-	bool _isSelected;
-	bool _isPartSelected;
+	bool _isSelectedSrc;
+	bool _isSelectedDest;
 	sf::Vertex v[4];
 	sf::Vertex v_collision[4];
 
@@ -17,5 +17,6 @@ struct Line
 	sf::Vector2f calculateOffset(const sf::Vector2f& point1, const sf::Vector2f& point2);
 
 	void select(bool is_select);
-	//void selectPart(bool is_select, const sf::Vertex2f& node_pos);
+	void selectPartSrc(bool is_select);
+	void selectPartDest(bool is_select);
 };
