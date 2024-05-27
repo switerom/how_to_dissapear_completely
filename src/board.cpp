@@ -89,9 +89,15 @@ void Board::setSelectRect(const sf::RenderWindow& window)
 void Board::Update(sf::RenderWindow& window, float dt)
 {
 	//window.setView(_areaView);
-
 	if (_viewControl.isMoving)
+	{
 		moveView(window, dt);
+	}
+	else if (_control.selectInProcess)
+	{
+		setSelectRect(window);
+		selectRectNode();
+	}
 	else if (_control.isNodeMoving && !_control.isMulptipleSelect)
 	{
 		moveNode(window);
@@ -103,10 +109,6 @@ void Board::Update(sf::RenderWindow& window, float dt)
 
 		_pulledLine.moveLine(_control.pulledLineNodePos, _control.mousePos);
 		_pulledLine.select(true);
-	}
-	else if (_control.selectInProcess)
-	{
-		setSelectRect(window);
 	}
 }
 
@@ -171,6 +173,9 @@ void Board::zoomView(sf::RenderWindow& window, float dt_zoom, float dt)
 
 void Board::unselectEverything()
 {
+	if (_control.isMulptipleSelect)
+		return;
+
 	for (auto& i : _selectedLines)
 		_lines.at(i)->select(false);
 
@@ -574,8 +579,10 @@ void Board::loadBoard()
 void Board::resetAction()
 {
 	_control.isNodeMoving = false;
+	_control.isMulptipleSelect = false;
 	_control.isLinePulled = false;
 	_control.isCutting = false;
+	_control.selectInProcess = false;
 	_viewControl.isMoving = false;
 }
 
@@ -684,6 +691,115 @@ void Board::unselectLinePart(int nodeID)
 			it = _partiallySelectedLines.erase(it);
 		}
 		else if(it->dest == nodeID)
+		{
+			if (_lines.at(*it)->_isSelectedDest)
+				_lines.at(*it)->selectPartDest(false);
+			else
+				_lines.at(*it)->selectPartSrc(false);
+			_lines.at(*it)->selectPartDest(false);
+			it = _partiallySelectedLines.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+
+	// Удаляем из selected lines и доавляем в partially selected lines
+	for (auto it = _selectedLines.begin(); it != _selectedLines.end();)
+	{
+		if (it->src == nodeID)
+		{
+			_lines.at(*it)->selectPartSrc(false);
+			_partiallySelectedLines.push_back(*it);
+			it = _selectedLines.erase(it);
+		}
+		else if (it->dest == nodeID)
+		{
+			_lines.at(*it)->selectPartDest(false);
+			_partiallySelectedLines.push_back(*it);
+			it = _selectedLines.erase(it);
+		}
+		else
+			++it;
+	}
+}
+
+bool Board::selectRectNode()
+{
+	if (_nodes.empty())
+		return false;
+
+	auto it = std::make_reverse_iterator(_layers.end());  // get reverse iterator to last element in vector
+
+	while (it != std::make_reverse_iterator(_layers.begin()))
+	{
+		auto rect = _nodes.at(*it)->getRect();
+		int nodeID = *it;
+		
+		auto selectedNode = std::find(_selectedNodes.begin(), _selectedNodes.end(), nodeID);
+
+		if (isColliding(_selectRect.getGlobalBounds(), rect))
+		{
+			if (selectedNode != _selectedNodes.end())
+			{
+				++it;
+				continue;
+			}
+
+			//if (unselectNode(nodeID))
+			//	return true;
+
+			//if (!_control.isMulptipleSelect)
+			//	unselectEverything();
+
+			_nodes.at(nodeID)->select(true);
+			_selectedNodes.push_back(nodeID);
+			selectLinePart(nodeID);
+
+			//// Change layers order
+			//auto j = std::find(_layers.begin(), _layers.end(), nodeID);
+			//_layers.erase(j);
+			//_layers.push_back(nodeID);
+		}
+		else
+		{
+			if (selectedNode == _selectedNodes.end())
+			{
+				++it;
+				continue;
+			}
+
+			if (!_control.isMulptipleSelect)
+			{
+				_nodes.at(nodeID)->select(false);
+				_selectedNodes.remove(nodeID);
+				unselectRectLinePart(nodeID);
+			}
+		}
+
+		++it;
+	}
+
+	return false;
+}
+
+void Board::unselectRectLinePart(int nodeID)
+{
+	//if (_control.isMulptipleSelect)
+
+	// Удаляем из partially selected lines
+	for (auto it = _partiallySelectedLines.begin(); it != _partiallySelectedLines.end();)
+	{
+		if (it->src == nodeID)
+		{
+			if (_lines.at(*it)->_isSelectedDest)
+				_lines.at(*it)->selectPartDest(false);
+			else
+				_lines.at(*it)->selectPartSrc(false);
+
+			it = _partiallySelectedLines.erase(it);
+		}
+		else if (it->dest == nodeID)
 		{
 			if (_lines.at(*it)->_isSelectedDest)
 				_lines.at(*it)->selectPartDest(false);

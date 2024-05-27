@@ -90,3 +90,11 @@ bool isColliding(const sf::Vector2f& mouse_pos, const sf::Vertex v[4])
     // If all cross products are non-negative, the point is inside the quadrilateral
     return true;
 }
+
+bool isColliding(const  sf::FloatRect& rect1, const  sf::FloatRect& rect2)
+{
+    bool xOverlap = (rect1.left + rect1.width >= rect2.left) && (rect2.left + rect2.width >= rect1.left);
+    bool yOverlap = (rect1.top + rect1.height >= rect2.top) && (rect2.top + rect2.height >= rect1.top);
+
+    return xOverlap && yOverlap;
+}

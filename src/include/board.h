@@ -83,8 +83,11 @@ public:
 
 	bool selectLine(sf::RenderWindow& window);
 	void selectLinePart(int nodeID);
+	void unselectRectLinePart(int nodeID);
+
 	void unselectLinePart(int nodeID);
 	bool selectNode(sf::RenderWindow& window);
+	bool selectRectNode();
 	bool unselectNode(int nodeID);
 	bool unselectLine(Edge edge);
 	void unselectEverything();
@@ -129,6 +132,8 @@ private:
 template <typename T, typename... Args>
 void Board::createNode(Args&&... args)
 {
+	unselectEverything();
+
 	std::unique_ptr<Node> node = std::make_unique<T>(_areaView.getCenter(), std::forward<Args>(args)...);
 	int id{ KeyGen::getKey() };
 
