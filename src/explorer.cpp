@@ -234,3 +234,9 @@ void Explorer::resetAction()
 {
 
 }
+/*
+void Explorer::addNodeToSearch(const Node& node)
+{
+	_searchNodes.push_back(node);
+}
+*/

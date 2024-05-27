@@ -144,6 +144,7 @@
     <ClInclude Include="src\include\line.h" />
     <ClInclude Include="src\include\node.h" />
     <ClInclude Include="src\include\note.h" />
+    <ClInclude Include="src\include\operatingsystem.h" />
     <ClInclude Include="src\include\sample.h" />
     <ClInclude Include="src\include\searchbox.h" />
     <ClInclude Include="src\include\settings.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="src\line.cpp" />
     <ClCompile Include="src\node.cpp" />
     <ClCompile Include="src\note.cpp" />
+    <ClCompile Include="src\operatingsystem.cpp" />
     <ClCompile Include="src\sample.cpp" />
     <ClCompile Include="src\searchbox.cpp" />
     <ClCompile Include="src\still.cpp" />

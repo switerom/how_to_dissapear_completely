@@ -11,6 +11,8 @@ Board::~Board()
 
 void Board::Init()
 {
+	_id = ID::Board;
+
 	// Фон окна
 	_bigRect.setFillColor(BOARD_BACK_COLOR);
 	_bigRect.setSize(sf::Vector2f(WIDTH, HEIGHT));
@@ -19,6 +21,7 @@ void Board::Init()
 	_control.isNodeMoving = false;
 	_control.isCutting = false;
 	_control.isLinePulled = false;
+	_control.dragDropInProcess = false;
 	_control.mousePos = sf::Vector2f(0.f, 0.f);
 
 	_control.selectInProcess = false;
@@ -595,9 +598,33 @@ bool Board::unselectLine(Edge edge)
 
 	if (selectedLine == _selectedLines.end())
 		return false;
+	
+	auto sel1 = std::find(_selectedNodes.begin(), _selectedNodes.end(), edge.src);
+	auto sel2 = std::find(_selectedNodes.begin(), _selectedNodes.end(), edge.dest);
 
-	_lines.at(edge)->select(false);
-	_selectedLines.remove(edge);
+	// если обе ноды выделены, то либо ничего не делаем, либо убираем выделение с линии и обоих нод?
+	if(sel1 != _selectedNodes.end() && sel2 != _selectedNodes.end())
+		return true;
+
+	auto sel3 = std::find(_selectedLines.begin(), _selectedLines.end(), edge);
+	
+	if (sel1 != _selectedNodes.end() && sel3 != _selectedLines.end())
+	{
+		_lines.at(edge)->selectPartDest(false);
+		_selectedLines.remove(edge);
+		_partiallySelectedLines.push_back(edge);
+	}
+	else if (sel2 != _selectedNodes.end() && sel3 != _selectedLines.end())
+	{ 
+		_lines.at(edge)->selectPartSrc(false);
+		_selectedLines.remove(edge);
+		_partiallySelectedLines.push_back(edge);
+	}
+	else
+	{
+		_lines.at(edge)->select(false);
+		_selectedLines.remove(edge);
+	}
 
 	return true;
 }

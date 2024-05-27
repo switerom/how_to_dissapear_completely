@@ -1,7 +1,8 @@
 ﻿#include "areacontroller.h"
 #include "collisiondetection.h"
 
-AreaController::AreaController(Explorer& explorer, VideoPlayer& videoplayer, Board& board) : _explorer(explorer), _videoplayer(videoplayer), _board(board)
+AreaController::AreaController(Explorer& explorer, VideoPlayer& videoplayer, Board& board, OperatingSystem& opearatingsystem) 
+    : _explorer(explorer), _videoplayer(videoplayer), _board(board), _operatingsystem(opearatingsystem)
 {
     _areas.push_back(&explorer);
     _areas.push_back(&videoplayer);
@@ -27,10 +28,15 @@ void AreaController::Draw(sf::RenderWindow& window)
 
     _maximized = Area::None;
 
+    _operatingsystem.Draw(window);
+
     for (auto& area : _areas)
     {
         area->Draw(window);
     }
+
+    _operatingsystem.DrawOverlay(window);
+
 }
 
 void AreaController::Update(sf::RenderWindow& window, float dt)
@@ -135,6 +141,13 @@ void AreaController::explorerEvents(sf::Event& event, sf::RenderWindow& window, 
     else if (event.type == sf::Event::MouseWheelScrolled)
     {
         _explorer.scrollView(event.mouseWheelScroll.delta, timecontroller.getDt());
+    }
+    else if (event.type == sf::Event::MouseButtonReleased)
+    {
+        if (event.mouseButton.button == sf::Mouse::Left)
+        {
+            //_explorer.addNodeToSearch(_operatingsystem.drop());
+        }
     }
 }
 

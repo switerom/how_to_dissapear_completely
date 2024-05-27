@@ -24,7 +24,8 @@ int main()
     Explorer explorer;
     VideoPlayer videoplayer;
     Board board;
-    AreaController areacontroller ( explorer, videoplayer, board );
+    OperatingSystem operatingsystem;
+    AreaController areacontroller ( explorer, videoplayer, board, operatingsystem);
 
     while (window.isOpen())
     {

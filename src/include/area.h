@@ -9,6 +9,7 @@ public:
 	{
 		Explorer,
 		Videoplayer,
+		Board,
 		None,
 	};
 

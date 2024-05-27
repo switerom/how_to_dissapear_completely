@@ -29,6 +29,7 @@ public:
 		bool isLinePulled;
 		bool isCutting;
 		bool selectInProcess;
+		bool dragDropInProcess;
 		sf::Vector2f mousePos;
 		sf::Vector2f prevMousePos;
 		sf::Vector2f pulledLineNodePos;
