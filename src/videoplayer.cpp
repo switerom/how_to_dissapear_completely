@@ -34,7 +34,7 @@ void VideoPlayer::Init()
 	_interface.timing.setPosition(TIME_POS);
 
 	_screenshot.rect.setFillColor(sf::Color::Transparent);
-	_screenshot.rect.setOutlineColor(SCREENSHOT_RECT_COLOR_A);
+	_screenshot.rect.setOutlineColor(SCREENSHOT_RECT_COLOR_B);
 	_screenshot.rect.setOutlineThickness(SCREENSHOT_RECT_THICKNESS);
 
 	_screenshot.video = nullptr;
@@ -172,6 +172,9 @@ void VideoPlayer::Update(sf::RenderWindow& window, float dt)
 	if (!_currentVideo)
 		return;
 
+	if (_screenshot.inProcess)
+		changeScreenshotLinesColor();
+
 	if (_currentVideo->getStatus() != sfe::Status::Playing)
 		return;
 
@@ -196,8 +199,8 @@ void VideoPlayer::changeTiming()
 
 	float durationNum = _currentVideo->getDuration().asSeconds();
 
-	std::string durationStr{convertToTime(durationNum)};
-	std::string playTimeStr{convertToTime(playTimeNum)};
+	std::string durationStr{ convertToTime(durationNum) };
+	std::string playTimeStr{ convertToTime(playTimeNum) };
 
 	_interface.timing.setString(playTimeStr + " / " + durationStr);
 }
@@ -226,11 +229,11 @@ void VideoPlayer::changePlayTime(sf::RenderWindow& window)
 }
 
 void VideoPlayer::startScreenshot(sf::RenderWindow& window)
-{ 
+{
 	if (!_currentVideo)
 		return;
 
-	_screenshot.inProcess = true; 
+	_screenshot.inProcess = true;
 
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f mousePosView = window.mapPixelToCoords(mousePos, _videoView);
@@ -239,6 +242,7 @@ void VideoPlayer::startScreenshot(sf::RenderWindow& window)
 	_screenshot.frame.top = mousePosView.y;
 	_screenshot.frame.width = 0;
 	_screenshot.frame.height = 0;
+
 
 	//	Restrict screenshot frame from black bars (on start)
 	if (_screenshot.frame.left < 0)
@@ -265,7 +269,13 @@ void VideoPlayer::startScreenshot(sf::RenderWindow& window)
 
 void VideoPlayer::endScreenshot()
 {
+	if (!_screenshot.inProcess)
+		return;
+
 	_screenshot.inProcess = false;
+
+	if (!isScreenshotCorrect())
+		return;
 
 	if (_currentVideo)
 	{
@@ -274,6 +284,20 @@ void VideoPlayer::endScreenshot()
 	}
 
 	_screenshot.vid_name = _vid_name;
+
+	// Swap values if scrennshot reversed
+	auto& rect = _screenshot.frame;
+
+	if (rect.width < 0)
+	{
+		rect.left += rect.width;
+		rect.width = -rect.width;
+	}
+	if (rect.height < 0)
+	{
+		rect.top += rect.height;
+		rect.height = -rect.height;
+	}
 }
 
 void VideoPlayer::setScreenshotRect(sf::RenderWindow& window)
@@ -329,4 +353,39 @@ void VideoPlayer::setSelectSubs(sf::RenderWindow& window)
 void VideoPlayer::endSelectSubs()
 {
 	_subs.endSelect();
+	_audio.wstr = _subs.getSelectedString();
+}
+
+void VideoPlayer::resetAction()
+{
+	_screenshot.inProcess = false;
+}
+
+void VideoPlayer::changeScreenshotLinesColor()
+{
+	if (isScreenshotCorrect())
+		_screenshot.rect.setOutlineColor(SCREENSHOT_RECT_COLOR_A);
+	else
+		_screenshot.rect.setOutlineColor(SCREENSHOT_RECT_COLOR_B);
+}
+
+bool VideoPlayer::isScreenshotCorrect() const
+{
+	auto& rect = _screenshot.frame;
+
+	int width = rect.width;
+	int height = rect.height;
+
+	if (width < height)
+		std::swap(width, height);
+
+	float factor = static_cast<float>(width) / height;
+
+	return (std::abs(width) >= SCREENSHOT_MIN_SIZE && std::abs(height) >= SCREENSHOT_MIN_SIZE)
+				&& factor < SCREENSHOT_MIN_FACTOR;
+}
+
+bool VideoPlayer::isTextCorrect() const
+{
+	return !_audio.wstr.empty();
 }

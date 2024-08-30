@@ -6,18 +6,14 @@
 #include "explorer.h"
 #include "timecontroller.h"
 #include "board.h"
-
-struct MouseController
-{
-	sf::Vector2f _leftPressed;
-	sf::Vector2f _leftReleased;
-};
+#include "sample.h"
+#include "operatingsystem.h"
 
 class AreaController
 {
 public:
 
-	AreaController(Explorer& explorer, VideoPlayer& videoplayer, Board& board);
+	AreaController(Explorer& explorer, VideoPlayer& videoplayer, Board& board, OperatingSystem& opearatingsystem);
 
 	void Draw(sf::RenderWindow& window);
 	void Update(sf::RenderWindow& window, float dt);
@@ -34,5 +30,8 @@ private:
 	Explorer& _explorer;
 	Board& _board;
 	VideoPlayer& _videoplayer;
-	MouseController _mousecontroller;
+	OperatingSystem& _operatingsystem;
+
+	Area* _prevArea;
+	Area* _curArea;
 };

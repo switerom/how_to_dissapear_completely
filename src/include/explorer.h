@@ -4,6 +4,7 @@
 #include "area.h"
 #include "exploreritem.h"
 #include "searchbox.h"
+#include "node.h"
 
 struct Scroll
 {
@@ -36,6 +37,8 @@ public:
 	void typeInSearchBox(sf::Event& event);
 	std::wstring getSearchBoxText() const;
 	bool isItemSelected() const;
+	void resetAction() override;
+	void addNodeToSearch(const Node& node);
 
 private:
 	void resetScroll();
@@ -50,4 +53,6 @@ private:
 	sf::View _itemsView;
 
 	Scroll _scroll;
+
+	//std::list<Node> _searchNodes;
 };

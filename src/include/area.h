@@ -9,11 +9,13 @@ public:
 	{
 		Explorer,
 		Videoplayer,
+		Board,
 		None,
 	};
 
 	virtual void Draw(sf::RenderWindow& window) = 0;
 	virtual void Update(sf::RenderWindow& window, float dt) = 0;
+	virtual void resetAction() = 0;
 	virtual void toggleMaximize();
 
 	Area(const sf::FloatRect& minBounds, const sf::FloatRect& viewport);

@@ -16,9 +16,9 @@
 #define MIN_VIEW_SIZE 		700.f
 #define MAX_VIEW_SIZE		4000.f
 
-#define NOT_SELECTED		0
+#define NOT_SELECTED		INT_MIN
+#define SELECTED			INT_MAX
 
-#define LINE_THICKNESS		7.f
 #define EPSILON				0.0001f
 
 #define FONT				"rsc/fonts/CascadiaCode.ttf"
@@ -33,7 +33,10 @@
 #define TEXT_NOTE_SIZE		75
 #define DOUBLE_CLICK_RANGE	5
 
-#define SAVES_DIR			"C:/_FILES/CATEGORIES/MY_FILM-GAME/code/detective_film_game/game/saves"
+// Сохранения и загрузка
+#define SAVE_DIR			"/saves/"
+#define SAVE_FILE			"/saves/save.bin"
+#define TEX_SAVE_DIR		"/saves/tex/"
 
 // Настройки всех окон
 #define WINDOW_TOP_RECT				HEIGHT*0.025f
@@ -75,45 +78,32 @@
 #define BOARD_VIEWPORT				sf::FloatRect(0.f, 0.f, WIDTH*0.5f, HEIGHT)
 #define BOARD_MOVE_SPEED			50.f
 #define BOARD_ZOOM_SPEED			6.f
-
-// Настройки каркаса
-#define CARCASS_COLOR				sf::Color::Blue
-#define CARCASS_HEIGHT				100.f
-#define CARCASS_OUTLINE_THICKNESS	10.f
-#define CARCASS_COLOR_SELECT		sf::Color::Yellow
-#define CARCASS_COLOR_UNSELECT		sf::Color::Transparent
-#define TIMELINE_WIDTH_FACTOR		5
-#define TIMELINE_HEIGHT				5.f
-#define TIMELINE_COLOR				sf::Color::White
-#define TIMELINE_LEFT_INDENTATION	10.f
-#define TIMELINE_TOP_INDENTATION	10.f
-
-#define DELIMITER_COLOR				sf::Color::White
-#define DELIMITER_WIDTH				5.f
-#define DELIMITER_HEIGHT			10.f
-#define DELIMITER_FREQUENCY			5
-#define DELIMITER_LEFT_INDENTATION	TIMELINE_LEFT_INDENTATION
-#define DELIMITER_TOP_INDENTATION	TIMELINE_TOP_INDENTATION
-#define CARCASS_VID_NAME_FONT		"No Limits.ttf"
-#define CARCASS_VID_NAME_COLOR		sf::Color::White
-#define CARCASS_VID_NAME_SIZE		25
-#define CARCASS_VID_NAME_POS_Y		50.f
+#define LINE_THICKNESS				3.f
+#define LINE_COLLISION_THK			6.f
+#define LINE_COLOR_A				sf::Color::Red
+#define LINE_COLOR_B				sf::Color::Yellow
+#define STILL						0
+#define SAMPLE						1
+#define BOARD_SELECT_RECT_COLOR		sf::Color::White
+#define BOARD_SELECT_RECT_THK		1.f
 
 // Настройки скриншота
-#define SCREENSHOT_RECT_COLOR_A		sf::Color::White
-#define SCREENSHOT_RECT_COLOR_B		sf::Color::Green
-#define SCREENSHOT_RECT_COLOR_C		sf::Color::Yellow
+#define SCREENSHOT_RECT_COLOR_A		sf::Color::Green
+#define SCREENSHOT_RECT_COLOR_B		sf::Color::Red
 #define SCREENSHOT_RECT_THICKNESS	3.f
-#define SCREENSHOT_SIZE				1000.f
-#define SCREENSHOT_POS_Y			CARCASS_HEIGHT * 0.15f
+#define SCREENSHOT_MIN_SIZE			50.f
+#define SCREENSHOT_MIN_FACTOR		2.f
 
 // Настройки ассет менеджера
 #define FONTS_DIR					"rsc/fonts/"
 
 // Настройки нод
-#define NODE_COLOR_SELECT			sf::Color::Yellow
-#define NODE_COLOR_UNSELECT			sf::Color::Transparent
+#define NODE_SELECT_COLOR			sf::Color::Yellow
+#define NODE_UNSELECT_COLOR			sf::Color::Blue
+#define NODE_FILL_COLOR				sf::Color::Black
 #define NODE_OUTLINE_THK			2.f
+#define NODE_SIZE					sf::Vector2f(100.f, 100.f)
+#define NODE_TEXT_SIZE				sf::Vector2f(250.f, 250.f)
 
 // Настроки субтитров
 #define SUBS_DIR					"rsc/subs/"

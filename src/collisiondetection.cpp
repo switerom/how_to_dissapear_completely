@@ -71,3 +71,30 @@ bool isColliding(const sf::Vector2f& worldPos, const  sf::FloatRect& rect)
             (worldPos.y >= rect.top) &&
             (worldPos.y <= rect.top + rect.height);
 }
+
+// Assuming v[4] contains the vertices of the quadrilateral
+bool isColliding(const sf::Vector2f& mouse_pos, const sf::Vertex v[4]) 
+{
+    // Calculate the cross products for each pair of adjacent edges
+    for (int i = 0; i < 4; ++i) 
+    {
+        sf::Vector2f edge = v[(i + 1) % 4].position - v[i].position;
+        sf::Vector2f to_point = mouse_pos - v[i].position;
+        float cross_product = edge.x * to_point.y - edge.y * to_point.x;
+
+        // If any cross product is negative, the point is outside the quadrilateral
+        if (cross_product > 0.0f) 
+            return false;
+    }
+
+    // If all cross products are non-negative, the point is inside the quadrilateral
+    return true;
+}
+
+bool isColliding(const  sf::FloatRect& rect1, const  sf::FloatRect& rect2)
+{
+    bool xOverlap = (rect1.left + rect1.width >= rect2.left) && (rect2.left + rect2.width >= rect1.left);
+    bool yOverlap = (rect1.top + rect1.height >= rect2.top) && (rect2.top + rect2.height >= rect1.top);
+
+    return xOverlap && yOverlap;
+}

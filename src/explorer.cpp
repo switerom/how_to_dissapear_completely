@@ -229,3 +229,14 @@ bool Explorer::isItemSelected() const
 {
 	return (_selectedItem == _explorerItems.end()) ? false : true;
 }
+
+void Explorer::resetAction()
+{
+
+}
+/*
+void Explorer::addNodeToSearch(const Node& node)
+{
+	_searchNodes.push_back(node);
+}
+*/

@@ -7,6 +7,7 @@
 
 struct Screenshot
 {
+	//float timing;
 	//MetaData _metaData;
 	const sfe::Movie* video;
 	bool inProcess;
@@ -16,6 +17,17 @@ struct Screenshot
 	sf::IntRect frame;
 	sf::RectangleShape rect;
 	std::string vid_name{};
+};
+
+struct Audio
+{
+	//float timing;
+	//MetaData _metaData;
+	//const sfe::Movie* video;
+	//sf::Texture tex;
+	//sf::Sprite spr;			
+	//std::string vid_name{};
+	std::wstring wstr;
 };
 
 class VideoPlayer: public Area
@@ -49,12 +61,20 @@ public:
 	void setScreenshotRect(sf::RenderWindow& window);
 	const Screenshot& getScreenshot() const { return _screenshot; };
 
+	const Audio& getAudio() const { return _audio; };
+	
 	void startSelectSubs(sf::RenderWindow& window);
 	void endSelectSubs();
 	void setSelectSubs(sf::RenderWindow& window);
 	std::vector<sf::FloatRect> getSubsBounds() const;
 	std::wstring getSelectedString() { return _subs.getSelectedString(); };
 
+	void resetAction() override;
+	bool isTakingScreenshot() const { return _screenshot.inProcess; };
+	
+	bool isTextCorrect() const;
+	bool isScreenshotCorrect() const;
+	void changeScreenshotLinesColor();
 private:
 	std::string getSubName(const std::string& filename) const;
 	void loadVideo(const std::string& filename);
@@ -65,6 +85,7 @@ private:
 	sfe::Movie* _currentVideo;
 	std::string _vid_name;
 	Screenshot _screenshot;
+	Audio _audio;
 	Interface _interface;
 	Subtitles _subs;
 };
